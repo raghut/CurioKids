@@ -1,0 +1,38 @@
+[
+	{
+		"id": "fact-001",
+		"type": "nature_fact",
+		"language": "en",
+		"topic": "Ants",
+		"age_range": "5-8",
+		"title": "Why do ants walk in a line?",
+		"cover_image": "",
+		"audio": "",
+		"sections": [
+			{
+				"type": "question",
+				"text": "Have you ever seen ants walking one behind another? Why do they do that?",
+				"image": ""
+			},
+			{
+				"type": "discovery",
+				"text": "Ants leave a special smell on the ground called a scent trail. Other ants follow this smell to find food!",
+				"image": ""
+			},
+			{
+				"type": "fun_facts",
+				"items": [
+					"Ants can carry things 50 times their own weight!",
+					"There are over 10,000 kinds of ants in the world.",
+					"Ants talk to each other using smells, not words."
+				]
+			},
+			{
+				"type": "lesson",
+				"text": "Ants teach us that working together and helping each other makes hard things easy."
+			}
+		],
+		"reflection_question": "What would you do if you could talk to ants?",
+		"real_world_mission": "Go outside and find a line of ants. Watch where they are going!"
+	}
+]

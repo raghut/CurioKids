@@ -1,0 +1,58 @@
+@import 'tailwindcss';
+
+@theme {
+	--color-peach: #FFB89A;
+	--color-sky-blue: #A8D8EA;
+	--color-mint: #B8E6C1;
+	--color-butter: #FFE4A3;
+	--color-coral: #FF8B7B;
+
+	--font-nunito: 'Nunito', sans-serif;
+	--font-fraunces: 'Fraunces', serif;
+	--font-telugu: 'Noto Sans Telugu', sans-serif;
+}
+
+@font-face {
+	font-family: 'Nunito';
+	src: url('/fonts/Nunito-Regular.ttf') format('truetype');
+	font-weight: 400;
+}
+
+@font-face {
+	font-family: 'Nunito';
+	src: url('/fonts/Nunito-Bold.ttf') format('truetype');
+	font-weight: 700;
+}
+
+@font-face {
+	font-family: 'Fraunces';
+	src: url('/fonts/Fraunces-Regular.ttf') format('truetype');
+	font-weight: 400;
+}
+
+@font-face {
+	font-family: 'Fraunces';
+	src: url('/fonts/Fraunces-Bold.ttf') format('truetype');
+	font-weight: 700;
+}
+
+@font-face {
+	font-family: 'Noto Sans Telugu';
+	src: url('/fonts/NotoSansTelugu-Regular.ttf') format('truetype');
+	font-weight: 400;
+}
+
+@font-face {
+	font-family: 'Noto Sans Telugu';
+	src: url('/fonts/NotoSansTelugu-Bold.ttf') format('truetype');
+	font-weight: 700;
+}
+
+body {
+	font-family: var(--font-nunito);
+}
+
+[lang='te'] {
+	font-family: var(--font-telugu);
+	line-height: 1.6;
+}

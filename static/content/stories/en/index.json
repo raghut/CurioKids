@@ -1,0 +1,22 @@
+[
+	{
+		"id": "story-001",
+		"type": "story",
+		"source": "curated",
+		"language": "en",
+		"age_range": "5-8",
+		"theme": "be_brave",
+		"title": "Mishti and the Dark Cave",
+		"cover_image": "",
+		"audio": "",
+		"pages": [
+			{ "text": "Mishti the rabbit found a dark cave near the river.", "image": "" },
+			{ "text": "She was scared. But she heard a tiny cry inside.", "image": "" },
+			{ "text": "Mishti took a deep breath and hopped in slowly.", "image": "" },
+			{ "text": "Inside, a baby bird had fallen from its nest!", "image": "" },
+			{ "text": "Mishti carried the bird out gently. The sun felt warm again.", "image": "" }
+		],
+		"moral": "Being brave means helping others even when you feel scared.",
+		"reflection_question": "When was the last time you did something brave?"
+	}
+]

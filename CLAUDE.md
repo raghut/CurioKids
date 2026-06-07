@@ -1,3 +1,11 @@
+## Project Configuration
+
+- **Language**: TypeScript
+- **Package Manager**: npm
+- **Add-ons**: tailwindcss, sveltekit-adapter
+
+---
+
 # CurioKids — Project Instructions for Claude Code
 
 > Place this file at the **root of the curiokids/ project**. Claude Code reads it automatically every session.
