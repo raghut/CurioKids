@@ -1,11 +1,18 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { get } from 'svelte/store';
 	import { language } from '$lib/stores/language';
+	import { generatedStories } from '$lib/stores/generatedStories';
 	import { characters } from '$lib/data/characters';
+	import type { CharacterId, GeneratedStory, ThemeId } from '$lib/types';
+
+	type Phase = 'loading' | 'error' | 'limit';
+
+	const te = $derived($language === 'te');
 
 	const characterId = $derived($page.url.searchParams.get('character'));
 	const character = $derived(characters.find((c) => c.id === characterId));
-	const te = $derived($language === 'te');
 
 	const emoji = $derived(
 		characterId === 'rabbit' ? '🐰' :
@@ -14,29 +21,91 @@
 		characterId === 'monkey' ? '🐒' :
 		characterId === 'tortoise' ? '🐢' : '🦜'
 	);
+
+	let phase = $state<Phase>('loading');
+	let started = false;
+
+	$effect(() => {
+		if (started) return;
+		started = true;
+		void generate();
+	});
+
+	async function generate() {
+		const character_id = $page.url.searchParams.get('character') as CharacterId | null;
+		const theme_id = $page.url.searchParams.get('theme') as ThemeId | null;
+		const child_name = $page.url.searchParams.get('name');
+		const lang = get(language) ?? 'en';
+
+		if (!character_id || !theme_id) {
+			phase = 'error';
+			return;
+		}
+
+		// Client-side rate limit: max 3 generations per device per day.
+		if (!generatedStories.canGenerate(get(generatedStories))) {
+			phase = 'limit';
+			return;
+		}
+
+		try {
+			const res = await fetch('/api/generate-story', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ character_id, theme_id, child_name, language: lang })
+			});
+
+			if (!res.ok) {
+				phase = 'error';
+				return;
+			}
+
+			const data = (await res.json()) as { story: GeneratedStory };
+			if (!data?.story?.id) {
+				phase = 'error';
+				return;
+			}
+
+			generatedStories.addStory(data.story);
+			await goto(`/stories/${data.story.id}`);
+		} catch {
+			// Offline or network failure.
+			phase = 'error';
+		}
+	}
 </script>
 
-<div class="min-h-screen bg-white flex flex-col items-center justify-center p-6">
-	<div class="text-8xl animate-pulse mb-8">
-		{emoji}
-	</div>
+<div class="min-h-screen bg-white flex flex-col items-center justify-center p-6 text-center">
+	{#if phase === 'loading'}
+		<div class="text-8xl animate-pulse mb-8">{emoji}</div>
 
-	{#if character}
-		<p class="text-xl font-bold mb-2">
-			{te ? character.name_te : character.name_en}
+		{#if character}
+			<p class="text-xl font-bold mb-2" lang={te ? 'te' : undefined}>
+				{te ? character.name_te : character.name_en}
+			</p>
+		{/if}
+
+		<p class="text-lg text-gray-500" lang={te ? 'te' : undefined}>
+			{te ? 'నీ కథ సిద్ధం అవుతోంది...' : 'Your story is coming...'}
 		</p>
+	{:else if phase === 'limit'}
+		<div class="text-8xl mb-8">{emoji}</div>
+		<p class="text-xl font-bold mb-2" lang={te ? 'te' : undefined}>
+			{te ? 'రేపు మళ్ళీ కథ చేద్దాం!' : "Let's make more tomorrow!"}
+		</p>
+		<p class="text-lg text-gray-500 mb-8" lang={te ? 'te' : undefined}>
+			{te ? 'ఈ రోజుకి మూడు కథలు అయిపోయాయి.' : "That's three new stories for today."}
+		</p>
+		<a href="/stories" class="px-6 py-4 rounded-2xl bg-sky-blue text-xl font-bold" lang={te ? 'te' : undefined}>
+			{te ? 'కథలు చదువు' : 'Read stories'}
+		</a>
+	{:else}
+		<div class="text-8xl mb-8 grayscale opacity-70">{emoji}</div>
+		<p class="text-xl font-bold mb-8" lang={te ? 'te' : undefined}>
+			{te ? 'వైఫై వచ్చాక మళ్ళీ ప్రయత్నిద్దాం!' : "Let's try after wifi comes back!"}
+		</p>
+		<a href="/" class="px-6 py-4 rounded-2xl bg-sky-blue text-xl font-bold" lang={te ? 'te' : undefined}>
+			{te ? 'ఇంటికి వెళ్ళు' : 'Back to home'}
+		</a>
 	{/if}
-
-	<p class="text-lg text-gray-500 text-center" lang={te ? 'te' : undefined}>
-		{te ? 'నీ కథ సిద్ధం అవుతోంది...' : 'Your story is coming...'}
-	</p>
-
-	<p class="mt-8 text-sm text-gray-300">(API not connected yet)</p>
-
-	<a
-		href="/"
-		class="mt-8 px-6 py-3 rounded-xl bg-sky-blue font-bold"
-	>
-		{te ? 'ఇంటికి వెళ్ళు' : 'Back to home'}
-	</a>
 </div>

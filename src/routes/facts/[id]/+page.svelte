@@ -52,18 +52,20 @@
 
 		<div class="flex-1 flex flex-col justify-center">
 			<div class="bg-butter/20 rounded-2xl p-6 min-h-[200px] flex flex-col justify-center">
-				{#if section?.type === 'question'}
-					<p class="text-xl font-bold">{section.text}</p>
-				{:else if section.type === 'discovery'}
-					<p class="text-xl">{section.text}</p>
-				{:else if section.type === 'fun_facts'}
-					<ul class="space-y-2">
-						{#each section.items as item}
-							<li class="text-lg">• {item}</li>
-						{/each}
-					</ul>
-				{:else if section.type === 'lesson'}
-					<p class="text-xl italic">{section.text}</p>
+				{#if section}
+					{#if section.type === 'question'}
+						<p class="text-xl font-bold">{section.text}</p>
+					{:else if section.type === 'discovery'}
+						<p class="text-xl">{section.text}</p>
+					{:else if section.type === 'fun_facts'}
+						<ul class="space-y-2">
+							{#each section.items as item}
+								<li class="text-lg">• {item}</li>
+							{/each}
+						</ul>
+					{:else if section.type === 'lesson'}
+						<p class="text-xl italic">{section.text}</p>
+					{/if}
 				{/if}
 			</div>
 		</div>
