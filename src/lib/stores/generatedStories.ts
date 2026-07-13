@@ -28,9 +28,27 @@ function createGeneratedStoriesStore() {
 
 	const { subscribe, update } = writable<StoreState>(initial);
 
-	function save(state: StoreState) {
-		if (typeof window !== 'undefined') {
-			localStorage.setItem('curiokids_generated', JSON.stringify(state));
+	/**
+	 * Persist to localStorage. Generated covers are large base64 images, so we
+	 * can hit the ~5MB quota. If saving fails, drop the oldest stories one at a
+	 * time (keeping the newest, which the user just made) until it fits.
+	 * Returns the state that was actually saved.
+	 */
+	function save(state: StoreState): StoreState {
+		if (typeof window === 'undefined') return state;
+
+		let toSave = state;
+		while (true) {
+			try {
+				localStorage.setItem('curiokids_generated', JSON.stringify(toSave));
+				return toSave;
+			} catch {
+				if (toSave.stories.length <= 1) {
+					// Can't even fit one story — give up on persisting, keep in memory.
+					return toSave;
+				}
+				toSave = { ...toSave, stories: toSave.stories.slice(0, -1) };
+			}
 		}
 	}
 
@@ -43,8 +61,9 @@ function createGeneratedStoriesStore() {
 					generationsToday: state.generationsToday + 1,
 					generationDate: todayStr()
 				};
-				save(next);
-				return next;
+				// Persist (may evict oldest to fit quota) and keep the in-memory
+				// store consistent with what was actually saved.
+				return save(next);
 			});
 		},
 		canGenerate(state: StoreState): boolean {

@@ -9,6 +9,7 @@
 	import type { Story, GeneratedStory } from '$lib/types';
 
 	let story = $state<Story | GeneratedStory | null>(null);
+	let notFound = $state(false);
 	let pageIndex = $state(0);
 
 	$effect(() => {
@@ -19,12 +20,17 @@
 		const gen = $generatedStories.stories.find((s) => s.id === id);
 		if (gen) {
 			story = gen;
+			notFound = false;
 			return;
 		}
 
-		// Load curated story
+		// Load curated story. If it isn't a curated story either, mark not-found
+		// so we never hang on "Loading..." forever.
 		if ($language) {
-			loadStory(id, $language).then((s) => (story = s));
+			loadStory(id, $language).then((s) => {
+				story = s;
+				notFound = s === null;
+			});
 		}
 	});
 
@@ -104,6 +110,13 @@
 				<p class="text-base italic">{story.moral}</p>
 			</div>
 		{/if}
+	{:else if notFound}
+		<div class="flex-1 flex flex-col items-center justify-center text-center">
+			<p class="text-xl font-bold mb-6">Hmm, we can't find that story.</p>
+			<a href="/stories" class="px-6 py-4 rounded-2xl bg-sky-blue text-xl font-bold">
+				Back to stories
+			</a>
+		</div>
 	{:else}
 		<p class="text-center text-gray-400 mt-12">Loading...</p>
 	{/if}
