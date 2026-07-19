@@ -1,5 +1,13 @@
 import { writable } from 'svelte/store';
+import { env as publicEnv } from '$env/dynamic/public';
 import type { GeneratedStory, Language, StorySummary } from '$lib/types';
+
+/**
+ * Per-device daily generation limit (client-side, UX only). Defaults to 20 to
+ * match the server-side global DAILY_GENERATION_CAP. Override with the public
+ * env var PUBLIC_MAX_STORIES_PER_DAY. The real cost guard is server-side.
+ */
+const MAX_STORIES_PER_DAY = Number(publicEnv.PUBLIC_MAX_STORIES_PER_DAY ?? 20);
 
 /** Client-side daily generation count (UX only; the real cost guard is server-side). */
 type RateState = { generationsToday: number; generationDate: string };
@@ -55,10 +63,10 @@ function createGeneratedStoriesStore() {
 				return next;
 			});
 		},
-		/** Client-side daily limit check (3/day) for instant UX. */
+		/** Client-side per-device daily limit check for instant UX. */
 		canGenerate(state: RateState): boolean {
 			if (state.generationDate !== todayStr()) return true;
-			return state.generationsToday < 3;
+			return state.generationsToday < MAX_STORIES_PER_DAY;
 		}
 	};
 }

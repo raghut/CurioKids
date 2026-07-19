@@ -38,7 +38,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		return fail('server_error', "Let's try again after wifi comes back!", 500);
 	}
 
-	const withPageImages = (env.GENERATE_PAGE_IMAGES ?? 'false') === 'true';
+	const withPageImages = (env.GENERATE_PAGE_IMAGES ?? 'false').trim().toLowerCase() === 'true';
 
 	// --- Generate ---
 	try {
