@@ -47,6 +47,7 @@ export function buildStoryMessages(opts: {
 		`- Title: max 8 words.`,
 		`- Moral: exactly 1 sentence, max 15 words.`,
 		`- Reflection question: 1 open-ended question, max 15 words.`,
+		`- Each page also needs "image_prompt": one short English sentence describing that page's single illustration (what the hero is doing, where). No text/words in the image.`,
 		`- Sentences: max 12 words each. Active voice. No subordinate clauses.`,
 		`- Simple, read-aloud-friendly words a 6-year-old knows.`,
 		`- Warm, calm tone. A happy or hopeful ending.`,
@@ -54,7 +55,13 @@ export function buildStoryMessages(opts: {
 		`Return ONLY this JSON shape (all text in ${languageName}):`,
 		`{`,
 		`  "title": string,`,
-		`  "pages": [ { "text": string }, { "text": string }, { "text": string }, { "text": string }, { "text": string } ],`,
+		`  "pages": [`,
+		`    { "text": string, "image_prompt": string },`,
+		`    { "text": string, "image_prompt": string },`,
+		`    { "text": string, "image_prompt": string },`,
+		`    { "text": string, "image_prompt": string },`,
+		`    { "text": string, "image_prompt": string }`,
+		`  ],`,
 		`  "moral": string,`,
 		`  "reflection_question": string,`,
 		`  "scene": string  // a short English visual description of the opening scene, for illustration`,
@@ -80,4 +87,31 @@ export function buildCoverImagePrompt(character: Character, scene: string): stri
 		`Scene: ${scene}.`,
 		`Soft watercolor style, warm gentle colors, calm mood, no text, no words, no letters.`
 	].join(' ');
+}
+
+/**
+ * Builds the image prompt for a single story page. Uses the character's LOCKED
+ * prompt_descriptor (for cross-page visual consistency) plus the page's scene.
+ */
+export function buildPageImagePrompt(character: Character, pageScene: string): string {
+	return [
+		`Children's picture-book illustration for one page.`,
+		character.prompt_descriptor + '.',
+		`Scene: ${pageScene}.`,
+		`Soft watercolor style, warm gentle colors, calm mood, no text, no words, no letters.`
+	].join(' ');
+}
+
+/**
+ * Builds all image prompts for a story: cover first, then one per page.
+ */
+export function buildImagePrompts(
+	character: Character,
+	coverScene: string,
+	pages: Array<{ image_prompt: string }>
+): string[] {
+	return [
+		buildCoverImagePrompt(character, coverScene),
+		...pages.map((p) => buildPageImagePrompt(character, p.image_prompt))
+	];
 }
