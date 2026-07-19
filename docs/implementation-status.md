@@ -1,9 +1,11 @@
-# CurioKids — Implementation Status & Next Direction
+# CurioKids — Implementation Status
 
-_Last updated: 2026-07-13_
+_Last updated: 2026-07-19_
 
-This doc tracks **what we planned**, **what is actually built**, and teeing up the **next ideation**:
-moving generated-story persistence from browser `localStorage` to a **backend-driven** model.
+This doc tracks **what we planned** and **what is actually built**. The big milestone since the
+last update: generated stories moved off browser `localStorage` onto a **backend-driven shared
+gallery** (Postgres + Vercel Blob), with **per-page illustrations**. That work is built and
+verified end-to-end.
 
 > Source of truth for scope is `CLAUDE.md` + `docs/strategy.md`. This file is a working status
 > snapshot — if it disagrees with `CLAUDE.md`, `CLAUDE.md` wins.
@@ -16,10 +18,12 @@ moving generated-story persistence from browser `localStorage` to a **backend-dr
 |---|---|---|---|---|
 | 2 | Nature facts | Hand-curated, bundled | Offline | Scaffold done, content missing |
 | 1A | Curated stories | Hand-curated, bundled | Offline | Scaffold done, content missing |
-| 1B | Generated stories | OpenAI (character + theme) | Online, cached for re-read | **Built & working** |
+| 1B | Generated stories | OpenAI (character + theme) | Online, shared backend gallery | **Built & verified end-to-end** |
 
-Locked constraints (current): no DB, no auth, no accounts. Only persistence is `localStorage`.
-English + Telugu. 6-screen UX. Calm, no gamification.
+Current constraints: **Postgres (Neon) + Vercel Blob** back the generated gallery (anonymous
+shared storage — still no auth, no accounts, no user database). Facts + curated stories stay
+fully offline/bundled. `localStorage` now holds only language preference + daily generation
+count. English + Telugu. 6-screen UX. Calm, no gamification.
 
 ---
 
@@ -28,36 +32,60 @@ English + Telugu. 6-screen UX. Calm, no gamification.
 ### ✅ App shell / navigation
 - 6-screen flow: splash → language picker → home → facts grid/viewer → stories grid/viewer → create → generating
 - Svelte 5 (runes) + SvelteKit + Tailwind v4, Vercel adapter (`nodejs22.x`)
-- Stores (all `localStorage`): `language`, `progress` (completed IDs), `generatedStories`
+- Stores: `language`, `progress` (completed IDs) in `localStorage`; `generatedStories` is now a
+  thin **backend API client** (+ a client-side daily-count for UX)
 - Character set (6 animals) + theme set (4) + pickers
 
-### ✅ AI story generation (Pillar 1B) — the headline feature, working end-to-end
-- **`src/routes/api/generate-story/+server.ts`** — validates `character_id`/`theme_id`/`language`
-  against locked enums, builds prompt server-side, returns a full `GeneratedStory`.
-- **`src/lib/server/storyPrompt.ts`** — prompt builder enforcing length/style rules
-  (5 pages, 30–50 words/page, title ≤8 words, moral ≤15, sentences ≤12, active voice),
-  plus species-consistency and per-language instructions.
-- **`src/lib/server/openaiClient.ts`** — REST calls (no SDK dependency):
-  `gpt-4o-mini` for text, `gpt-image-1` for cover → compressed **JPEG base64 data URI**.
-- **`src/routes/create/generating/+page.svelte`** — client-side rate-limit guard (max 3/day),
-  fetch → cache → open story, plus graceful offline/error screen.
-- Verified with real API calls: English (in-spec length), Telugu (correct script + name
-  transliteration), input validation, and failure path.
+### ✅ Backend-driven shared story gallery (Pillar 1B) — verified end-to-end
+The headline feature. Pick a character + theme → OpenAI writes a 5-page story → cover + (optional)
+5 page illustrations generate **in parallel** → uploaded to **Vercel Blob** → assembled story
+saved to **Neon Postgres** → served to every device via the shared gallery.
 
-### ✅ Bug fixes (branch `fix/generated-story-viewer`)
-- `ContentCard`: render `data:` image URIs as `<img>` (were shown as raw base64 text).
-- Story viewer: friendly "can't find that story" state instead of an infinite "Loading…".
-- `generatedStories`: **evict oldest stories when `localStorage` quota is hit**, so a new
-  story always persists and opens.
+- **`src/routes/api/generate-story/+server.ts`** — validates input against locked enums, enforces
+  a server-side **global daily cap** (`DAILY_GENERATION_CAP`, default 20), generates text +
+  images in parallel, uploads to Blob, inserts the story into Postgres, returns it.
+- **`src/routes/api/stories/+server.ts`** — GET shared gallery list (lightweight summaries).
+- **`src/routes/api/stories/[id]/+server.ts`** — GET one full story by id.
+- **`src/lib/server/db.ts`** — Neon client + queries (insert / list / get / count-today); one
+  `stories` table with a flexible **JSONB** blob + promoted columns (`id, language, title,
+  cover_url, age_tag, created_at`). `scripts/init-db.mjs` creates the schema.
+- **`src/lib/server/blob.ts`** — Vercel Blob upload (public JPEG URLs).
+- **`src/lib/server/storyPrompt.ts`** — prompt builder with length/style rules + **per-page
+  `image_prompt`** and `buildImagePrompts` (cover + per-page, each carrying the locked character
+  descriptor for visual consistency).
+- **`src/lib/server/openaiClient.ts`** — REST (no SDK): `gpt-4o-mini` text, `gpt-image-1` image
+  returning JPEG bytes.
+- **`src/lib/server/validate.ts`** + **`assembleStory.ts`** — pure, unit-tested helpers.
+- **Frontend** — grid fetches the shared gallery; viewer renders **image-above-text per page**
+  (text-only when a page has no image); generating screen wired to the backend.
 
-### Deviations from `CLAUDE.md` (need doc update)
-1. **`gpt-image-1`** instead of `dall-e-3` — dall-e-3 isn't available on the account.
-2. Runtime is **`nodejs22.x`**, not Edge (matches actual `svelte.config.js`).
-3. `cover_image_url` is `''` — gpt-image-1 returns base64 directly, no hosted URL.
+**Config flag** — `GENERATE_PAGE_IMAGES` (default `false` = cover only, ~$0.20/story; `true` =
+cover + 5 page images, ~$1/story, ~35s). **Rate limits**: server-side global cap of 20/day (hard
+cost ceiling) + client-side per-device soft cap (default 20, override via
+`PUBLIC_MAX_STORIES_PER_DAY`).
+
+**Live verification (2026-07-19):** real generation returned HTTP 200; all 6 images uploaded and
+reachable (HTTP 200) on Blob; story row confirmed in Postgres with cover + 5 page image URLs;
+gallery list + single-story endpoints return correctly; graceful handling confirmed for a failed
+image (page renders text-only) and a private-Blob-store misconfig.
+
+**Quality gates:** `npm run check` → 0 errors / 0 warnings; `npm test` → 9 unit tests passing.
+
+### ✅ Earlier bug fixes (branch `fix/generated-story-viewer`, folded in)
+- `ContentCard`: render `data:`/`http` image URIs as `<img>`.
+- Story viewer: friendly "can't find that story" instead of infinite "Loading…".
+- (The old localStorage quota-eviction logic was removed — no longer needed with the backend.)
+
+### Deviations from original `CLAUDE.md` (now reconciled in `CLAUDE.md`)
+1. **`gpt-image-1`** instead of `dall-e-3` (dall-e-3 unavailable on the account).
+2. Runtime is **`nodejs22.x`**, not Edge.
+3. Generated stories persist **server-side** (Postgres + Blob), not in `localStorage`.
+4. **Per-page images** are now in scope (behind `GENERATE_PAGE_IMAGES`).
 
 ### Local dev note
-Default `node` on this machine is v20.9.0 (too old for Vite 8). Use Node 22:
-`export PATH="/opt/homebrew/opt/node@22/bin:$PATH"` before `npm run dev`.
+Homebrew's `node@22` now resolves to **v23** and fails `engine-strict`. Use the nvm Node 22:
+`export PATH="$HOME/.nvm/versions/node/v22.23.1/bin:$PATH"` before any `npm` command.
+One-time DB setup: `npm run db:init`.
 
 ---
 
@@ -67,69 +95,34 @@ Default `node` on this machine is v20.9.0 (too old for Vite 8). Use Node 22:
   (Content authoring is owned by Raghu, not Claude Code.)
 - **Audio** — `AudioPlayer` + `SectionRenderer` components and autoplay for curated content.
 - **PWA install** (Phase 1 target) and **Capacitor → Android APK** (Phase 2).
+- **Deploy to Vercel** — connect GitHub + set the 5 env vars in the dashboard so it's reachable
+  from a real URL/phone. Not yet done.
 - **Telugu length tuning** — Telugu is denser, so stories run under the 150-word floor.
-- **Server-side rate limiting** (Vercel KV) — currently client-side only (open decision).
-- **`lint` / `format`** scripts are referenced in `CLAUDE.md` but not in `package.json`.
+- **`lint` / `format`** scripts referenced in `CLAUDE.md` but not in `package.json`.
 
 ---
 
-## 4. Next ideation: backend-driven storage (instead of localStorage)
+## 4. Deferred / next-phase ideas (explicitly out of the current MVP)
 
-### Why revisit this now
-We hit the real limits of `localStorage` during testing:
-- **~5 MB cap** → only ~25 generated stories fit (each cover is ~170 KB base64). We had to add
-  oldest-story eviction just to keep working.
-- **Per-browser, per-device** → a story made on the laptop never appears on the phone.
-- **Fragile** → clearing browser data wipes every generated story; no backup, no re-download.
-- Images are stored as base64 inside a JSON blob — the least efficient possible format.
+These were fenced off during the backend-gallery design (see
+`docs/superpowers/specs/2026-07-19-backend-shared-gallery-design.md`):
 
-### ⚠️ Scope flag (read before ideating)
-Current `CLAUDE.md` **explicitly forbids** a database, auth, accounts, and "any other backend
-services… the serverless function is the entire backend." A backend-driven store is a **real
-departure from locked scope.** This is fine to _pursue_ — but it should be a deliberate decision
-that updates `CLAUDE.md`, not an accidental drift. The whole point of this section is to ideate
-that decision.
-
-### Design questions to work through (with Claude Code)
-
-**A. Identity — the hard part (no accounts is a current rule)**
-- How do we associate stories with a child/family **without** login screens?
-- Options: anonymous device ID (localStorage-persisted UUID) · short "family code" typed once ·
-  magic-link/email on the parent's side · silent OAuth. Each trades privacy/UX/complexity.
-- Constraint reminder: "Never assume the parent is present. The child operates the app alone."
-
-**B. Where stories live**
-- Metadata + text: Vercel KV (Redis) · Vercel Postgres · Supabase · SQLite on the edge.
-- Cover images: **object/blob storage** (Vercel Blob, S3, Supabase Storage) returning a URL —
-  _not_ base64 in a row. This alone fixes the size problem.
-
-**C. Online/offline model**
-- Backend as source of truth, with `localStorage` (or IndexedDB) kept as an **offline cache**
-  so re-reads still work with no network — consistent with the "cache for offline re-read" rule.
-- Sync strategy: read-through cache, last-write-wins, or backend-authoritative list + lazy image
-  fetch.
-
-**D. Migration & cost**
-- One-time import of existing `localStorage` stories into the backend on first run.
-- Where server-side rate limiting lands (KV) once there's a backend anyway.
-- Cost ceiling still applies: keep within the ~₹500/month target across users.
-
-**E. Blast radius**
-- Which files change: new `+server.ts` endpoints (list/get/save/delete), `generatedStories`
-  store becomes a thin client over the API, `stories` grid + viewer read from it, plus an
-  offline-cache layer. `GeneratedStory` type likely swaps `cover_image_data_uri` for a URL.
-
-### Suggested next step
-Run a **brainstorming session** scoped to questions A–C first (identity + storage + offline),
-since those decide everything downstream. Land those, then write a proper plan and update
-`CLAUDE.md`'s persistence rules to match.
+- **Identity / per-user scoping / auth** — today the gallery is a single shared global collection.
+- **Admin dashboard** to upload/manage stories for all users.
+- **Age-based experience** — the `age_tag` column exists; the filter + image/text-ratio logic
+  (e.g. 2–4 → more images/less text) is a later phase.
+- **Moderation / delete** of gallery stories.
+- **Offline caching** of generated stories (currently online-only, on-demand).
 
 ---
 
 ## 5. Branch / commit state
 
-- `main` (`d53f9a4 "first commit"`) — AI generation feature + scaffold.
-- `fix/generated-story-viewer` (`e74296e`) — the 3 bug fixes above. Committed locally;
-  push was blocked by the local permission setting (run `git push -u origin
-  fix/generated-story-viewer` manually).
-- `.env` holds `OPENAI_API_KEY` and is gitignored — never commit it.
+- `main` — original scaffold + first AI generation feature.
+- `fix/generated-story-viewer` — the viewer/cover bug fixes + brainstorming spec & plan docs.
+- **`feat/backend-shared-gallery`** (current) — the full backend shared gallery: 14 planned tasks
+  + rate-limit/flag fixes, all committed. Verified end-to-end. **Not yet pushed / not yet merged.**
+- Spec: `docs/superpowers/specs/2026-07-19-backend-shared-gallery-design.md`
+- Plan: `docs/superpowers/plans/2026-07-19-backend-shared-gallery.md`
+- `.env` holds `OPENAI_API_KEY`, `DATABASE_URL`, `BLOB_READ_WRITE_TOKEN`,
+  `GENERATE_PAGE_IMAGES`, `DAILY_GENERATION_CAP` — gitignored, never committed.
