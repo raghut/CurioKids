@@ -1,6 +1,6 @@
 # CurioKids — Implementation Status
 
-_Last updated: 2026-07-19 (passcode gate + extra-requirements field)_
+_Last updated: 2026-07-19 (passcode gate + extra-requirements field + print + deployed)_
 
 This doc tracks **what we planned** and **what is actually built**. The big milestone since the
 last update: generated stories moved off browser `localStorage` onto a **backend-driven shared
@@ -92,6 +92,30 @@ Two create-screen features, built & verified end-to-end (`npm test` 21 passing, 
 **Action for Raghu:** set `CREATE_PASSCODE` in Vercel (and local `.env` if you want the gate on
 locally) before/at deploy — otherwise creation is open.
 
+### ✅ Print stories as a picture-book (branch `feat/create-passcode-gate`)
+Parents can print a story for **off-screen** reading — directly serves the anti-screen-time
+mission. A printer icon in the story viewer header calls `window.print()` with a print-only
+(`@media print`) layout; no new dependency, no PDF library, no extra route.
+
+- **`src/lib/components/PrintableStory.svelte`** (new) — picture-book layout: title page (cover +
+  large Fraunces title), one story page per sheet (image + storybook-scale text), final sheet with
+  moral + reflection question + "Made with CurioKids ✨" footer. Page number pinned to the bottom
+  of each sheet. Hidden on screen (`hidden print:block`); Telugu-aware (`lang="te"`).
+- **`src/routes/stories/[id]/+page.svelte`** — Printer button, `print:hidden` on the interactive
+  reader, and a `printData` derived that normalizes **both** curated and generated stories (incl.
+  per-page images) into the component's props.
+- Works for curated + generated stories. Verified in-browser under print emulation.
+- **Print layout tuning** (from real-print feedback): each sheet is a fixed **24cm** (fits Letter
+  25.1cm + A4 26.9cm printable areas) with margins in `@page` — fixes blank pages and
+  content overflowing to a second page; line spacing tightened (`leading-relaxed`); page number
+  pinned to the page bottom.
+
+### ✅ Deployed to Vercel — LIVE
+`https://curio-kids-alpha.vercel.app` — verified end-to-end in the browser: home renders, the
+passcode gate is active (`CREATE_PASSCODE` set in Vercel; wrong code rejected), and generation
+works. Same Neon DB as local (schema already initialized). Repo: `raghut/CurioKids`, production
+branch `main`, adapter `nodejs22.x`.
+
 ### ✅ Earlier bug fixes (branch `fix/generated-story-viewer`, folded in)
 - `ContentCard`: render `data:`/`http` image URIs as `<img>`.
 - Story viewer: friendly "can't find that story" instead of infinite "Loading…".
@@ -116,8 +140,9 @@ One-time DB setup: `npm run db:init`.
   (Content authoring is owned by Raghu, not Claude Code.)
 - **Audio** — `AudioPlayer` + `SectionRenderer` components and autoplay for curated content.
 - **PWA install** (Phase 1 target) and **Capacitor → Android APK** (Phase 2).
-- **Deploy to Vercel** — connect GitHub + set the 5 env vars in the dashboard so it's reachable
-  from a real URL/phone. Not yet done.
+- ~~Deploy to Vercel~~ — **DONE**, live at `https://curio-kids-alpha.vercel.app` (see §2).
+- **Curated story load bug** — `story-001` shows "can't find that story" in the viewer (pre-dates
+  the print work; generated stories load fine). Worth a follow-up.
 - **Telugu length tuning** — Telugu is denser, so stories run under the 150-word floor.
 - **`lint` / `format`** scripts referenced in `CLAUDE.md` but not in `package.json`.
 
@@ -141,8 +166,10 @@ These were fenced off during the backend-gallery design (see
 
 - `main` — scaffold + first AI generation feature + **backend shared gallery** (merged via PR #2).
 - `feat/backend-shared-gallery` — the full backend shared gallery. Merged to `main`.
-- **`feat/create-passcode-gate`** (current) — family passcode gate + extra-requirements field.
-  Committed, verified end-to-end. **Not yet pushed / not yet merged** (awaiting Raghu review).
+- **`feat/create-passcode-gate`** (current) — family passcode gate + extra-requirements field +
+  **print-as-picture-book** feature (+ layout fixes). Committed, verified end-to-end.
+  **Not yet pushed / not yet merged** (awaiting Raghu review). NOTE: despite the branch name it now
+  also carries the print feature. Spec: `docs/superpowers/specs/2026-07-19-print-stories-design.md`.
 - Spec: `docs/superpowers/specs/2026-07-19-backend-shared-gallery-design.md`
 - Plan: `docs/superpowers/plans/2026-07-19-backend-shared-gallery.md`
 - `.env` holds `OPENAI_API_KEY`, `DATABASE_URL`, `BLOB_READ_WRITE_TOKEN`,
