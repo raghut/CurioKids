@@ -13,6 +13,7 @@ export type Fact = {
 	topic: string;
 	age_range: '5-8';
 	title: string;
+	subtitle?: string; // optional 1-line card description
 	cover_image: string;
 	audio: string;
 	sections: FactSection[];
