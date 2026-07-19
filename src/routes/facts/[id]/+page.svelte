@@ -4,103 +4,119 @@
 	import { language } from '$lib/stores/language';
 	import { progress } from '$lib/stores/progress';
 	import { loadFact } from '$lib/data/loadContent';
+	import SectionRenderer from '$lib/components/SectionRenderer.svelte';
+	import { swipe } from '$lib/actions/swipe';
 	import { X, ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import type { Fact } from '$lib/types';
 
 	let fact = $state<Fact | null>(null);
-	let sectionIndex = $state(0);
+	let notFound = $state(false);
+	let stepIndex = $state(0);
 
 	$effect(() => {
 		const id = $page.params.id;
 		if ($language && id) {
-			loadFact(id, $language).then((f) => (fact = f));
+			fact = null;
+			notFound = false;
+			stepIndex = 0;
+			loadFact(id, $language).then((f) => {
+				fact = f;
+				notFound = f === null;
+			});
 		}
 	});
 
+	// One step per section, plus a final closing screen.
+	const stepCount = $derived(fact ? fact.sections.length + 1 : 0);
+	const onClosing = $derived(fact ? stepIndex === fact.sections.length : false);
+	const section = $derived(fact && !onClosing ? fact.sections[stepIndex] : null);
+
+	const te = $derived($language === 'te');
+	const lead = $derived(te ? 'leading-[1.6]' : 'leading-relaxed');
+
 	function next() {
-		if (fact && sectionIndex < fact.sections.length - 1) {
-			sectionIndex++;
-		}
+		if (fact && stepIndex < stepCount - 1) stepIndex++;
 	}
-
 	function prev() {
-		if (sectionIndex > 0) {
-			sectionIndex--;
-		}
+		if (stepIndex > 0) stepIndex--;
 	}
-
 	function done() {
-		if (fact) {
-			progress.markComplete(fact.id);
-		}
+		if (fact) progress.markComplete(fact.id);
 		goto('/facts');
 	}
-
-	const section = $derived(fact ? fact.sections[sectionIndex] : null);
-	const isLast = $derived(fact ? sectionIndex === fact.sections.length - 1 : false);
 </script>
 
 <div class="min-h-screen bg-white p-6 flex flex-col">
 	<header class="flex justify-end mb-4">
-		<a href="/facts" class="p-2 rounded-full hover:bg-gray-100" aria-label="Close">
-			<X size={24} strokeWidth={1.5} />
+		<a
+			href="/facts"
+			class="w-16 h-16 flex items-center justify-center rounded-full hover:bg-gray-100"
+			aria-label="Close"
+		>
+			<X size={28} strokeWidth={1.5} />
 		</a>
 	</header>
 
 	{#if fact}
-		<h2 class="text-2xl font-bold mb-4">{fact.title}</h2>
+		<h2 class="text-3xl font-bold mb-4" lang={te ? 'te' : undefined}>{fact.title}</h2>
 
-		<div class="flex-1 flex flex-col justify-center">
-			<div class="bg-butter/20 rounded-2xl p-6 min-h-[200px] flex flex-col justify-center">
-				{#if section}
-					{#if section.type === 'question'}
-						<p class="text-xl font-bold">{section.text}</p>
-					{:else if section.type === 'discovery'}
-						<p class="text-xl">{section.text}</p>
-					{:else if section.type === 'fun_facts'}
-						<ul class="space-y-2">
-							{#each section.items as item}
-								<li class="text-lg">• {item}</li>
-							{/each}
-						</ul>
-					{:else if section.type === 'lesson'}
-						<p class="text-xl italic">{section.text}</p>
-					{/if}
-				{/if}
-			</div>
+		<div class="flex-1 flex flex-col justify-center" use:swipe={{ onLeft: next, onRight: prev }}>
+			{#if onClosing}
+				<div class="flex flex-col gap-4">
+					<div class="bg-sky-blue/20 rounded-2xl p-6 text-center">
+						<p class="text-xl font-bold mb-2">Think about it 💭</p>
+						<p class="text-2xl {lead}" lang={te ? 'te' : undefined}>{fact.reflection_question}</p>
+					</div>
+					<div class="bg-mint/20 rounded-2xl p-6 text-center">
+						<p class="text-xl font-bold mb-2">Try this! 🌿</p>
+						<p class="text-2xl {lead}" lang={te ? 'te' : undefined}>{fact.real_world_mission}</p>
+					</div>
+				</div>
+			{:else if section}
+				<div class="bg-butter/20 rounded-2xl p-6 min-h-[220px] flex flex-col justify-center">
+					<SectionRenderer {section} language={$language ?? 'en'} />
+				</div>
+			{/if}
 		</div>
 
 		<div class="flex items-center justify-between mt-6">
 			<button
 				onclick={prev}
-				disabled={sectionIndex === 0}
-				class="p-3 rounded-full bg-gray-100 disabled:opacity-30"
+				disabled={stepIndex === 0}
+				class="w-16 h-16 flex items-center justify-center rounded-full bg-gray-100 disabled:opacity-30"
 				aria-label="Previous"
 			>
-				<ChevronLeft size={28} />
+				<ChevronLeft size={32} />
 			</button>
 
-			{#if isLast}
-				<button
-					onclick={done}
-					class="px-8 py-3 rounded-full bg-mint font-bold text-lg"
-				>
+			{#if onClosing}
+				<button onclick={done} class="px-8 py-4 rounded-full bg-mint font-bold text-xl min-h-[64px]">
 					Done!
 				</button>
 			{:else}
-				<span class="text-sm text-gray-400">{sectionIndex + 1} / {fact.sections.length}</span>
+				<span class="text-lg text-gray-400">{stepIndex + 1} / {fact.sections.length}</span>
 			{/if}
 
 			<button
 				onclick={next}
-				disabled={isLast}
-				class="p-3 rounded-full bg-gray-100 disabled:opacity-30"
+				disabled={onClosing}
+				class="w-16 h-16 flex items-center justify-center rounded-full bg-gray-100 disabled:opacity-30"
 				aria-label="Next"
 			>
-				<ChevronRight size={28} />
+				<ChevronRight size={32} />
 			</button>
 		</div>
+	{:else if notFound}
+		<div class="flex-1 flex flex-col items-center justify-center text-center">
+			<p class="text-2xl font-bold mb-6">Hmm, we can't find that fact.</p>
+			<a
+				href="/facts"
+				class="px-6 py-4 rounded-2xl bg-sky-blue text-xl font-bold min-h-[64px] flex items-center"
+			>
+				Back to Why?
+			</a>
+		</div>
 	{:else}
-		<p class="text-center text-gray-400 mt-12">Loading...</p>
+		<p class="text-center text-gray-400 mt-12 text-xl">Loading...</p>
 	{/if}
 </div>

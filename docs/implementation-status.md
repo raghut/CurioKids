@@ -1,6 +1,6 @@
 # CurioKids — Implementation Status
 
-_Last updated: 2026-07-19 (passcode gate + extra-requirements field + print + deployed)_
+_Last updated: 2026-07-19 (Why? / nature-facts section built to full UX-parity)_
 
 This doc tracks **what we planned** and **what is actually built**. The big milestone since the
 last update: generated stories moved off browser `localStorage` onto a **backend-driven shared
@@ -16,7 +16,7 @@ verified end-to-end.
 
 | Pillar | Mode | Source | Network | Status |
 |---|---|---|---|---|
-| 2 | Nature facts | Hand-curated, bundled | Offline | Scaffold done, content missing |
+| 2 | Nature facts | Hand-curated, bundled | Offline | **Viewer built to UX-parity**, content missing |
 | 1A | Curated stories | Hand-curated, bundled | Offline | Scaffold done, content missing |
 | 1B | Generated stories | OpenAI (character + theme) | Online, shared backend gallery | **Built & verified end-to-end** |
 
@@ -110,6 +110,34 @@ mission. A printer icon in the story viewer header calls `window.print()` with a
   content overflowing to a second page; line spacing tightened (`leading-relaxed`); page number
   pinned to the page bottom.
 
+### ✅ Why? / nature-facts section — full UX-parity (branch `feat/why-facts-section`, NOT yet merged)
+Pillar 2's reading experience, built brainstorm→spec→plan→subagent-driven, verified end-to-end in
+a browser. Content authoring stays with Raghu; this is rendering/plumbing only.
+
+- **`src/routes/facts/+page.svelte`** — vertical single-column **`FactCard`** list (image + title +
+  optional 1-line subtitle + ✓ when completed), replacing the old 2-col grid.
+- **`src/lib/components/FactCard.svelte`** (new) — horizontal row card, ≥64px tap target.
+- **`src/lib/components/SectionRenderer.svelte`** (new) — renders one fact section, **image-above-text**
+  for `question`/`discovery` (text-only when the image is empty), bullet list for `fun_facts`, italic
+  for `lesson`; ≥22px, Telugu-aware.
+- **`src/routes/facts/[id]/+page.svelte`** — section-by-section viewer with **swipe** (`use:swipe`) +
+  arrows, a **dedicated closing screen** (reflection "Think about it 💭" + mission "Try this! 🌿" +
+  Done!), a friendly **not-found** state (no more infinite "Loading…"), and ≥64px controls.
+- **`src/lib/actions/swipe.ts`** (new) — reusable left/right swipe action with a unit-tested pure
+  `resolveSwipe` helper (no new dependency).
+- **`src/lib/types.ts`** — optional `Fact.subtitle` (only change to the locked content schema;
+  mirrored in `CLAUDE.md`).
+- **Bug fixed — `src/lib/data/loadContent.ts`:** `loadFact` now resolves by id from `index.json`
+  instead of fetching `<id>.json`, which 404'd on the `fact-001-ants.json` naming convention and hung
+  every fact on "Loading…". **The curated-story load bug is the identical root cause in `loadStory`**
+  and is still open (stories were out of scope).
+- **Quality gates:** `npm run check` 0/0; `npm test` **25 passing** (21 existing + 4 new swipe tests).
+- **Deferred by decision:** audio narration (no files yet; recorded-vs-TTS undecided) — no
+  `AudioPlayer` in this build. **Follow-ups:** localize the three English chrome labels to Telugu
+  (wording pending Raghu); apply the same one-line fix to `loadStory`.
+- Spec: `docs/superpowers/specs/2026-07-19-why-section-design.md` · Plan:
+  `docs/superpowers/plans/2026-07-19-why-section.md`.
+
 ### ✅ Deployed to Vercel — LIVE
 `https://curio-kids-alpha.vercel.app` — verified end-to-end in the browser: home renders, the
 passcode gate is active (`CREATE_PASSCODE` set in Vercel; wrong code rejected), and generation
@@ -141,8 +169,11 @@ One-time DB setup: `npm run db:init`.
 - **Audio** — `AudioPlayer` + `SectionRenderer` components and autoplay for curated content.
 - **PWA install** (Phase 1 target) and **Capacitor → Android APK** (Phase 2).
 - ~~Deploy to Vercel~~ — **DONE**, live at `https://curio-kids-alpha.vercel.app` (see §2).
-- **Curated story load bug** — `story-001` shows "can't find that story" in the viewer (pre-dates
-  the print work; generated stories load fine). Worth a follow-up.
+- **Curated story load bug** — `story-001` shows "can't find that story" in the viewer (generated
+  stories load fine). **Root cause now identified + fixed for facts** (`loadFact`, see §2): the
+  loader fetched `<id>.json` but files are `story-001-bunny.json`. The same one-line fix applies to
+  `loadStory` — still open.
+- **Fact content** — only the plumbing exists; still just 1 English fact (`fact-001-ants`), no Telugu.
 - **Telugu length tuning** — Telugu is denser, so stories run under the 150-word floor.
 - **`lint` / `format`** scripts referenced in `CLAUDE.md` but not in `package.json`.
 
@@ -164,12 +195,11 @@ These were fenced off during the backend-gallery design (see
 
 ## 5. Branch / commit state
 
-- `main` — scaffold + first AI generation feature + **backend shared gallery** (merged via PR #2).
-- `feat/backend-shared-gallery` — the full backend shared gallery. Merged to `main`.
-- **`feat/create-passcode-gate`** (current) — family passcode gate + extra-requirements field +
-  **print-as-picture-book** feature (+ layout fixes). Committed, verified end-to-end.
-  **Not yet pushed / not yet merged** (awaiting Raghu review). NOTE: despite the branch name it now
-  also carries the print feature. Spec: `docs/superpowers/specs/2026-07-19-print-stories-design.md`.
+- `main` — scaffold + AI generation + **backend shared gallery** (PR #2) + passcode gate +
+  extra-requirements + **print-as-picture-book** (PR #4). All live on Vercel.
+- `feat/create-passcode-gate` — passcode gate + extra-requirements + print. **Merged to `main` (PR #4).**
+- **`feat/why-facts-section`** (current) — Why?/nature-facts full UX-parity (7 atomic commits, see §2).
+  **Not yet pushed / not yet merged** (awaiting Raghu review). Off latest `origin/main`.
 - Spec: `docs/superpowers/specs/2026-07-19-backend-shared-gallery-design.md`
 - Plan: `docs/superpowers/plans/2026-07-19-backend-shared-gallery.md`
 - `.env` holds `OPENAI_API_KEY`, `DATABASE_URL`, `BLOB_READ_WRITE_TOKEN`,
