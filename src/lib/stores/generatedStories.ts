@@ -1,72 +1,62 @@
 import { writable } from 'svelte/store';
-import type { GeneratedStory } from '$lib/types';
+import type { GeneratedStory, Language, StorySummary } from '$lib/types';
 
-type StoreState = {
-	stories: GeneratedStory[];
-	generationsToday: number;
-	generationDate: string;
-};
+/** Client-side daily generation count (UX only; the real cost guard is server-side). */
+type RateState = { generationsToday: number; generationDate: string };
 
 function todayStr(): string {
 	return new Date().toISOString().slice(0, 10);
 }
 
 function createGeneratedStoriesStore() {
-	const initial: StoreState =
+	const initial: RateState =
 		typeof window !== 'undefined'
-			? JSON.parse(
-					localStorage.getItem('curiokids_generated') ||
-						'{"stories":[],"generationsToday":0,"generationDate":""}'
-				)
-			: { stories: [], generationsToday: 0, generationDate: '' };
+			? JSON.parse(localStorage.getItem('curiokids_gen_rate') || '{"generationsToday":0,"generationDate":""}')
+			: { generationsToday: 0, generationDate: '' };
 
-	// Reset daily count if date changed
 	if (initial.generationDate !== todayStr()) {
 		initial.generationsToday = 0;
 		initial.generationDate = todayStr();
 	}
 
-	const { subscribe, update } = writable<StoreState>(initial);
+	const { subscribe, update } = writable<RateState>(initial);
 
-	/**
-	 * Persist to localStorage. Generated covers are large base64 images, so we
-	 * can hit the ~5MB quota. If saving fails, drop the oldest stories one at a
-	 * time (keeping the newest, which the user just made) until it fits.
-	 * Returns the state that was actually saved.
-	 */
-	function save(state: StoreState): StoreState {
-		if (typeof window === 'undefined') return state;
-
-		let toSave = state;
-		while (true) {
-			try {
-				localStorage.setItem('curiokids_generated', JSON.stringify(toSave));
-				return toSave;
-			} catch {
-				if (toSave.stories.length <= 1) {
-					// Can't even fit one story — give up on persisting, keep in memory.
-					return toSave;
-				}
-				toSave = { ...toSave, stories: toSave.stories.slice(0, -1) };
-			}
+	function saveRate(state: RateState) {
+		if (typeof window !== 'undefined') {
+			localStorage.setItem('curiokids_gen_rate', JSON.stringify(state));
 		}
 	}
 
 	return {
 		subscribe,
-		addStory(story: GeneratedStory) {
+		/** Fetch the shared gallery list for a language. */
+		async loadGallery(language: Language): Promise<StorySummary[]> {
+			const res = await fetch(`/api/stories?language=${language}`);
+			if (!res.ok) throw new Error('gallery load failed');
+			const data = (await res.json()) as { stories: StorySummary[] };
+			return data.stories;
+		},
+		/** Fetch one full story by id (null if not found). */
+		async getStory(id: string): Promise<GeneratedStory | null> {
+			const res = await fetch(`/api/stories/${id}`);
+			if (res.status === 404) return null;
+			if (!res.ok) throw new Error('story load failed');
+			const data = (await res.json()) as { story: GeneratedStory };
+			return data.story;
+		},
+		/** Record one successful generation for the client-side daily UX counter. */
+		recordGeneration() {
 			update((state) => {
-				const next = {
-					stories: [story, ...state.stories],
-					generationsToday: state.generationsToday + 1,
-					generationDate: todayStr()
-				};
-				// Persist (may evict oldest to fit quota) and keep the in-memory
-				// store consistent with what was actually saved.
-				return save(next);
+				const next =
+					state.generationDate === todayStr()
+						? { generationsToday: state.generationsToday + 1, generationDate: todayStr() }
+						: { generationsToday: 1, generationDate: todayStr() };
+				saveRate(next);
+				return next;
 			});
 		},
-		canGenerate(state: StoreState): boolean {
+		/** Client-side daily limit check (3/day) for instant UX. */
+		canGenerate(state: RateState): boolean {
 			if (state.generationDate !== todayStr()) return true;
 			return state.generationsToday < 3;
 		}
