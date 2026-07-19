@@ -66,7 +66,7 @@
 				return;
 			}
 
-			generatedStories.addStory(data.story);
+			generatedStories.recordGeneration();
 			await goto(`/stories/${data.story.id}`);
 		} catch {
 			// Offline or network failure.
