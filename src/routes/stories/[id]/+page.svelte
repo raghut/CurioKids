@@ -5,7 +5,8 @@
 	import { progress } from '$lib/stores/progress';
 	import { generatedStories } from '$lib/stores/generatedStories';
 	import { loadStory } from '$lib/data/loadContent';
-	import { X, ChevronLeft, ChevronRight } from 'lucide-svelte';
+	import { X, ChevronLeft, ChevronRight, Printer } from 'lucide-svelte';
+	import PrintableStory from '$lib/components/PrintableStory.svelte';
 	import type { Story, GeneratedStory } from '$lib/types';
 
 	let story = $state<Story | GeneratedStory | null>(null);
@@ -48,6 +49,27 @@
 	const current = $derived(pages[pageIndex]);
 	const isLast = $derived(pageIndex === pages.length - 1);
 
+	// Normalize either source into props for the print-only layout.
+	const printData = $derived(
+		story
+			? story.source === 'generated'
+				? {
+						title: story.title,
+						cover: (story as GeneratedStory).cover_image_url,
+						pages: (story as GeneratedStory).pages.map((p) => ({ text: p.text, image: p.image_url })),
+						moral: story.moral,
+						reflectionQuestion: story.reflection_question
+					}
+				: {
+						title: story.title,
+						cover: (story as Story).cover_image,
+						pages: (story as Story).pages.map((p) => ({ text: p.text, image: p.image })),
+						moral: story.moral,
+						reflectionQuestion: story.reflection_question
+					}
+			: null
+	);
+
 	function next() {
 		if (!isLast) pageIndex++;
 	}
@@ -61,13 +83,27 @@
 </script>
 
 <div class="min-h-screen bg-white p-6 flex flex-col">
-	<header class="flex justify-end mb-4">
+	<header class="flex justify-end items-center gap-1 mb-4 print:hidden">
+		{#if story}
+			<button
+				onclick={() => window.print()}
+				class="p-2 rounded-full hover:bg-gray-100"
+				aria-label="Print"
+			>
+				<Printer size={24} strokeWidth={1.5} />
+			</button>
+		{/if}
 		<a href="/stories" class="p-2 rounded-full hover:bg-gray-100" aria-label="Close">
 			<X size={24} strokeWidth={1.5} />
 		</a>
 	</header>
 
+	{#if printData}
+		<PrintableStory {...printData} language={$language ?? 'en'} />
+	{/if}
+
 	{#if story}
+		<div class="flex-1 flex flex-col print:hidden">
 		<h2 class="text-2xl font-bold mb-4">{story.title}</h2>
 
 		<div class="flex-1 flex flex-col justify-center">
@@ -100,6 +136,7 @@
 				<p class="text-base italic">{story.moral}</p>
 			</div>
 		{/if}
+		</div>
 	{:else if notFound}
 		<div class="flex-1 flex flex-col items-center justify-center text-center">
 			<p class="text-xl font-bold mb-6">Hmm, we can't find that story.</p>
