@@ -82,7 +82,7 @@
 	}
 </script>
 
-<div class="min-h-screen bg-white p-6 flex flex-col">
+<div class="min-h-screen bg-white p-6 flex flex-col print:min-h-0 print:p-0 print:block">
 	<header class="flex justify-end items-center gap-1 mb-4 print:hidden">
 		{#if story}
 			<button
