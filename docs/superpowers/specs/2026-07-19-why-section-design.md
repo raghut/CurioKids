@@ -100,8 +100,16 @@ the existing arrow buttons.
 | `src/lib/actions/swipe.ts` | **new** — reusable left/right swipe action |
 | `src/routes/facts/+page.svelte` | vertical `FactCard` list; Telugu attrs |
 | `src/routes/facts/[id]/+page.svelte` | swipe + closing screen + not-found state + sizing; use `SectionRenderer` |
+| `src/lib/data/loadContent.ts` | fix `loadFact` to resolve by id from `index.json` (bug fix — see below) |
 | `src/lib/types.ts` | add optional `Fact.subtitle` |
 | `CLAUDE.md` | reflect the `subtitle?` schema addition |
+
+**Load bug (discovered while planning):** `loadFact('fact-001', …)` fetches
+`/content/facts/en/fact-001.json`, but the file is `fact-001-ants.json` (per CLAUDE.md's naming
+convention), so it 404s and the viewer shows "Loading…" forever — tapping any fact is currently
+dead. Fix: `index.json` already holds the full fact objects, so `loadFact` resolves by id from
+there and drops the filename coupling. (The curated story loader has the identical bug; stories
+stay out of scope here.)
 
 **Untouched (out of scope):** `ContentCard.svelte`, the stories viewer, any audio component, all
 fact/Telugu content files.
