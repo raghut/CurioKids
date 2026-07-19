@@ -26,20 +26,21 @@ Full product strategy is in `docs/strategy.md`. **Always re-read it if you're un
 ### Always
 - Keep facts and curated stories **fully offline**. JSON, images, audio bundled in the app.
 - Generated stories require network — but **fail gracefully** when offline (show friendly "we need wifi for this" screen with the curated stories highlighted instead).
-- Cache every generated story to **localStorage** so the child can re-read it offline.
-- Route all OpenAI calls through the **single serverless function** `/api/generate-story`. Never embed `OPENAI_API_KEY` in client code or commit it to git.
-- Use **TypeScript** for all code (frontend and the serverless function).
+- Generated stories are stored server-side in **Postgres (Neon)** as a shared gallery, with cover (and optionally per-page) images uploaded to **Vercel Blob**. Every device reads the same shared gallery — there is no per-device story cache.
+- Route all OpenAI calls through the **single serverless function** `/api/generate-story`. Never embed `OPENAI_API_KEY` in client code or commit it to git. Two additional read-only endpoints, `/api/stories` (list) and `/api/stories/[id]` (single story), serve the shared gallery from Postgres.
+- Use **TypeScript** for all code (frontend and the serverless functions).
 - Use **Tailwind** for styling. No custom CSS files unless absolutely needed.
-- Use **localStorage** for: language preference, list of completed content IDs, generated stories cache, daily generation count.
+- Use **localStorage** for only: language preference and the client-side daily generation count (UX-only; the real cap is enforced server-side against Postgres).
 - Honor the **6-screen UX**: splash → language picker → home → content list → content viewer → story creator. No new screens without my approval.
 - Use **large fonts** (min 22pt on content screens) and **large tap targets** (min 64×64 px).
 - Use **Noto Sans Telugu** for Telugu text, bundled in `static/fonts/`.
-- **Rate limit story generation**: max 3 per device per day. Check localStorage `generationsToday` + date before allowing.
+- **Rate limit story generation**: client shows a soft cap of 3 per device per day (localStorage `generationsToday` + date, UX only). The real limit is a **global daily cap** (`DAILY_GENERATION_CAP`, default 20) enforced server-side by counting today's rows in Postgres — this is a shared gallery, so the cap protects total spend across all users, not just one device.
+- Per-page illustrations are generated **only** when `GENERATE_PAGE_IMAGES=true`; by default only the cover image is generated (cheaper, faster).
 
 ### Never
-- Never add a database, auth, user accounts, or login screen.
+- Never add auth, user accounts, or a login screen. (Postgres exists solely as anonymous shared storage for generated stories — see below; it is not a user database.)
 - Never call OpenAI directly from the browser. Always proxy via `/api/generate-story`.
-- Never embed `OPENAI_API_KEY` in the bundle or commit it. Use `.env` + Vercel env vars only.
+- Never embed `OPENAI_API_KEY`, `DATABASE_URL`, or `BLOB_READ_WRITE_TOKEN` in the bundle or commit them. Use `.env` + Vercel env vars only.
 - Never add analytics, tracking, ads, notifications, or external SDKs.
 - Never add a settings page with more than language reset.
 - Never add infinite scroll, badges, streaks, points, leaderboards, or any gamification.
@@ -50,14 +51,20 @@ Full product strategy is in `docs/strategy.md`. **Always re-read it if you're un
 
 - **Framework**: SvelteKit (Svelte 5 + runes) + TypeScript
 - **Styling**: Tailwind CSS
-- **State**: Svelte stores + localStorage only
+- **State**: Svelte stores + localStorage for language preference and the client-side daily generation count only. Generated stories themselves live server-side (Postgres + Blob), not in localStorage.
 - **Audio**: native HTML `<audio>` element
 - **Build target Phase 1**: web (works on any browser, install as PWA)
 - **Build target Phase 2**: Capacitor wrapper → Android APK first, iOS later
 - **Hosting (web)**: Vercel
-- **Backend**: a single Vercel Edge Function at `src/routes/api/generate-story/+server.ts`. It accepts `{character, theme, childName, language}`, calls OpenAI, returns the generated story JSON + a DALL-E cover image URL. No DB, no queue, no other endpoints.
-- **AI**: OpenAI `gpt-4o-mini` for story text (cheap, fast, good enough). OpenAI `dall-e-3` for cover image. Use `gpt-4o` only if `mini` quality is visibly bad in testing.
-- **No** Supabase, no Firebase, no other backend services. The serverless function is the entire backend.
+- **Backend**: three Vercel serverless functions:
+  - `src/routes/api/generate-story/+server.ts` — accepts `{character_id, theme_id, child_name, language}`, calls OpenAI for story text, generates cover (and optionally per-page) images in parallel, uploads them to Vercel Blob, inserts the assembled story into Postgres, and returns it.
+  - `src/routes/api/stories/+server.ts` — GET, lists the shared gallery (lightweight summaries) from Postgres, optionally filtered by `?language=`.
+  - `src/routes/api/stories/[id]/+server.ts` — GET, returns one full generated story (the JSONB blob) by id.
+- **Database**: Postgres via **Neon** (`@neondatabase/serverless`), a single `stories` table storing the full `GeneratedStory` as a JSONB column plus a few promoted columns (`id`, `language`, `title`, `cover_url`, `age_tag`, `created_at`) for cheap listing/filtering/counting. This is anonymous shared storage for the gallery — not a user database (no auth, no accounts).
+- **Image storage**: **Vercel Blob** (`@vercel/blob`) holds cover images and, when enabled, per-page images as public JPEG URLs.
+- **AI**: OpenAI `gpt-4o-mini` for story text (cheap, fast, good enough). OpenAI `gpt-image-1` for cover + optional per-page images. Use `gpt-4o` only if `mini` quality is visibly bad in testing.
+- **Env vars**: `OPENAI_API_KEY`, `DATABASE_URL` (Neon connection string), `BLOB_READ_WRITE_TOKEN` (Vercel Blob), `GENERATE_PAGE_IMAGES` (`true`/`false`, default `false`), `DAILY_GENERATION_CAP` (integer, default `20`) — see `.env.example`.
+- **No** Supabase, no Firebase, no other backend services beyond Neon Postgres + Vercel Blob. There is still no auth, no user accounts, and no admin dashboard.
 
 ## Folder structure
 
@@ -75,7 +82,9 @@ curiokids/
       create/+page.svelte            # story creator: character + theme + name
       create/generating/+page.svelte # loading screen while OpenAI responds
       api/
-        generate-story/+server.ts    # the only backend endpoint
+        generate-story/+server.ts    # generates + persists a story to Postgres/Blob
+        stories/+server.ts           # GET — shared gallery list
+        stories/[id]/+server.ts      # GET — single generated story
     lib/
       components/
         ContentCard.svelte
@@ -86,15 +95,21 @@ curiokids/
       stores/
         language.ts                  # language preference
         progress.ts                  # completed content IDs
-        generatedStories.ts          # cached generated stories + daily count
+        generatedStories.ts          # thin API client + daily generation count (UX only)
       data/
         loadContent.ts               # reads JSON files
         characters.ts                # the 6 animal hero definitions
         themes.ts                    # the 4 theme definitions
       server/
+        db.ts                        # Neon client + story queries (insert/list/get/count-today)
+        blob.ts                      # Vercel Blob upload helper
+        validate.ts                  # pure request validation
+        assembleStory.ts             # pure GeneratedStory builder
         openaiClient.ts              # server-only OpenAI wrapper
-        storyPrompt.ts               # prompt builder
-      types.ts                       # Fact, Story, GeneratedStory, Character, Theme
+        storyPrompt.ts               # prompt builder (incl. per-page image prompts)
+      types.ts                       # Fact, Story, GeneratedStory, StorySummary, Character, Theme
+  scripts/
+    init-db.mjs                      # one-time Postgres schema creation
   static/
     content/
       facts/
@@ -121,7 +136,7 @@ curiokids/
       NotoSansTelugu-Bold.ttf
   docs/
     strategy.md                      # the full product strategy
-  .env                               # OPENAI_API_KEY — gitignored
+  .env                               # OPENAI_API_KEY, DATABASE_URL, BLOB_READ_WRITE_TOKEN, GENERATE_PAGE_IMAGES, DAILY_GENERATION_CAP — gitignored
   .env.example                       # template, committed
   CLAUDE.md                          # this file
 ```
@@ -170,27 +185,29 @@ type Story = {
 };
 ```
 
-### GeneratedStory JSON (cached in localStorage)
+### GeneratedStory JSON (stored server-side in Postgres as a shared gallery; NOT in localStorage)
 
 ```ts
 type GeneratedStory = {
-  id: string;                       // uuid generated client-side
+  id: string;                       // uuid generated server-side
   type: "story";
   source: "generated";
   language: "en" | "te";
   age_range: "5-8";
+  age_tag: string;                  // promoted DB column; defaults "5-8"
   character_id: string;             // "rabbit" | "peacock" | etc.
   theme_id: string;                 // "be_brave" | "help_friend" | etc.
   child_name: string | null;
   title: string;
-  cover_image_url: string;          // DALL-E hosted URL — store, may expire after ~1 hour
-  cover_image_data_uri: string;     // base64 data URI — what we actually render (offline-safe)
-  pages: Array<{ text: string }>;   // no per-page images in MVP
+  cover_image_url: string;          // Vercel Blob URL ("" if the cover image failed)
+  pages: Array<{ text: string; image_url: string }>; // image_url is "" unless GENERATE_PAGE_IMAGES=true (or that page's image failed)
   moral: string;
   reflection_question: string;
   created_at: string;               // ISO timestamp
 };
 ```
+
+The whole object is stored as a JSONB column (`story`) in the Postgres `stories` table, alongside promoted columns (`id`, `language`, `title`, `cover_url`, `age_tag`, `created_at`) used for cheap listing/filtering. A lighter `StorySummary` type (id, title, cover_url, age_tag, language, created_at) is used for the gallery list endpoint so the client doesn't have to fetch every full story just to render tiles.
 
 ### Character + Theme definitions (static, in `src/lib/data/`)
 
@@ -283,12 +300,14 @@ POST /api/generate-story
 ```
 
 **Server-side rules:**
-- Validate `character_id` and `theme_id` against the locked enum. Reject unknown values.
+- Validate `character_id` and `theme_id` against the locked enum via `validate.ts`. Reject unknown values.
 - Build the prompt server-side using `storyPrompt.ts`. Never accept arbitrary prompts from the client.
 - Call OpenAI with `response_format: { type: "json_object" }` to guarantee parseable output.
-- After text generation, call DALL-E for the cover image with the character's `prompt_descriptor` + scene from page 1.
-- Convert DALL-E URL to base64 data URI before returning (so the frontend can cache offline).
-- Total budget per call: ~₹5–7. If costs exceed ₹500/month across all users, throttle harder.
+- After text generation, call `gpt-image-1` for the cover image (always) and, when `GENERATE_PAGE_IMAGES=true`, one image per page too — all generated in parallel using the character's `prompt_descriptor` + that page's `image_prompt` for continuity.
+- Upload each generated image to **Vercel Blob** and store the resulting public URL (not a data URI). A failed individual image becomes `""` for that slot rather than failing the whole request.
+- Assemble the final story with `assembleStory.ts` and insert it into Postgres via `db.ts` (`insertStory`) — this is what makes it visible in the shared gallery for every device.
+- Enforce a **global daily cap** (`DAILY_GENERATION_CAP`, default 20) by counting today's rows in Postgres before generating (`countStoriesToday`) — return `rate_limit` (429) if reached.
+- Total budget per call: ~₹5–7 (more if per-page images are enabled). If costs exceed ₹500/month across all users, lower `DAILY_GENERATION_CAP`.
 - No logging of personal info. `child_name` is used to build the prompt and discarded — never written to logs.
 
 **Story length constraints (enforce in prompt):**
@@ -334,24 +353,26 @@ npm run preview      # preview production build
 npm run check        # svelte-check + tsc
 npm run lint         # eslint
 npm run format       # prettier
+npm test             # vitest run — unit tests for server/*.ts
+npm run test:watch   # vitest, watch mode
+npm run db:init      # one-time Postgres schema creation (scripts/init-db.mjs)
 ```
 
 ## Out of scope (do not propose, do not build)
 
-- User accounts, profiles, multi-user
-- Database (the only persistence is localStorage)
+- User accounts, profiles, auth, login, multi-user identity (Postgres is anonymous shared storage for the gallery only, not a user database)
 - Quiz / mission tracker UI
 - Parent dashboard / discussion prompts UI
-- Sharing, social, library of others' generated stories
+- Social features on top of the shared gallery: no likes, comments, following, moderation UI, or per-user "my stories" view
 - Push notifications, email, marketing
 - Subscriptions, payments, ads
 - Voice recording by the child
 - Speech-to-text
 - Analytics of any kind
-- Per-page DALL-E images for generated stories (cover only in MVP)
-- Audio narration for generated stories (text only in MVP — curated stories have audio)
+- Audio narration for generated stories (text only — curated stories have audio)
 - Custom character creation by the child (locked to the 6 animals)
 - Custom theme entry (locked to the 4 themes)
+- Migrating old localStorage-cached generated stories into the new backend gallery
 
 If a feature request touches any of the above, **stop and ask me** before implementing.
 
@@ -363,9 +384,9 @@ These are not decided yet — flag if relevant to your work and I'll choose:
 - Bundle identifier for Capacitor (will affect package ID — get this right before first Android build)
 - Whether Telugu narration is recorded human voice or TTS
 - Whether to support Hindi as a third language in Phase 1 or wait
-- Whether generated stories should be saveable to a "My Stories" tab separately from curated ones, or mixed in the same grid (current default: mixed with ✨ badge)
-- Whether to add server-side rate limiting (Vercel KV) before opening to anyone outside the family
+- Whether generated stories should be saveable to a "My Stories" tab separately from curated ones, or mixed in the same grid (current default: mixed with ✨ badge; note all generated stories are now shared globally, not per-device, which makes a per-device "My Stories" concept moot unless we later add lightweight device tagging)
+- Whether to enable `GENERATE_PAGE_IMAGES=true` by default once cost data from cover-only usage is in (currently `false`)
 
 ---
 
-_Last updated: 2026-06-07. Update this file whenever a scope decision changes._
+_Last updated: 2026-07-19. Update this file whenever a scope decision changes._

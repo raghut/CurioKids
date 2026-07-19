@@ -12,7 +12,7 @@
 
 <a {href} class="block rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white relative">
 	<div class="aspect-square bg-butter/30 flex items-center justify-center text-4xl">
-		{#if coverImage.startsWith('/') || coverImage.startsWith('data:')}
+		{#if coverImage.startsWith('/') || coverImage.startsWith('data:') || coverImage.startsWith('http')}
 			<img src={coverImage} alt={title} class="w-full h-full object-cover" />
 		{:else}
 			<span>{coverImage}</span>
