@@ -41,12 +41,12 @@
 
 	<!-- Sheets 2…N: one story page each -->
 	{#each pages as page, i (i)}
-		<section class="print-sheet flex flex-col items-center justify-center gap-6 text-center">
+		<section class="print-sheet relative flex flex-col items-center justify-center gap-6 text-center">
 			{#if page.image}
 				<img src={page.image} alt="" class="max-w-full max-h-[11cm] object-contain rounded-2xl" />
 			{/if}
 			<p class="text-2xl leading-relaxed max-w-[17cm]" lang={te ? 'te' : undefined}>{page.text}</p>
-			<span class="text-base text-gray-400">{i + 1}</span>
+			<span class="absolute bottom-4 left-0 right-0 text-center text-base text-gray-400">{i + 1}</span>
 		</section>
 	{/each}
 
