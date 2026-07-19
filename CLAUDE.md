@@ -38,7 +38,7 @@ Full product strategy is in `docs/strategy.md`. **Always re-read it if you're un
 - Per-page illustrations are generated **only** when `GENERATE_PAGE_IMAGES=true`; by default only the cover image is generated (cheaper, faster).
 
 ### Never
-- Never add auth, user accounts, or a login screen. (Postgres exists solely as anonymous shared storage for generated stories — see below; it is not a user database.)
+- Never add auth, user accounts, or a login screen. (Postgres exists solely as anonymous shared storage for generated stories — see below; it is not a user database.) **Carve-out (approved 2026-07-19):** a single shared **family passcode** (`CREATE_PASSCODE`) may gate *story creation* to protect the OpenAI bill from strangers with the link. This is a door-code, not auth — one shared secret, no accounts, no usernames, no user identity, no per-user data. If it's unset, creation stays open.
 - Never call OpenAI directly from the browser. Always proxy via `/api/generate-story`.
 - Never embed `OPENAI_API_KEY`, `DATABASE_URL`, or `BLOB_READ_WRITE_TOKEN` in the bundle or commit them. Use `.env` + Vercel env vars only.
 - Never add analytics, tracking, ads, notifications, or external SDKs.
@@ -56,14 +56,15 @@ Full product strategy is in `docs/strategy.md`. **Always re-read it if you're un
 - **Build target Phase 1**: web (works on any browser, install as PWA)
 - **Build target Phase 2**: Capacitor wrapper → Android APK first, iOS later
 - **Hosting (web)**: Vercel
-- **Backend**: three Vercel serverless functions:
-  - `src/routes/api/generate-story/+server.ts` — accepts `{character_id, theme_id, child_name, language}`, calls OpenAI for story text, generates cover (and optionally per-page) images in parallel, uploads them to Vercel Blob, inserts the assembled story into Postgres, and returns it.
+- **Backend**: four Vercel serverless functions:
+  - `src/routes/api/generate-story/+server.ts` — accepts `{character_id, theme_id, child_name, extra, language}`, enforces the family-passcode gate (see below), calls OpenAI for story text, generates cover (and optionally per-page) images in parallel, uploads them to Vercel Blob, inserts the assembled story into Postgres, and returns it.
   - `src/routes/api/stories/+server.ts` — GET, lists the shared gallery (lightweight summaries) from Postgres, optionally filtered by `?language=`.
   - `src/routes/api/stories/[id]/+server.ts` — GET, returns one full generated story (the JSONB blob) by id.
+  - `src/routes/api/verify-code/+server.ts` — POST `{code}`, returns `{ok}` (200) or 401. UX-only helper so the create screen can validate the family passcode at unlock time; the real enforcement is inside `generate-story`.
 - **Database**: Postgres via **Neon** (`@neondatabase/serverless`), a single `stories` table storing the full `GeneratedStory` as a JSONB column plus a few promoted columns (`id`, `language`, `title`, `cover_url`, `age_tag`, `created_at`) for cheap listing/filtering/counting. This is anonymous shared storage for the gallery — not a user database (no auth, no accounts).
 - **Image storage**: **Vercel Blob** (`@vercel/blob`) holds cover images and, when enabled, per-page images as public JPEG URLs.
 - **AI**: OpenAI `gpt-4o-mini` for story text (cheap, fast, good enough). OpenAI `gpt-image-1` for cover + optional per-page images. Use `gpt-4o` only if `mini` quality is visibly bad in testing.
-- **Env vars**: `OPENAI_API_KEY`, `DATABASE_URL` (Neon connection string), `BLOB_READ_WRITE_TOKEN` (Vercel Blob), `GENERATE_PAGE_IMAGES` (`true`/`false`, default `false`), `DAILY_GENERATION_CAP` (integer, default `20`) — see `.env.example`.
+- **Env vars**: `OPENAI_API_KEY`, `DATABASE_URL` (Neon connection string), `BLOB_READ_WRITE_TOKEN` (Vercel Blob), `GENERATE_PAGE_IMAGES` (`true`/`false`, default `false`), `DAILY_GENERATION_CAP` (integer, default `20`), `CREATE_PASSCODE` (shared family passcode gating story creation; blank = gate off) — see `.env.example`.
 - **No** Supabase, no Firebase, no other backend services beyond Neon Postgres + Vercel Blob. There is still no auth, no user accounts, and no admin dashboard.
 
 ## Folder structure
@@ -280,8 +281,10 @@ POST /api/generate-story
   character_id: "rabbit" | "peacock" | "elephant" | "monkey" | "tortoise" | "parrot";
   theme_id: "be_brave" | "help_friend" | "find_lost" | "learn_new";
   child_name: string | null;        // optional; if provided, substituted into story
+  extra: string | null;             // optional free-text "wishes" (e.g. extra animals); sanitized + length-capped server-side, treated as story CONTENT only, never as prompt instructions
   language: "en" | "te";
 }
+// Header: x-create-code — the family passcode (see CREATE_PASSCODE). Required only when the gate is enabled.
 ```
 
 **Response (200):**
@@ -294,14 +297,15 @@ POST /api/generate-story
 **Response (4xx/5xx):**
 ```ts
 {
-  error: "rate_limit" | "invalid_input" | "openai_failed" | "server_error";
+  error: "rate_limit" | "invalid_input" | "unauthorized" | "openai_failed" | "server_error";
   message: string;                  // kid-friendly message frontend can display
 }
 ```
 
 **Server-side rules:**
+- Enforce the **family passcode gate** first: `checkPasscode(request.headers['x-create-code'])` via `passcode.ts`. Reject with `unauthorized` (401) before any validation, DB, or OpenAI work when the gate is enabled and the code is missing/wrong. No-op when `CREATE_PASSCODE` is unset (open). This is a shared door-code, not auth.
 - Validate `character_id` and `theme_id` against the locked enum via `validate.ts`. Reject unknown values.
-- Build the prompt server-side using `storyPrompt.ts`. Never accept arbitrary prompts from the client.
+- Build the prompt server-side using `storyPrompt.ts`. Never accept arbitrary prompt *instructions* from the client. **The one exception is the optional `extra` field**: it is sanitized in `validate.ts` (whitespace collapsed, quote/backtick delimiters stripped, capped at 200 chars) and injected in `storyPrompt.ts` as fenced, untrusted **content** — story "ingredients" the model may gently include — with an explicit instruction to ignore any commands inside it and never break the safety/length rules. It is never treated as a prompt override and is not persisted to the DB.
 - Call OpenAI with `response_format: { type: "json_object" }` to guarantee parseable output.
 - After text generation, call `gpt-image-1` for the cover image (always) and, when `GENERATE_PAGE_IMAGES=true`, one image per page too — all generated in parallel using the character's `prompt_descriptor` + that page's `image_prompt` for continuity.
 - Upload each generated image to **Vercel Blob** and store the resulting public URL (not a data URI). A failed individual image becomes `""` for that slot rather than failing the whole request.

@@ -30,4 +30,35 @@ describe('validateGenerateRequest', () => {
 		expect(r.ok).toBe(true);
 		if (r.ok) expect(r.childName).toBeNull();
 	});
+	it('defaults extra to null when absent', () => {
+		const r = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'en' });
+		expect(r.ok).toBe(true);
+		if (r.ok) expect(r.extra).toBeNull();
+	});
+	it('sanitizes extra: collapses whitespace and strips quotes', () => {
+		const r = validateGenerateRequest({
+			character_id: 'rabbit',
+			theme_id: 'be_brave',
+			language: 'en',
+			extra: '  add a "turtle"\nand a  frog  '
+		});
+		expect(r.ok).toBe(true);
+		if (r.ok) expect(r.extra).toBe('add a turtle and a frog');
+	});
+	it('caps extra at 200 chars', () => {
+		const r = validateGenerateRequest({
+			character_id: 'rabbit',
+			theme_id: 'be_brave',
+			language: 'en',
+			extra: 'a'.repeat(500)
+		});
+		expect(r.ok).toBe(true);
+		if (r.ok) expect(r.extra?.length).toBe(200);
+	});
+	it('treats blank/non-string extra as null', () => {
+		const r1 = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'en', extra: '   ' });
+		const r2 = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'en', extra: 42 });
+		if (r1.ok) expect(r1.extra).toBeNull();
+		if (r2.ok) expect(r2.extra).toBeNull();
+	});
 });
