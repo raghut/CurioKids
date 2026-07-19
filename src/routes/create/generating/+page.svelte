@@ -4,6 +4,7 @@
 	import { get } from 'svelte/store';
 	import { language } from '$lib/stores/language';
 	import { generatedStories } from '$lib/stores/generatedStories';
+	import { familyCode } from '$lib/stores/familyCode';
 	import { characters } from '$lib/data/characters';
 	import type { CharacterId, GeneratedStory, ThemeId } from '$lib/types';
 
@@ -35,6 +36,7 @@
 		const character_id = $page.url.searchParams.get('character') as CharacterId | null;
 		const theme_id = $page.url.searchParams.get('theme') as ThemeId | null;
 		const child_name = $page.url.searchParams.get('name');
+		const extra = $page.url.searchParams.get('extra');
 		const lang = get(language) ?? 'en';
 
 		if (!character_id || !theme_id) {
@@ -49,11 +51,22 @@
 		}
 
 		try {
+			const code = familyCode.get();
 			const res = await fetch('/api/generate-story', {
 				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ character_id, theme_id, child_name, language: lang })
+				headers: {
+					'Content-Type': 'application/json',
+					...(code ? { 'x-create-code': code } : {})
+				},
+				body: JSON.stringify({ character_id, theme_id, child_name, extra, language: lang })
 			});
+
+			if (res.status === 401) {
+				// Code missing or rotated — forget it and send them back to re-enter.
+				familyCode.clear();
+				await goto('/create');
+				return;
+			}
 
 			if (!res.ok) {
 				phase = 'error';

@@ -7,14 +7,20 @@ import { generateStoryText, generateImage } from '$lib/server/openaiClient';
 import { uploadImage } from '$lib/server/blob';
 import { assembleStory } from '$lib/server/assembleStory';
 import { insertStory, countStoriesToday } from '$lib/server/db';
+import { checkPasscode } from '$lib/server/passcode';
 
-type ErrorCode = 'invalid_input' | 'rate_limit' | 'openai_failed' | 'server_error';
+type ErrorCode = 'invalid_input' | 'unauthorized' | 'rate_limit' | 'openai_failed' | 'server_error';
 
 function fail(code: ErrorCode, message: string, status: number) {
 	return json({ error: code, message }, { status });
 }
 
 export const POST: RequestHandler = async ({ request }) => {
+	// --- Family passcode gate (real cost guard; no-op if CREATE_PASSCODE unset) ---
+	if (!checkPasscode(request.headers.get('x-create-code'))) {
+		return fail('unauthorized', 'Ask a grown-up for the family code.', 401);
+	}
+
 	// --- Parse + validate ---
 	let body: unknown;
 	try {
@@ -25,7 +31,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	const v = validateGenerateRequest(body);
 	if (!v.ok) return fail(v.code, v.message, 400);
-	const { character, theme, language, childName } = v;
+	const { character, theme, language, childName, extra } = v;
 
 	// --- Global daily cost guard ---
 	const cap = parseInt(env.DAILY_GENERATION_CAP ?? '20', 10);
@@ -42,7 +48,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	// --- Generate ---
 	try {
-		const messages = buildStoryMessages({ character, theme, childName, language });
+		const messages = buildStoryMessages({ character, theme, childName, language, extra });
 		const text = await generateStoryText(messages);
 
 		// Build prompts: [cover, page1..pageN]. If page images are off, only the cover.
