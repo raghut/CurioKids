@@ -41,15 +41,24 @@ export type GeneratedStory = {
 	source: 'generated';
 	language: Language;
 	age_range: '5-8';
+	age_tag: string;
 	character_id: string;
 	theme_id: string;
 	child_name: string | null;
 	title: string;
 	cover_image_url: string;
-	cover_image_data_uri: string;
-	pages: Array<{ text: string }>;
+	pages: Array<{ text: string; image_url: string }>;
 	moral: string;
 	reflection_question: string;
+	created_at: string;
+};
+
+export type StorySummary = {
+	id: string;
+	title: string;
+	cover_url: string;
+	age_tag: string;
+	language: string;
 	created_at: string;
 };
 
