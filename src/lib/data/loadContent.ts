@@ -7,9 +7,8 @@ export async function loadFacts(language: Language): Promise<Fact[]> {
 }
 
 export async function loadFact(id: string, language: Language): Promise<Fact | null> {
-	const response = await fetch(`/content/facts/${language}/${id}.json`);
-	if (!response.ok) return null;
-	return response.json();
+	const facts = await loadFacts(language);
+	return facts.find((f) => f.id === id) ?? null;
 }
 
 export async function loadStories(language: Language): Promise<Story[]> {
