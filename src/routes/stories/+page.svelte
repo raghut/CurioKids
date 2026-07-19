@@ -5,14 +5,23 @@
 	import { loadStories } from '$lib/data/loadContent';
 	import ContentCard from '$lib/components/ContentCard.svelte';
 	import { ArrowLeft } from 'lucide-svelte';
-	import type { Story } from '$lib/types';
+	import type { Story, StorySummary } from '$lib/types';
 
-	let stories = $state<Story[]>([]);
+	let curated = $state<Story[]>([]);
+	let generated = $state<StorySummary[]>([]);
+	let loading = $state(true);
+	let failed = $state(false);
 
 	$effect(() => {
-		if ($language) {
-			loadStories($language).then((s) => (stories = s));
-		}
+		if (!$language) return;
+		loading = true;
+		failed = false;
+		loadStories($language).then((s) => (curated = s));
+		generatedStories
+			.loadGallery($language)
+			.then((g) => (generated = g))
+			.catch(() => (failed = true))
+			.finally(() => (loading = false));
 	});
 
 	const te = $derived($language === 'te');
@@ -23,13 +32,11 @@
 		<a href="/" class="p-2 rounded-full hover:bg-gray-100" aria-label="Back">
 			<ArrowLeft size={24} strokeWidth={1.5} />
 		</a>
-		<h1 class="text-2xl font-bold" lang={te ? 'te' : undefined}>
-			{te ? 'కథలు' : 'Stories'}
-		</h1>
+		<h1 class="text-2xl font-bold" lang={te ? 'te' : undefined}>{te ? 'కథలు' : 'Stories'}</h1>
 	</header>
 
 	<div class="grid grid-cols-2 gap-4">
-		{#each stories as story}
+		{#each curated as story}
 			<ContentCard
 				title={story.title}
 				coverImage={story.cover_image || '📖'}
@@ -38,10 +45,10 @@
 			/>
 		{/each}
 
-		{#each $generatedStories.stories as gen}
+		{#each generated as gen}
 			<ContentCard
 				title={gen.title}
-				coverImage={gen.cover_image_data_uri || '✨'}
+				coverImage={gen.cover_url || '✨'}
 				href="/stories/{gen.id}"
 				completed={$progress.includes(gen.id)}
 				badge="✨"
@@ -49,7 +56,15 @@
 		{/each}
 	</div>
 
-	{#if stories.length === 0 && $generatedStories.stories.length === 0}
+	{#if loading}
+		<p class="text-center text-gray-400 mt-12 text-lg" lang={te ? 'te' : undefined}>
+			{te ? 'కథలు వస్తున్నాయి...' : 'Loading stories...'}
+		</p>
+	{:else if failed}
+		<p class="text-center text-gray-400 mt-12 text-lg" lang={te ? 'te' : undefined}>
+			{te ? 'కథల కోసం వైఫై కావాలి.' : 'We need wifi to load new stories.'}
+		</p>
+	{:else if curated.length === 0 && generated.length === 0}
 		<p class="text-center text-gray-400 mt-12 text-lg">No stories yet!</p>
 	{/if}
 </div>
