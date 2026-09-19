@@ -115,8 +115,9 @@ login action, not in `adminAuth.ts` (keeps the core pure and fast to test).
     title; newest-first sort.
   - Row actions: **Preview** (renders the kid story-viewer look in a modal/route),
     **Publish/Unpublish** (toggles `status`), **Delete** (confirm dialog → removes row + Blob
-    image; exports the row to a timestamped JSON backup first, per the backup-before-delete
-    rule).
+    image; server **logs the full row JSON before deleting** — serverless FS is read-only, so a
+    durable file backup isn't possible; the confirm dialog is the primary accident guard and the
+    log line is the recovery trail, per the backup-before-delete rule).
   - Data comes from a new admin list query (returns drafts too) — the kid `listStories` must
     stay published-only, so the admin uses a separate `listStoriesAdmin` in `db.ts`.
 - No generation or editing controls in this increment (Increments 2–3).
@@ -170,7 +171,7 @@ equivalent design pass) rather than treating the UI as incidental.
 ## Admin API (Increment 1)
 
 - `POST /api/admin/stories/[id]` with `{ action: 'publish' | 'unpublish' }` → updates `status`.
-- `DELETE /api/admin/stories/[id]` → backup-export the row, delete Blob images (cover + any
+- `DELETE /api/admin/stories/[id]` → log the full row JSON, delete Blob images (cover + any
   page images), delete the row. Reuses the Blob-delete logic from `scripts/cleanup-stories.mjs`,
   promoted into `src/lib/server/blob.ts` as `deleteImages(urls)`.
 - All under the `hooks.server.ts` guard.
