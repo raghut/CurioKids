@@ -24,7 +24,8 @@ describe('assembleStory', () => {
 			childName: 'Geeta',
 			coverUrl: 'http://blob/cover.jpg',
 			pageUrls: ['http://blob/p1.jpg', 'http://blob/p2.jpg'],
-			createdAt: '2026-01-01T00:00:00Z'
+			createdAt: '2026-01-01T00:00:00Z',
+			status: 'published'
 		});
 		expect(story.id).toBe('abc');
 		expect(story.source).toBe('generated');
@@ -46,9 +47,25 @@ describe('assembleStory', () => {
 			childName: null,
 			coverUrl: '',
 			pageUrls: ['http://blob/p1.jpg', ''],
-			createdAt: '2026-01-01T00:00:00Z'
+			createdAt: '2026-01-01T00:00:00Z',
+			status: 'draft'
 		});
 		expect(story.pages[1].image_url).toBe('');
 		expect(story.cover_image_url).toBe('');
+	});
+	it('sets the status passed in', () => {
+		const story = assembleStory({
+			id: 'id-1',
+			text: { title: 'T', pages: [{ text: 'p1' }], moral: 'm', reflection_question: 'r', scene: 's' } as never,
+			language: 'en',
+			character_id: 'rabbit',
+			theme_id: 'be_brave',
+			childName: null,
+			coverUrl: '',
+			pageUrls: [],
+			createdAt: '2026-09-19T00:00:00.000Z',
+			status: 'published'
+		});
+		expect(story.status).toBe('published');
 	});
 });
