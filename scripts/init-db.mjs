@@ -16,10 +16,12 @@ await sql`
 		title text NOT NULL,
 		cover_url text NOT NULL DEFAULT '',
 		age_tag text NOT NULL DEFAULT '5-8',
+		status text NOT NULL DEFAULT 'draft',
 		story jsonb NOT NULL
 	)
 `;
 await sql`CREATE INDEX IF NOT EXISTS stories_lang_created_idx ON stories (language, created_at DESC)`;
 await sql`CREATE INDEX IF NOT EXISTS stories_age_idx ON stories (age_tag)`;
+await sql`CREATE INDEX IF NOT EXISTS stories_status_idx ON stories (status)`;
 
 console.log('✅ stories table ready');

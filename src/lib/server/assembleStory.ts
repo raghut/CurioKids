@@ -16,6 +16,7 @@ export function assembleStory(input: {
 	coverUrl: string;
 	pageUrls: string[];
 	createdAt: string;
+	status: 'draft' | 'published';
 }): GeneratedStory {
 	return {
 		id: input.id,
@@ -32,6 +33,7 @@ export function assembleStory(input: {
 		pages: input.text.pages.map((p, i) => ({ text: p.text, image_url: input.pageUrls[i] ?? '' })),
 		moral: input.text.moral,
 		reflection_question: input.text.reflection_question,
-		created_at: input.createdAt
+		created_at: input.createdAt,
+		status: input.status
 	};
 }

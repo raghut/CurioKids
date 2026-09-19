@@ -9,6 +9,10 @@
 	let showSplash = $state(true);
 	let mounted = $state(false);
 
+	// The admin dashboard (/admin/*) is a separate tool — it must not inherit the
+	// kid app's splash screen or the language-picker redirect.
+	const isAdmin = $derived($page.url.pathname.startsWith('/admin'));
+
 	onMount(() => {
 		mounted = true;
 		// Show splash for 1 second on first load
@@ -17,15 +21,15 @@
 		}, 1000);
 	});
 
-	// Redirect to language picker if no language set (except if already there)
+	// Redirect to language picker if no language set (except if already there, or in admin)
 	$effect(() => {
-		if (mounted && !showSplash && $language === null && $page.url.pathname !== '/language') {
+		if (mounted && !showSplash && !isAdmin && $language === null && $page.url.pathname !== '/language') {
 			goto('/language');
 		}
 	});
 </script>
 
-{#if showSplash}
+{#if showSplash && !isAdmin}
 	<div class="fixed inset-0 bg-white flex flex-col items-center justify-center z-50">
 		<h1 class="text-5xl font-[family-name:var(--font-fraunces)] font-bold text-coral">
 			CurioKids
