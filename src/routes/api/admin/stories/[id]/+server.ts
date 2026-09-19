@@ -5,6 +5,20 @@ import { deleteImages } from '$lib/server/blob';
 
 // Auth is enforced in hooks.server.ts (all /api/admin/* require a valid cookie).
 
+export const GET: RequestHandler = async ({ params, url }) => {
+	if (url.searchParams.get('preview') !== '1') {
+		return json({ error: 'invalid_input', message: 'Unsupported.' }, { status: 400 });
+	}
+	try {
+		const story = await getStoryAdmin(params.id);
+		if (!story) return json({ error: 'not_found', message: 'Story not found.' }, { status: 404 });
+		return json({ story });
+	} catch (err) {
+		console.error('admin preview failed:', err instanceof Error ? err.message : 'unknown');
+		return json({ error: 'server_error', message: 'Could not load the story.' }, { status: 500 });
+	}
+};
+
 export const POST: RequestHandler = async ({ params, request }) => {
 	let body: { action?: string };
 	try {
