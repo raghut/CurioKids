@@ -64,8 +64,16 @@ Full product strategy is in `docs/strategy.md`. **Always re-read it if you're un
 - **Database**: Postgres via **Neon** (`@neondatabase/serverless`), a single `stories` table storing the full `GeneratedStory` as a JSONB column plus a few promoted columns (`id`, `language`, `title`, `cover_url`, `age_tag`, `created_at`) for cheap listing/filtering/counting. This is anonymous shared storage for the gallery — not a user database (no auth, no accounts).
 - **Image storage**: **Vercel Blob** (`@vercel/blob`) holds cover images and, when enabled, per-page images as public JPEG URLs.
 - **AI**: OpenAI `gpt-4o-mini` for story text (cheap, fast, good enough). OpenAI `gpt-image-1` for cover + optional per-page images. Use `gpt-4o` only if `mini` quality is visibly bad in testing.
-- **Env vars**: `OPENAI_API_KEY`, `DATABASE_URL` (Neon connection string), `BLOB_READ_WRITE_TOKEN` (Vercel Blob), `GENERATE_PAGE_IMAGES` (`true`/`false`, default `false`), `DAILY_GENERATION_CAP` (integer, default `20`), `CREATE_PASSCODE` (shared family passcode gating story creation; blank = gate off) — see `.env.example`.
-- **No** Supabase, no Firebase, no other backend services beyond Neon Postgres + Vercel Blob. There is still no auth, no user accounts, and no admin dashboard.
+- **Env vars**: `OPENAI_API_KEY`, `DATABASE_URL` (Neon connection string), `BLOB_READ_WRITE_TOKEN` (Vercel Blob), `GENERATE_PAGE_IMAGES` (`true`/`false`, default `false`), `DAILY_GENERATION_CAP` (integer, default `20`), `CREATE_PASSCODE` (shared family passcode gating story creation; blank = gate off), `ADMIN_PASSCODE` (shared admin door-code gating the whole admin dashboard; blank = admin OFF), `ADMIN_SESSION_SECRET` (HMAC secret for the admin session cookie; blank = falls back to `ADMIN_PASSCODE`) — see `.env.example`.
+
+### Admin dashboard + story status gate (approved 2026-09-19)
+
+- The `stories` table has a promoted `status` column (`draft` | `published`, DB default `draft`). The kid-facing endpoints `/api/stories` and `/api/stories/[id]` return **`published` only**; drafts are invisible to children.
+- **Kid-generated** stories (from the kid `/create` → `/api/generate-story` flow) insert as **`published`** — the child's own creation is never gated. **Admin-produced** stories are **`draft` by default** and only reach kids when an operator publishes them.
+- The admin dashboard lives under `/admin/*` (pages) and `/api/admin/*` (endpoints), gated server-side by `src/hooks.server.ts` using a stateless HMAC-signed session cookie (`ADMIN_PASSCODE` + `ADMIN_SESSION_SECRET`). This is a shared door-code, **not** user auth — no accounts, no identity. Admin is OFF unless `ADMIN_PASSCODE` is set (never silently open).
+- Admin can review, publish/unpublish, and **delete** gallery stories (row + Vercel Blob images). This admin-side moderation is in scope; kid-facing social features remain out of scope.
+- Increment 1 (auth + status gate + manage) is built. Generation-from-brief, editing, and cost visibility are later increments — see `docs/superpowers/specs/2026-09-19-admin-dashboard-inc1-design.md`.
+- **No** Supabase, no Firebase, no other backend services beyond Neon Postgres + Vercel Blob. There is still no user auth and no user accounts. **An admin dashboard is now in scope (approved 2026-09-19)** — a content-production tool gated by a single shared `ADMIN_PASSCODE` (a door-code, not accounts) — see the admin dashboard note below.
 
 ## Folder structure
 
@@ -368,7 +376,7 @@ npm run db:init      # one-time Postgres schema creation (scripts/init-db.mjs)
 - User accounts, profiles, auth, login, multi-user identity (Postgres is anonymous shared storage for the gallery only, not a user database)
 - Quiz / mission tracker UI
 - Parent dashboard / discussion prompts UI
-- Social features on top of the shared gallery: no likes, comments, following, moderation UI, or per-user "my stories" view
+- Social features on top of the shared gallery: no likes, comments, following, or per-user "my stories" view. (Admin-side moderation — publish/unpublish/delete via the `/admin` dashboard — IS in scope as of 2026-09-19; what stays out is *kid-facing* social/moderation UI.)
 - Push notifications, email, marketing
 - Subscriptions, payments, ads
 - Voice recording by the child
