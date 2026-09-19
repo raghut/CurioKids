@@ -81,7 +81,8 @@ export const POST: RequestHandler = async ({ request }) => {
 			childName,
 			coverUrl,
 			pageUrls,
-			createdAt: new Date().toISOString()
+			createdAt: new Date().toISOString(),
+			status: 'published'
 		});
 
 		await insertStory(story);
