@@ -1,6 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import { env } from '$env/dynamic/private';
-import type { GeneratedStory, StorySummary } from '$lib/types';
+import type { GeneratedStory, StorySummary, AdminStorySummary } from '$lib/types';
 
 function sql() {
 	if (!env.DATABASE_URL) throw new Error('DATABASE_URL not configured');
@@ -11,24 +11,24 @@ function sql() {
 export async function insertStory(story: GeneratedStory): Promise<void> {
 	const q = sql();
 	await q`
-		INSERT INTO stories (id, language, title, cover_url, age_tag, story)
-		VALUES (${story.id}, ${story.language}, ${story.title}, ${story.cover_image_url}, ${story.age_tag}, ${JSON.stringify(story)})
+		INSERT INTO stories (id, language, title, cover_url, age_tag, status, story)
+		VALUES (${story.id}, ${story.language}, ${story.title}, ${story.cover_image_url}, ${story.age_tag}, ${story.status}, ${JSON.stringify(story)})
 	`;
 }
 
-/** Lightweight gallery list from promoted columns only (no jsonb parse). */
+/** Lightweight gallery list (published only) from promoted columns. */
 export async function listStories(language?: string): Promise<StorySummary[]> {
 	const q = sql();
 	const rows = language
-		? await q`SELECT id, title, cover_url, age_tag, language, created_at FROM stories WHERE language = ${language} ORDER BY created_at DESC`
-		: await q`SELECT id, title, cover_url, age_tag, language, created_at FROM stories ORDER BY created_at DESC`;
+		? await q`SELECT id, title, cover_url, age_tag, language, created_at FROM stories WHERE status = 'published' AND language = ${language} ORDER BY created_at DESC`
+		: await q`SELECT id, title, cover_url, age_tag, language, created_at FROM stories WHERE status = 'published' ORDER BY created_at DESC`;
 	return rows as StorySummary[];
 }
 
-/** Full story (jsonb blob) by id, or null if not found. */
+/** Full published story by id, or null. Drafts are treated as not-found for kids. */
 export async function getStory(id: string): Promise<GeneratedStory | null> {
 	const q = sql();
-	const rows = await q`SELECT story FROM stories WHERE id = ${id}`;
+	const rows = await q`SELECT story FROM stories WHERE id = ${id} AND status = 'published'`;
 	return rows.length ? (rows[0].story as GeneratedStory) : null;
 }
 
@@ -37,4 +37,41 @@ export async function countStoriesToday(): Promise<number> {
 	const q = sql();
 	const rows = await q`SELECT count(*)::int AS n FROM stories WHERE created_at >= date_trunc('day', now())`;
 	return (rows[0]?.n as number) ?? 0;
+}
+
+/** All stories (any status) with the fields the admin list needs. */
+export async function listStoriesAdmin(): Promise<AdminStorySummary[]> {
+	const q = sql();
+	const rows = await q`
+		SELECT id, title, cover_url, age_tag, language, created_at, status,
+		       story->>'character_id' AS character_id,
+		       story->>'theme_id' AS theme_id
+		FROM stories
+		ORDER BY created_at DESC
+	`;
+	return rows as AdminStorySummary[];
+}
+
+/** Full story (any status) for admin preview, or null. */
+export async function getStoryAdmin(id: string): Promise<GeneratedStory | null> {
+	const q = sql();
+	const rows = await q`SELECT story FROM stories WHERE id = ${id}`;
+	return rows.length ? (rows[0].story as GeneratedStory) : null;
+}
+
+/** Publish/unpublish: update the promoted column and mirror into the jsonb blob. */
+export async function setStoryStatus(id: string, status: 'draft' | 'published'): Promise<void> {
+	const q = sql();
+	await q`
+		UPDATE stories
+		SET status = ${status},
+		    story = jsonb_set(story, '{status}', to_jsonb(${status}::text))
+		WHERE id = ${id}
+	`;
+}
+
+/** Hard-delete a story row (Blob deletion is handled by the caller). */
+export async function deleteStory(id: string): Promise<void> {
+	const q = sql();
+	await q`DELETE FROM stories WHERE id = ${id}`;
 }
