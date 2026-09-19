@@ -31,8 +31,12 @@ This is a deliberate, owner-approved scope change. Decisions made during brainst
    own creation.
 4. **Admin auth = single passcode + stateless signed cookie.** Separate secret from the family
    `CREATE_PASSCODE`. Real accounts remain out of scope (deferred to PRD Phase 3).
-5. **Rate limiting = in-memory best-effort** (per owner choice). Serverless caveat documented
-   below; upgrade to a DB-backed limiter is a known future option.
+5. **No rate-limiter table/counter in Increment 1.** The real guard is a **strong
+   `ADMIN_PASSCODE`** (16+ random chars) plus a **fixed ~500ms delay on failed login
+   attempts** — both stateless and effective on free-tier serverless, unlike a per-instance
+   in-memory counter. A DB-backed limiter is a known upgrade path if more admins are added.
+6. **Very good, unified responsive UI is a first-class requirement** (desktop + mobile). See
+   the "UI / UX design" section.
 
 ## Data model change
 
@@ -71,7 +75,9 @@ New env vars (added to `.env.example`):
    - `httpOnly`, `secure`, `sameSite: 'strict'`, `path: '/'`, `maxAge` ≈ 7 days.
    - Verified statelessly on every request: recompute HMAC, constant-time compare, check
      `expiry > now`. **No session table.**
-4. On failure: increment the in-memory attempt counter, return an error the login page shows.
+4. On failure: **await a fixed ~500ms delay**, then return an error the login page shows. The
+   delay is unconditional on failure (stateless, no shared counter) and throttles rapid guessing
+   naturally on serverless.
 
 **Guard** (`src/hooks.server.ts`):
 - For any request to `/admin` or `/api/admin` (except `/admin/login` and its action):
@@ -79,16 +85,18 @@ New env vars (added to `.env.example`):
   routes return `401 { error: 'unauthorized' }`.
 - Guard runs server-side only. The client is never trusted.
 
-**Rate limiting** (`src/lib/server/adminRateLimit.ts`):
-- In-memory `Map<ip, { count, windowStart }>`. Allow 5 failed attempts per 15-minute window
-  per IP; further attempts return `429` until the window rolls.
-- **Documented caveat:** serverless runs multiple ephemeral instances, so this is best-effort
-  per-instance and resets on cold start. It raises the bar against casual brute force but is not
-  a hard guarantee. A DB-backed `admin_attempts` limiter is the known upgrade path if needed.
+**Brute-force posture (no rate-limiter in Inc 1):**
+- The primary guard is a **strong `ADMIN_PASSCODE`** — `.env.example` instructs 16+ random
+  chars. Over HTTP, guessing such a secret is infeasible regardless of throttling.
+- The **~500ms failed-attempt delay** is the stateless throttle. No in-memory counter (leaky
+  per-instance on serverless) and no DB table in this increment.
+- A DB-backed `admin_attempts` limiter remains the documented upgrade path for Phase 2/3 when
+  multiple admins exist.
 
 `adminAuth.ts` holds the pure, unit-testable core: `signSession(expiry, secret)`,
 `verifySession(cookieValue, secret, now)`, `checkPasscode(input, expected)`. `hooks.server.ts`
-and the login action are thin wrappers around it.
+and the login action are thin wrappers around it. The ~500ms failed-attempt delay lives in the
+login action, not in `adminAuth.ts` (keeps the core pure and fast to test).
 
 ## Kid app changes
 
@@ -112,6 +120,52 @@ and the login action are thin wrappers around it.
   - Data comes from a new admin list query (returns drafts too) — the kid `listStories` must
     stay published-only, so the admin uses a separate `listStoriesAdmin` in `db.ts`.
 - No generation or editing controls in this increment (Increments 2–3).
+
+## UI / UX design (unified responsive — desktop + mobile)
+
+A first-class requirement: the admin dashboard must look genuinely good and work equally well on
+a desktop (primary — content production) and a phone (review/publish on the go). One codebase,
+one responsive layout — not a separate mobile build.
+
+**Aesthetic direction — "calm production tool", distinct from the kid app but coherent with it.**
+The kid app is playful (Fraunces display, rounded cards, big tap targets). The admin app is a
+*tool*: denser, more utilitarian, professional — but it **shares the brand palette and fonts** so
+the two feel like one product. Concretely:
+- Reuse the brand palette as **accents on a neutral base**: white / soft-gray surfaces, slate
+  text, brand peach `#FFB89A` / sky `#A8D8EA` / mint `#B8E6C1` for status chips, primary actions,
+  and highlights. Coral `#FF8B7B` reserved for destructive (delete/unpublish confirm).
+- **Nunito** for UI text (already bundled); Fraunces used sparingly for page titles only.
+- Status is color-coded and label-coded (never color alone, for accessibility): `draft` = muted
+  gray chip, `published` = mint chip with a check.
+- Calm, no gamification, soft shadows, generous whitespace — consistent with the product tone.
+
+**Responsive layout system:**
+- **App shell** (`admin/+layout.svelte`): on desktop (≥1024px) a fixed left **sidebar** nav +
+  top bar (title, logout); on tablet/mobile the sidebar collapses into a **top bar + slide-in
+  drawer** (hamburger). Single layout, Tailwind breakpoints — no duplicate markup.
+- **Story list** — the responsive centerpiece:
+  - Desktop: a real **data table** (sortable columns, inline filters bar, checkbox column for
+    future bulk actions) — dense and scannable for production work.
+  - Mobile: the same rows render as **stacked cards** (cover thumb + title + status chip +
+    action menu). Implemented as one component that switches presentation at the `md` breakpoint
+    (table on `md+`, card list below) — same data, same actions, no logic duplication.
+  - Filters/search collapse into a **filter sheet/drawer** on mobile; inline toolbar on desktop.
+- **Login** — centered card, full-viewport calm background, works identically at any width.
+- **Preview** — renders the kid story-viewer look in a modal on desktop, full-screen route on
+  mobile, so you always see exactly what the child sees.
+
+**Component library** (`src/lib/components/admin/`): small, focused, reusable, each independently
+testable — e.g. `AdminShell`, `StatusChip`, `StoryTable` (desktop), `StoryCardList` (mobile),
+`FilterBar`, `ConfirmDialog`, `PreviewModal`. Built with Tailwind only (no new deps), lucide-svelte
+icons (stroke 1.5), following the existing component conventions.
+
+**Standards:** WCAG-minded contrast on all text/chips; keyboard-operable (focus states, Esc closes
+dialogs, Enter submits); tap targets ≥44px on mobile controls; no layout shift; the page body never
+scrolls horizontally (wide tables scroll inside their own `overflow-x:auto` container).
+
+**Design contract note:** because "very good UI" is an explicit goal, the implementation plan will
+run this increment's frontend through the `gsd-ui-phase` UI-spec/`gsd-ui-review` loop (or an
+equivalent design pass) rather than treating the UI as incidental.
 
 ## Admin API (Increment 1)
 
@@ -138,7 +192,8 @@ and the login action are thin wrappers around it.
 **New**
 - `src/hooks.server.ts`
 - `src/lib/server/adminAuth.ts` + `adminAuth.test.ts`
-- `src/lib/server/adminRateLimit.ts`
+- `src/lib/components/admin/` — admin UI component library (see "UI / UX design")
+- `src/routes/admin/+layout.svelte` — admin app shell (responsive nav)
 - `src/routes/admin/login/+page.svelte`, `+page.server.ts`
 - `src/routes/admin/+page.svelte`, `+page.server.ts`
 - `src/routes/api/admin/stories/[id]/+server.ts`
@@ -161,6 +216,8 @@ and the login action are thin wrappers around it.
 - Manual verification (per the `verify` discipline): log in with right/wrong passcode; confirm
   `/admin` lists a seeded draft + published; publish/unpublish flips kid-app visibility;
   delete removes row + Blob and writes a backup file; kid `/api/stories` never returns a draft.
+- Responsive UI check: verify the list renders as a table on desktop and stacked cards on
+  mobile, nav collapses to a drawer, and no horizontal body scroll at 375px width.
 - Gates: `npm run check` clean, `npm test` green.
 
 ## Non-goals (this increment)
@@ -169,7 +226,7 @@ and the login action are thin wrappers around it.
 - Cost visibility, OpenAI moderation — Increment 4.
 - Facts production, audio, roles, batch, templates, analytics — PRD Phases 2–3.
 - Real auth / accounts — PRD Phase 3.
-- DB-backed rate limiting — deferred (in-memory chosen for now).
+- DB-backed rate limiting — deferred; Inc 1 relies on a strong passcode + failed-attempt delay.
 
 ## Phase 1 slicing (one spec, executed in order)
 
