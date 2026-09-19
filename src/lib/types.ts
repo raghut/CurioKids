@@ -52,6 +52,7 @@ export type GeneratedStory = {
 	moral: string;
 	reflection_question: string;
 	created_at: string;
+	status: 'draft' | 'published';
 };
 
 export type StorySummary = {
@@ -61,6 +62,18 @@ export type StorySummary = {
 	age_tag: string;
 	language: string;
 	created_at: string;
+};
+
+export type AdminStorySummary = {
+	id: string;
+	title: string;
+	cover_url: string;
+	age_tag: string;
+	language: string;
+	created_at: string;
+	status: 'draft' | 'published';
+	character_id: string;
+	theme_id: string;
 };
 
 export type CharacterId = 'rabbit' | 'peacock' | 'elephant' | 'monkey' | 'tortoise' | 'parrot';
