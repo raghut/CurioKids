@@ -23,6 +23,13 @@
 	// Preview
 	let previewStory = $state<GeneratedStory | null>(null);
 	let previewLoading = $state(false);
+	let previewError = $state('');
+	const previewOpen = $derived(previewLoading || !!previewStory || !!previewError);
+
+	function closePreview() {
+		previewStory = null;
+		previewError = '';
+	}
 
 	const filtered = $derived(
 		(data.stories as AdminStorySummary[]).filter((s) => {
@@ -79,6 +86,9 @@
 			// Admin preview endpoint returns any status (drafts included).
 			const res = await fetch(`/api/admin/stories/${s.id}?preview=1`);
 			if (res.ok) previewStory = (await res.json()).story ?? null;
+			else previewError = 'Could not load the preview. Try again.';
+		} catch {
+			previewError = 'Could not load the preview. Try again.';
 		} finally {
 			previewLoading = false;
 		}
@@ -124,21 +134,31 @@
 	onconfirm={doDelete}
 />
 
-{#if previewLoading || previewStory}
-	<div class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/50 p-4">
-		<div class="my-8 w-full max-w-md rounded-2xl bg-white p-5 shadow-xl">
+<svelte:window on:keydown={(e) => previewOpen && e.key === 'Escape' && closePreview()} />
+
+{#if previewOpen}
+	<div
+		class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4"
+		role="dialog"
+		aria-modal="true"
+		aria-label="Story preview"
+	>
+		<button class="absolute inset-0 bg-slate-900/50" aria-label="Close preview" onclick={closePreview}></button>
+		<div class="relative my-8 w-full max-w-md rounded-2xl bg-white p-5 shadow-xl">
 			<div class="mb-3 flex items-center justify-between">
 				<h2 class="text-lg font-bold text-slate-800">Preview</h2>
 				<button
 					aria-label="Close preview"
 					class="grid h-9 w-9 place-items-center rounded-lg text-slate-500 hover:bg-slate-100"
-					onclick={() => (previewStory = null)}
+					onclick={closePreview}
 				>
 					<X size={18} strokeWidth={1.5} />
 				</button>
 			</div>
 			{#if previewLoading}
 				<p class="py-8 text-center text-slate-400">Loading…</p>
+			{:else if previewError}
+				<p class="py-8 text-center text-coral" role="alert">{previewError}</p>
 			{:else if previewStory}
 				{#if previewStory.cover_image_url}
 					<img src={previewStory.cover_image_url} alt="" class="mb-4 w-full rounded-xl object-cover" />

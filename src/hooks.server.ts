@@ -27,8 +27,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 			}
 			throw redirect(303, LOGIN_PATH);
 		}
-		// Already logged in and visiting the login page → send to dashboard.
-		if (authed && isLogin) {
+		// Already logged in and navigating to the login page → send to dashboard.
+		// Only for GET: a POST here is the logout form action, which must run.
+		if (authed && isLogin && event.request.method === 'GET') {
 			throw redirect(303, '/admin');
 		}
 	}

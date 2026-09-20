@@ -46,8 +46,10 @@ export const DELETE: RequestHandler = async ({ params }) => {
 		const story = await getStoryAdmin(params.id);
 		if (!story) return json({ error: 'not_found', message: 'Story not found.' }, { status: 404 });
 
-		// Recovery trail: serverless FS is read-only, so log the full row before deleting.
-		console.log('[admin] deleting story backup:', JSON.stringify(story));
+		// Recovery trail: serverless FS is read-only, so log the row before deleting.
+		// Strip child_name — logging a child's PII is forbidden (see CLAUDE.md).
+		const { child_name: _redacted, ...safeStory } = story;
+		console.log('[admin] deleting story backup:', JSON.stringify(safeStory));
 
 		const urls = [story.cover_image_url, ...story.pages.map((p) => p.image_url)];
 		await deleteImages(urls);
