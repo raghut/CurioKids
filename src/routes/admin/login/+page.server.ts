@@ -19,7 +19,9 @@ export const actions: Actions = {
 			path: '/',
 			httpOnly: true,
 			secure: true,
-			sameSite: 'strict',
+			// 'lax' still blocks the cross-site POST/DELETE that CSRF needs, but lets a
+			// valid session survive a top-level entry (bookmark / typed URL / external link).
+			sameSite: 'lax',
 			maxAge: Math.floor(SESSION_TTL_MS / 1000)
 		});
 		throw redirect(303, '/admin');
