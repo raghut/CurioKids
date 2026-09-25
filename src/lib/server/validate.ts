@@ -91,7 +91,7 @@ export type AdminBriefOk = {
 	extra: string | null;
 };
 
-const AGE_BANDS: AgeBand[] = ['5-6', '7-8'];
+const AGE_BANDS: AgeBand[] = ['2-4', '5-6', '7-8'];
 const TONES: Tone[] = ['gentle', 'funny', 'adventurous'];
 const STORY_IDEA_MAX = 500;
 const FIELD_MAX = 120;

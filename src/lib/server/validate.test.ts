@@ -119,6 +119,12 @@ describe('validateAdminBrief', () => {
 		expect(r.ok).toBe(false);
 	});
 
+	it('accepts the 2-4 age band', () => {
+		const r = validateAdminBrief({ ...base, age_band: '2-4' });
+		expect(r.ok).toBe(true);
+		if (r.ok) expect(r.ageBand).toBe('2-4');
+	});
+
 	it('rejects bad theme, age band, and language', () => {
 		expect(validateAdminBrief({ ...base, theme_id: 'nope' }).ok).toBe(false);
 		expect(validateAdminBrief({ ...base, age_band: '9-10' }).ok).toBe(false);
