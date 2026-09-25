@@ -3,7 +3,7 @@
 	import ThemePicker from '$lib/components/ThemePicker.svelte';
 	import { goto } from '$app/navigation';
 	import { Sparkles, ArrowLeft } from 'lucide-svelte';
-	import type { CharacterId, ThemeId, GeneratedStory } from '$lib/types';
+	import type { CharacterId, ThemeId, GeneratedStory, AgeBand } from '$lib/types';
 
 	// Brief state
 	let storyIdea = $state('');
@@ -12,7 +12,7 @@
 	let customCharacter = $state('');
 	let supportingCharacter = $state('');
 	let selectedTheme = $state<ThemeId | null>(null);
-	let ageBand = $state<'5-6' | '7-8'>('7-8');
+	let ageBand = $state<AgeBand>('7-8');
 	let language = $state<'en' | 'te'>('en');
 	let tone = $state<'gentle' | 'funny' | 'adventurous'>('gentle');
 	let setting = $state('');
@@ -26,6 +26,9 @@
 	let publishing = $state(false);
 
 	const SETTINGS = ['village', 'forest', 'home', 'pond', 'festival', 'market'];
+
+	// 2-4 is the board-book band: every page is illustrated, so it costs and takes more.
+	const isToddler = $derived(ageBand === '2-4');
 
 	const canGenerate = $derived(
 		storyIdea.trim().length > 0 &&
@@ -107,7 +110,12 @@
 			<h2 class="mb-3 font-[family-name:var(--font-fraunces)] text-xl font-bold" lang={draft.language}>{draft.title}</h2>
 			<div class="flex flex-col gap-4">
 				{#each draft.pages as p, i (i)}
-					<p class="text-base leading-relaxed text-slate-700" lang={draft.language}>{p.text}</p>
+					<div class="flex flex-col gap-2">
+						{#if p.image_url}
+							<img src={p.image_url} alt="" class="w-full rounded-xl object-cover" />
+						{/if}
+						<p class="text-base leading-relaxed text-slate-700" lang={draft.language}>{p.text}</p>
+					</div>
 				{/each}
 			</div>
 			<p class="mt-4 rounded-lg bg-mint/20 px-3 py-2 text-sm text-slate-700" lang={draft.language}>{draft.moral}</p>
@@ -163,9 +171,16 @@
 				<label class="flex flex-col gap-1.5">
 					<span class="text-sm font-bold text-slate-700">Age band</span>
 					<select bind:value={ageBand} class={inputClass}>
+						<option value="2-4">2–4</option>
 						<option value="5-6">5–6</option>
 						<option value="7-8">7–8</option>
 					</select>
+					{#if isToddler}
+						<p class="text-xs text-slate-400">
+							Board book: short pages and a picture on every page (6 images) — slower and
+							costlier than the other bands.
+						</p>
+					{/if}
 				</label>
 				<label class="flex flex-col gap-1.5">
 					<span class="text-sm font-bold text-slate-700">Language</span>
@@ -212,7 +227,9 @@
 				{generating ? 'Creating your story…' : 'Generate'}
 			</button>
 			{#if generating}
-				<p class="text-center text-sm text-slate-400">This takes ~15–30 seconds. Please wait…</p>
+				<p class="text-center text-sm text-slate-400">
+					This takes ~{isToddler ? '60–90' : '15–30'} seconds. Please wait…
+				</p>
 			{/if}
 		</div>
 	{/if}
