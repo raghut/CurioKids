@@ -68,4 +68,18 @@ describe('assembleStory', () => {
 		});
 		expect(story.status).toBe('published');
 	});
+	it('uses a passed age_tag and defaults to 5-8 when omitted', () => {
+		const withBand = assembleStory({
+			id: 'id-2', text: { title: 'T', pages: [{ text: 'p1' }], moral: 'm', reflection_question: 'r', scene: 's' } as never,
+			language: 'en', character_id: 'rabbit', theme_id: 'be_brave', childName: null,
+			coverUrl: '', pageUrls: [], createdAt: '2026-09-25T00:00:00.000Z', status: 'draft', age_tag: '5-6'
+		});
+		expect(withBand.age_tag).toBe('5-6');
+		const noBand = assembleStory({
+			id: 'id-3', text: { title: 'T', pages: [{ text: 'p1' }], moral: 'm', reflection_question: 'r', scene: 's' } as never,
+			language: 'en', character_id: 'rabbit', theme_id: 'be_brave', childName: null,
+			coverUrl: '', pageUrls: [], createdAt: '2026-09-25T00:00:00.000Z', status: 'published'
+		});
+		expect(noBand.age_tag).toBe('5-8');
+	});
 });
