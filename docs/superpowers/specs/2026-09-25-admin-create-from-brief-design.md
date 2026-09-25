@@ -168,3 +168,37 @@ option (radio/toggle → free-text input; selecting it clears the animal pick an
 - Per-page images for admin (cover only here).
 - Batch generation, templates, series, roles — PRD Phase 2.
 - Telugu-specific length tuning beyond the existing prompt rules.
+
+---
+
+## Amendment 2026-09-25 — the 2-4 age band (approved)
+
+A third age band, **`2-4`**, joins `5-6` and `7-8` in the admin brief. It is a *board book*, not a
+shorter picture book, so it differs from the other two bands in three ways — and only for `2-4`;
+`5-6` and `7-8` output is byte-for-byte unchanged.
+
+1. **Shorter pages.** Still exactly 5 pages, but **15–25 words** each (total body 75–125) with
+   sentences of **max 6 words** and only words a 2-year-old knows, one idea per page. The three
+   bands' text rules now live in one `AGE_RULES` lookup in `storyPrompt.ts` instead of ternaries.
+2. **A picture on every page.** `2-4` always generates the cover **plus one image per page** — 6
+   images, generated in parallel exactly as the kid endpoint does, each failure degrading to `""`
+   for that slot. The band itself is the switch: this deliberately does *not* read
+   `GENERATE_PAGE_IMAGES`, which stays the kid flow's flag. `5-6` / `7-8` remain cover-only, so
+   the "per-page images for admin" non-goal above now holds for those two bands only.
+   `buildAdminPageImagePrompt(heroDescriptor, pageScene)` is the page twin of
+   `buildAdminCoverPrompt` — a descriptor string, so custom characters work as well.
+3. **An outline cover.** For `2-4` the model's `scene` field describes the **whole story in one
+   picture** (hero + main idea) rather than the opening moment, and each page's `image_prompt`
+   must show one clear subject on an uncluttered background. The other bands keep opening-scene
+   covers.
+
+Supporting changes: `AgeBand` widens to `'2-4' | '5-6' | '7-8'`; `AGE_BANDS` in `validate.ts`
+accepts it; the admin form gains a `2–4` option, a note that the band illustrates every page, a
+~60–90s wait hint, and a draft preview that renders each page's image; the admin generate route
+declares `maxDuration: 120` because 6 images exceed the platform's default function timeout.
+
+**Cost:** ~₹20–25 per `2-4` story vs ~₹4 cover-only. Admin generation is uncapped by design, so
+nothing throttles this — it is the operator's call per story, and the form says so.
+
+**Unchanged:** `GeneratedStory.age_range` stays the locked literal `'5-8'`; `age_tag` (the DB
+column) carries the real band. The kid `/create` screen gets no age picker — `2-4` is admin-only.

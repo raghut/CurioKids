@@ -73,6 +73,7 @@ Full product strategy is in `docs/strategy.md`. **Always re-read it if you're un
 - The admin dashboard lives under `/admin/*` (pages) and `/api/admin/*` (endpoints), gated server-side by `src/hooks.server.ts` using a stateless HMAC-signed session cookie (`ADMIN_PASSCODE` + `ADMIN_SESSION_SECRET`). This is a shared door-code, **not** user auth — no accounts, no identity. Admin is OFF unless `ADMIN_PASSCODE` is set (never silently open).
 - Admin can review, publish/unpublish, and **delete** gallery stories (row + Vercel Blob images). This admin-side moderation is in scope; kid-facing social features remain out of scope.
 - Increment 1 (auth + status gate + manage) is built. Generation-from-brief, editing, and cost visibility are later increments — see `docs/superpowers/specs/2026-09-19-admin-dashboard-inc1-design.md`.
+- **Admin age bands (approved 2026-09-25):** admin create-from-brief offers three bands — `2-4`, `5-6`, `7-8` — stored in the promoted `age_tag` column. They steer vocabulary and sentence length, and `2-4` is a **board book**: 5 pages of 15–25 words, **an illustration on every page** (cover + 5 page images, ~₹20–25 per story), and a cover that pictures the whole story rather than the opening scene. `5-6` and `7-8` stay cover-only with 30–50-word pages. The band itself switches page images on — this does **not** read `GENERATE_PAGE_IMAGES`, which remains the kid flow's flag. `GeneratedStory.age_range` stays the locked `'5-8'`; `age_tag` carries the real band. The kid `/create` screen has no age picker — the bands are admin-only. See `docs/superpowers/specs/2026-09-25-admin-create-from-brief-design.md`.
 - **No** Supabase, no Firebase, no other backend services beyond Neon Postgres + Vercel Blob. There is still no user auth and no user accounts. **An admin dashboard is now in scope (approved 2026-09-19)** — a content-production tool gated by a single shared `ADMIN_PASSCODE` (a door-code, not accounts) — see the admin dashboard note below.
 
 ## Folder structure
@@ -402,4 +403,4 @@ These are not decided yet — flag if relevant to your work and I'll choose:
 
 ---
 
-_Last updated: 2026-07-19. Update this file whenever a scope decision changes._
+_Last updated: 2026-09-25. Update this file whenever a scope decision changes._
