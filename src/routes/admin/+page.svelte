@@ -98,9 +98,12 @@
 <svelte:head><title>CurioKids Admin — Stories</title></svelte:head>
 
 <div class="mx-auto max-w-5xl">
-	<div class="mb-6 flex items-center justify-between">
+	<div class="mb-6 flex items-center justify-between gap-3">
 		<h1 class="font-[family-name:var(--font-fraunces)] text-2xl font-bold text-slate-800">Stories</h1>
-		<span class="text-sm text-slate-500">{filtered.length} shown</span>
+		<div class="flex items-center gap-3">
+			<span class="hidden text-sm text-slate-500 sm:inline">{filtered.length} shown</span>
+			<a href="/admin/create" class="rounded-xl bg-coral px-4 py-2 text-sm font-bold text-white hover:brightness-105">+ New story</a>
+		</div>
 	</div>
 
 	<div class="mb-4">

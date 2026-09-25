@@ -17,6 +17,7 @@ export function assembleStory(input: {
 	pageUrls: string[];
 	createdAt: string;
 	status: 'draft' | 'published';
+	age_tag?: string;
 }): GeneratedStory {
 	return {
 		id: input.id,
@@ -24,7 +25,7 @@ export function assembleStory(input: {
 		source: 'generated',
 		language: input.language,
 		age_range: '5-8',
-		age_tag: '5-8',
+		age_tag: input.age_tag ?? '5-8',
 		character_id: input.character_id,
 		theme_id: input.theme_id,
 		child_name: input.childName,

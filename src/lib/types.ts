@@ -95,3 +95,6 @@ export type Theme = {
 	label_te: string;
 	goal_hint: string;
 };
+
+export type AgeBand = '5-6' | '7-8';
+export type Tone = 'gentle' | 'funny' | 'adventurous';
