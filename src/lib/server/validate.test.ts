@@ -62,3 +62,72 @@ describe('validateGenerateRequest', () => {
 		if (r2.ok) expect(r2.extra).toBeNull();
 	});
 });
+
+import { validateAdminBrief } from './validate';
+
+describe('validateAdminBrief', () => {
+	const base = {
+		story_idea: 'A shy peacock learns to dance at the festival.',
+		character_id: 'peacock',
+		theme_id: 'be_brave',
+		age_band: '7-8',
+		language: 'en'
+	};
+
+	it('accepts a full valid brief with a locked animal', () => {
+		const r = validateAdminBrief({ ...base, tone: 'funny', setting: 'festival', moral_focus: 'courage', supporting_character: 'a wise owl', extra: 'add fireflies' });
+		expect(r.ok).toBe(true);
+		if (r.ok) {
+			expect(r.character?.id).toBe('peacock');
+			expect(r.customCharacter).toBe(null);
+			expect(r.ageBand).toBe('7-8');
+			expect(r.tone).toBe('funny');
+			expect(r.setting).toBe('festival');
+			expect(r.moralFocus).toBe('courage');
+			expect(r.supportingCharacter).toBe('a wise owl');
+			expect(r.extra).toBe('add fireflies');
+		}
+	});
+
+	it('accepts a custom-character brief (no character_id)', () => {
+		const r = validateAdminBrief({ ...base, character_id: undefined, custom_character: 'a tiny brave firefly named Chinni' });
+		expect(r.ok).toBe(true);
+		if (r.ok) {
+			expect(r.character).toBe(null);
+			expect(r.customCharacter).toContain('firefly');
+		}
+	});
+
+	it('defaults tone to gentle when missing/invalid', () => {
+		const r = validateAdminBrief({ ...base, tone: 'spicy' });
+		expect(r.ok).toBe(true);
+		if (r.ok) expect(r.tone).toBe('gentle');
+	});
+
+	it('rejects an empty story idea', () => {
+		const r = validateAdminBrief({ ...base, story_idea: '   ' });
+		expect(r.ok).toBe(false);
+	});
+
+	it('rejects when neither character nor custom is given', () => {
+		const r = validateAdminBrief({ ...base, character_id: undefined });
+		expect(r.ok).toBe(false);
+	});
+
+	it('rejects when BOTH character and custom are given', () => {
+		const r = validateAdminBrief({ ...base, custom_character: 'a fox' });
+		expect(r.ok).toBe(false);
+	});
+
+	it('rejects bad theme, age band, and language', () => {
+		expect(validateAdminBrief({ ...base, theme_id: 'nope' }).ok).toBe(false);
+		expect(validateAdminBrief({ ...base, age_band: '9-10' }).ok).toBe(false);
+		expect(validateAdminBrief({ ...base, language: 'fr' }).ok).toBe(false);
+	});
+
+	it('sanitizes and caps free-text fields', () => {
+		const r = validateAdminBrief({ ...base, moral_focus: '  be `brave`  and "kind"  ' });
+		expect(r.ok).toBe(true);
+		if (r.ok) expect(r.moralFocus).toBe('be brave and kind');
+	});
+});
