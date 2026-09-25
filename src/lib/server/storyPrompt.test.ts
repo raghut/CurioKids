@@ -29,7 +29,7 @@ describe('buildImagePrompts', () => {
 	});
 });
 
-import { buildAdminStoryMessages, buildAdminCoverPrompt } from './storyPrompt';
+import { buildAdminStoryMessages, buildAdminCoverPrompt, buildAdminPageImagePrompt } from './storyPrompt';
 
 describe('buildAdminStoryMessages', () => {
 	const peacock = characters.find((c) => c.id === 'peacock')!;
@@ -77,6 +77,42 @@ describe('buildAdminStoryMessages', () => {
 		expect(older).toContain('max 12 words');
 	});
 
+	it('tells the model which age it is writing for', () => {
+		const sys = (band: '2-4' | '5-6' | '7-8') =>
+			buildAdminStoryMessages({ ...baseOpts, ageBand: band }).find((m) => m.role === 'system')!.content;
+		expect(sys('2-4')).toContain('aged 2-4');
+		expect(sys('7-8')).toContain('aged 7-8');
+	});
+
+	it('gives 2-4 board-book lengths (15-25 words a page, max 6 a sentence)', () => {
+		const toddler = buildAdminStoryMessages({ ...baseOpts, ageBand: '2-4' }).find((m) => m.role === 'user')!.content;
+		expect(toddler).toContain('between 15 and 25 words');
+		expect(toddler).toContain('between 75 and 125 words');
+		expect(toddler).toContain('max 6 words');
+		expect(toddler).toContain('a 2-year-old knows');
+	});
+
+	it('keeps 5-6 and 7-8 page lengths at 30-50 / 150-250 words', () => {
+		for (const ageBand of ['5-6', '7-8'] as const) {
+			const user = buildAdminStoryMessages({ ...baseOpts, ageBand }).find((m) => m.role === 'user')!.content;
+			expect(user).toContain('between 30 and 50 words');
+			expect(user).toContain('between 150 and 250 words');
+		}
+	});
+
+	it('asks 2-4 for a whole-story cover scene and one clear subject per page', () => {
+		const toddler = buildAdminStoryMessages({ ...baseOpts, ageBand: '2-4' }).find((m) => m.role === 'user')!.content;
+		expect(toddler).toContain('WHOLE story in one picture');
+		expect(toddler).toContain('ONE clear simple subject');
+		expect(toddler).not.toContain('visual description of the opening scene');
+	});
+
+	it('leaves the other bands\' cover scene as the opening scene', () => {
+		const older = buildAdminStoryMessages({ ...baseOpts, ageBand: '7-8' }).find((m) => m.role === 'user')!.content;
+		expect(older).toContain('visual description of the opening scene');
+		expect(older).not.toContain('WHOLE story in one picture');
+	});
+
 	it('keeps the 5-page / 30-50-word HARD RULES and fences the extra wishes', () => {
 		const user = buildAdminStoryMessages(baseOpts).find((m) => m.role === 'user')!.content;
 		expect(user).toContain('Exactly 5 pages.');
@@ -92,5 +128,15 @@ describe('buildAdminCoverPrompt', () => {
 		expect(p).toContain('a tiny glowing firefly');
 		expect(p).toContain('flying over a pond at dusk');
 		expect(p).toContain('no text');
+	});
+});
+
+describe('buildAdminPageImagePrompt', () => {
+	it('includes the hero descriptor, page scene, and no-text watercolor style', () => {
+		const p = buildAdminPageImagePrompt('a tiny glowing firefly', 'resting on a lotus leaf');
+		expect(p).toContain('a tiny glowing firefly');
+		expect(p).toContain('resting on a lotus leaf');
+		expect(p).toContain('no text');
+		expect(p).toContain('for one page');
 	});
 });
