@@ -1,14 +1,19 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { validateAdminBrief } from '$lib/server/validate';
-import { buildAdminStoryMessages, buildAdminCoverPrompt } from '$lib/server/storyPrompt';
+import { buildAdminStoryMessages, buildAdminCoverPrompt, buildAdminPageImagePrompt } from '$lib/server/storyPrompt';
 import { generateStoryText, generateImage } from '$lib/server/openaiClient';
 import { uploadImage } from '$lib/server/blob';
 import { assembleStory } from '$lib/server/assembleStory';
 import { insertStory } from '$lib/server/db';
 
 // Auth is enforced by hooks.server.ts (all /api/admin/* need a valid admin cookie).
-// Admin generation has NO family passcode and NO daily cap. Cover image only.
+// Admin generation has NO family passcode and NO daily cap. 5-6 and 7-8 get a cover
+// image only; the 2-4 band is a board book, so it illustrates every page too (6 images).
+
+// A 2-4 story generates 6 images, which takes well past the platform's default
+// function timeout — give this route room.
+export const config = { maxDuration: 120 };
 
 type ErrorCode = 'invalid_input' | 'openai_failed' | 'server_error';
 function fail(code: ErrorCode, message: string, status: number) {
@@ -43,14 +48,32 @@ export const POST: RequestHandler = async ({ request }) => {
 		const text = await generateStoryText(messages);
 
 		const heroDescriptor = v.character ? v.character.prompt_descriptor : (v.customCharacter as string);
-		let coverUrl = '';
-		try {
-			const bytes = await generateImage(buildAdminCoverPrompt(heroDescriptor, text.scene));
-			coverUrl = await uploadImage(bytes, 'admin-cover');
-		} catch (e) {
-			console.error('admin cover image failed:', e instanceof Error ? e.message : 'unknown');
-			coverUrl = '';
-		}
+
+		// The 2-4 band always illustrates every page — the band itself is the switch,
+		// deliberately not GENERATE_PAGE_IMAGES (that flag is for the kid flow).
+		const withPageImages = v.ageBand === '2-4';
+		const imagePrompts = [
+			buildAdminCoverPrompt(heroDescriptor, text.scene),
+			...(withPageImages
+				? text.pages.map((pg) => buildAdminPageImagePrompt(heroDescriptor, pg.image_prompt))
+				: [])
+		];
+
+		// Generate in parallel; a failed image becomes "" for that slot rather than
+		// failing the whole story.
+		const imageResults = await Promise.all(
+			imagePrompts.map((prompt, i) =>
+				generateImage(prompt)
+					.then((bytes) => uploadImage(bytes, i === 0 ? 'admin-cover' : `admin-page-${i}`))
+					.catch((e) => {
+						console.error(`admin image ${i} failed:`, e instanceof Error ? e.message : 'unknown');
+						return '';
+					})
+			)
+		);
+
+		const coverUrl = imageResults[0] ?? '';
+		const pageUrls = withPageImages ? imageResults.slice(1) : [];
 
 		const story = assembleStory({
 			id: crypto.randomUUID(),
@@ -60,7 +83,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			theme_id: v.theme.id,
 			childName: null,
 			coverUrl,
-			pageUrls: [],
+			pageUrls,
 			createdAt: new Date().toISOString(),
 			status: 'draft',
 			age_tag: v.ageBand
