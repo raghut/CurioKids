@@ -74,10 +74,22 @@ export const POST: RequestHandler = async ({ request }) => {
 		// The 2-4 band always illustrates every page — the band itself is the switch,
 		// deliberately not GENERATE_PAGE_IMAGES (that flag is for the kid flow).
 		const withPageImages = v.ageBand === '2-4';
+
+		// The supporting character gets its own descriptor, added only to the pages the
+		// model says it actually appears on — so it looks the same wherever it shows up
+		// without wandering into scenes the text never puts it in.
+		const supporting = text.supporting_descriptor?.trim() ?? '';
 		const imagePrompts = [
-			buildAdminCoverPrompt(templates.image_cover, heroDescriptor, text.scene),
+			buildAdminCoverPrompt(templates.image_cover, heroDescriptor, text.scene, supporting),
 			...(withPageImages
-				? text.pages.map((pg) => buildAdminPageImagePrompt(templates.image_page, heroDescriptor, pg.image_prompt))
+				? text.pages.map((pg) =>
+						buildAdminPageImagePrompt(
+							templates.image_page,
+							heroDescriptor,
+							pg.image_prompt,
+							pg.has_supporting ? supporting : ''
+						)
+					)
 				: [])
 		];
 
@@ -106,6 +118,9 @@ export const POST: RequestHandler = async ({ request }) => {
 			childName: null,
 			coverUrl,
 			pageUrls,
+			// Keep the prompts that produced these images so they can be edited later.
+			coverPrompt: imagePrompts[0],
+			pagePrompts: withPageImages ? imagePrompts.slice(1) : [],
 			createdAt: new Date().toISOString(),
 			status: 'draft',
 			age_tag: v.ageBand

@@ -17,7 +17,12 @@ function apiKey(): string {
 
 export type StoryTextResult = {
 	title: string;
-	pages: Array<{ text: string; image_prompt: string }>;
+	/**
+	 * has_supporting marks the pages the supporting character actually appears on, so
+	 * its descriptor is added to those page prompts only — keeping it consistent where
+	 * it belongs without dropping it into scenes the text never puts it in.
+	 */
+	pages: Array<{ text: string; image_prompt: string; has_supporting?: boolean }>;
 	moral: string;
 	reflection_question: string;
 	scene: string;
@@ -29,6 +34,8 @@ export type StoryTextResult = {
 	 * ask for it (it always has a locked character descriptor to use instead).
 	 */
 	hero_descriptor?: string;
+	/** Same idea as hero_descriptor, for the brief's supporting character. '' when none. */
+	supporting_descriptor?: string;
 };
 
 /**

@@ -47,3 +47,20 @@ describe('parseStoryJson', () => {
 		expect(parseStoryJson(JSON.stringify(withoutHero)).hero_descriptor).toBeUndefined();
 	});
 });
+
+describe('supporting character fields', () => {
+	it('parses supporting_descriptor and per-page has_supporting', () => {
+		const pages = [1, 2, 3, 4, 5].map(page);
+		pages[1] = { ...pages[1], has_supporting: true } as (typeof pages)[number];
+		const r = parseStoryJson(
+			JSON.stringify({ ...good, pages, supporting_descriptor: 'a small green parrot' })
+		);
+		expect(r.supporting_descriptor).toBe('a small green parrot');
+		expect(r.pages[1].has_supporting).toBe(true);
+		expect(r.pages[0].has_supporting).toBeUndefined();
+	});
+
+	it('stays optional — a story with no side character still parses', () => {
+		expect(parseStoryJson(JSON.stringify(good)).supporting_descriptor).toBeUndefined();
+	});
+});

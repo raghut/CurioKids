@@ -24,6 +24,14 @@ describe('renderTemplate', () => {
 		expect(out).toBe('Keep me\nKeep me too');
 	});
 
+	it('drops the WHOLE line when an optional value is empty, fragment and all', () => {
+		// Otherwise an absent supporting character leaves "Also in this picture: ."
+		const out = renderTemplate('Hero: {{a}}.\nAlso in shot: {{b}}.\nScene: {{c}}.', {
+			a: 'an elephant', b: '', c: 'a pond'
+		});
+		expect(out).toBe('Hero: an elephant.\nScene: a pond.');
+	});
+
 	it('keeps intentional blank lines that held no placeholder', () => {
 		expect(renderTemplate('a\n\nb', {})).toBe('a\n\nb');
 	});
@@ -105,12 +113,28 @@ describe('validateTemplate', () => {
 	});
 
 	it('allows only the documented vars per kind', () => {
-		expect(ALLOWED_VARS.image_page).toEqual(['hero_descriptor', 'scene']);
+		expect(ALLOWED_VARS.image_page).toEqual(['hero_descriptor', 'supporting_descriptor', 'scene']);
 		expect(REQUIRED_VARS.story_user).toContain('story_idea');
+	});
+
+	it('allows the supporting descriptor without requiring it', () => {
+		// A story may have no side character, so the placeholder must stay optional.
+		for (const kind of ['image_cover', 'image_page'] as const) {
+			expect(ALLOWED_VARS[kind]).toContain('supporting_descriptor');
+			expect(REQUIRED_VARS[kind]).not.toContain('supporting_descriptor');
+			expect(validateTemplate(kind, 'Draw {{hero_descriptor}} at {{scene}}.').ok).toBe(true);
+		}
 	});
 });
 
 describe('PROMPT_DEFAULTS', () => {
+	const buildLine = (supporting: string) =>
+		renderWithFloor('image_page', PROMPT_DEFAULTS['2-4'].image_page, {
+			hero_descriptor: 'a baby elephant',
+			supporting_descriptor: supporting,
+			scene: 'beside the pond'
+		});
+
 	it('gives each band its own page lengths', () => {
 		expect(PROMPT_DEFAULTS['2-4'].story_user).toContain('between 15 and 25 words');
 		expect(PROMPT_DEFAULTS['5-6'].story_user).toContain('between 30 and 50 words');
@@ -128,6 +152,20 @@ describe('PROMPT_DEFAULTS', () => {
 		expect(PROMPT_DEFAULTS['2-4'].story_user).toContain('WHOLE story in one picture');
 		expect(PROMPT_DEFAULTS['2-4'].image_page).toContain('uncluttered background');
 		expect(PROMPT_DEFAULTS['7-8'].story_user).toContain('OPENING scene');
+	});
+
+	it('carries the supporting character only when there is one', () => {
+		const withSide = buildLine('a small green parrot with a red beak');
+		expect(withSide).toContain('a small green parrot with a red beak');
+
+		const without = buildLine('');
+		expect(without).not.toContain('Also in this picture');
+		expect(without).toContain('a baby elephant'); // the hero line survives
+	});
+
+	it('no longer asks 2-4 for a single subject, which excluded the side character', () => {
+		expect(PROMPT_DEFAULTS['2-4'].image_page).not.toContain('one clear simple subject');
+		expect(PROMPT_DEFAULTS['2-4'].image_page).toContain('One clear simple action');
 	});
 
 	it('tells the illustrator not to swap the hero for a person', () => {

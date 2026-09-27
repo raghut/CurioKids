@@ -195,8 +195,17 @@ export function buildAdminStoryMessages(
  * prompt_descriptor, or — for a custom character — the description the story model
  * derived from the story it just wrote.
  */
-export function buildAdminCoverPrompt(template: string, heroDescriptor: string, scene: string): string {
-	return renderWithFloor('image_cover', template, { hero_descriptor: heroDescriptor, scene });
+export function buildAdminCoverPrompt(
+	template: string,
+	heroDescriptor: string,
+	scene: string,
+	supportingDescriptor = ''
+): string {
+	return renderWithFloor('image_cover', template, {
+		hero_descriptor: heroDescriptor,
+		supporting_descriptor: supportingDescriptor,
+		scene
+	});
 }
 
 /**
@@ -204,6 +213,15 @@ export function buildAdminCoverPrompt(template: string, heroDescriptor: string, 
  * same hero descriptor on every page is the only thing keeping the character
  * consistent, since the image model has no memory between calls.
  */
-export function buildAdminPageImagePrompt(template: string, heroDescriptor: string, pageScene: string): string {
-	return renderWithFloor('image_page', template, { hero_descriptor: heroDescriptor, scene: pageScene });
+export function buildAdminPageImagePrompt(
+	template: string,
+	heroDescriptor: string,
+	pageScene: string,
+	supportingDescriptor = ''
+): string {
+	return renderWithFloor('image_page', template, {
+		hero_descriptor: heroDescriptor,
+		supporting_descriptor: supportingDescriptor,
+		scene: pageScene
+	});
 }
