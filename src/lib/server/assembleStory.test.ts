@@ -32,8 +32,8 @@ describe('assembleStory', () => {
 		expect(story.age_tag).toBe('5-8');
 		expect(story.cover_image_url).toBe('http://blob/cover.jpg');
 		expect(story.pages).toEqual([
-			{ text: 'p1', image_url: 'http://blob/p1.jpg' },
-			{ text: 'p2', image_url: 'http://blob/p2.jpg' }
+			{ text: 'p1', image_url: 'http://blob/p1.jpg', image_prompt: '' },
+			{ text: 'p2', image_url: 'http://blob/p2.jpg', image_prompt: '' }
 		]);
 		expect(story.child_name).toBe('Geeta');
 	});
@@ -81,5 +81,31 @@ describe('assembleStory', () => {
 			coverUrl: '', pageUrls: [], createdAt: '2026-09-25T00:00:00.000Z', status: 'published'
 		});
 		expect(noBand.age_tag).toBe('5-8');
+	});
+});
+
+describe('stored prompts', () => {
+	const base = {
+		id: 'x', language: 'en' as const, character_id: 'rabbit', theme_id: 'be_brave',
+		childName: null, coverUrl: 'c', createdAt: '2026-09-27T00:00:00.000Z', status: 'draft' as const
+	};
+	const text = {
+		title: 'T', moral: 'M', reflection_question: 'Q', scene: 's',
+		pages: [1, 2, 3, 4, 5].map((n) => ({ text: `p${n}`, image_prompt: `ip${n}` }))
+	};
+
+	it('records the rendered cover and page prompts', () => {
+		const story = assembleStory({
+			...base, text, pageUrls: ['a', 'b', 'c', 'd', 'e'],
+			coverPrompt: 'COVER PROMPT', pagePrompts: ['P1', 'P2', 'P3', 'P4', 'P5']
+		});
+		expect(story.cover_prompt).toBe('COVER PROMPT');
+		expect(story.pages.map((p) => p.image_prompt)).toEqual(['P1', 'P2', 'P3', 'P4', 'P5']);
+	});
+
+	it('falls back to empty strings when prompts are not passed', () => {
+		const story = assembleStory({ ...base, text, pageUrls: [] });
+		expect(story.cover_prompt).toBe('');
+		expect(story.pages.every((p) => p.image_prompt === '')).toBe(true);
 	});
 });
