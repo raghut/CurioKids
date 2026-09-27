@@ -70,6 +70,21 @@ export async function setStoryStatus(id: string, status: 'draft' | 'published'):
 	`;
 }
 
+/**
+ * Overwrite a story's JSONB blob and re-sync the promoted columns that mirror it,
+ * the same way setStoryStatus keeps column and blob in step.
+ */
+export async function updateStory(story: GeneratedStory): Promise<void> {
+	const q = sql();
+	await q`
+		UPDATE stories
+		SET story = ${JSON.stringify(story)},
+		    title = ${story.title},
+		    cover_url = ${story.cover_image_url}
+		WHERE id = ${story.id}
+	`;
+}
+
 /** Hard-delete a story row (Blob deletion is handled by the caller). */
 export async function deleteStory(id: string): Promise<void> {
 	const q = sql();

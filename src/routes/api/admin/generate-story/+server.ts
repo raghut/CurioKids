@@ -96,8 +96,8 @@ export const POST: RequestHandler = async ({ request }) => {
 		// Generate in parallel; a failed image becomes "" for that slot rather than
 		// failing the whole story.
 		const imageResults = await Promise.all(
-			imagePrompts.map((prompt, i) =>
-				generateImage(prompt)
+			imagePrompts.map(({ full }, i) =>
+				generateImage(full)
 					.then((bytes) => uploadImage(bytes, i === 0 ? 'admin-cover' : `admin-page-${i}`))
 					.catch((e) => {
 						console.error(`admin image ${i} failed:`, e instanceof Error ? e.message : 'unknown');
@@ -118,9 +118,10 @@ export const POST: RequestHandler = async ({ request }) => {
 			childName: null,
 			coverUrl,
 			pageUrls,
-			// Keep the prompts that produced these images so they can be edited later.
-			coverPrompt: imagePrompts[0],
-			pagePrompts: withPageImages ? imagePrompts.slice(1) : [],
+			// Store the editable BODY, not the floored text — the floor is re-applied on
+			// every regeneration, so storing it would double it.
+			coverPrompt: imagePrompts[0].body,
+			pagePrompts: withPageImages ? imagePrompts.slice(1).map((p) => p.body) : [],
 			createdAt: new Date().toISOString(),
 			status: 'draft',
 			age_tag: v.ageBand

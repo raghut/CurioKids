@@ -149,20 +149,40 @@ describe('admin image prompts', () => {
 
 	it('carries the hero descriptor and scene into the cover prompt', () => {
 		const p = buildAdminCoverPrompt(PROMPT_DEFAULTS['2-4'].image_cover, descriptor, 'Motu holds a banana');
-		expect(p).toContain(descriptor);
-		expect(p).toContain('Motu holds a banana');
-		expect(p).toContain('No text, no words, no letters');
-		expect(p).not.toContain('{{');
+		expect(p.full).toContain(descriptor);
+		expect(p.full).toContain('Motu holds a banana');
+		expect(p.full).toContain('No text, no words, no letters');
+		expect(p.full).not.toContain('{{');
 	});
 
 	it('repeats the descriptor on every page and forbids swapping in a person', () => {
 		const p = buildAdminPageImagePrompt(PROMPT_DEFAULTS['7-8'].image_page, descriptor, 'Motu shares the banana');
-		expect(p).toContain(descriptor);
-		expect(p).toContain('do not substitute a human child');
+		expect(p.full).toContain(descriptor);
+		expect(p.full).toContain('do not substitute a human child');
 	});
 
 	it('keeps the locked no-text floor even if the operator deletes it', () => {
 		const p = buildAdminPageImagePrompt('Just draw {{hero_descriptor}} at {{scene}}.', descriptor, 'a pond');
-		expect(p).toContain('No text, no words, no letters');
+		expect(p.full).toContain('No text, no words, no letters');
+	});
+
+	it('returns a stored body WITHOUT the floor, so regenerating cannot double it', () => {
+		const p = buildAdminPageImagePrompt(PROMPT_DEFAULTS['7-8'].image_page, descriptor, 'a pond');
+		expect(p.body).toContain(descriptor);
+		expect(p.body).not.toContain('No text, no words, no letters');
+		expect(p.body).not.toContain('{{');
+		// Feeding the stored body back in adds the floor exactly once.
+		expect(p.full.split('No text, no words, no letters')).toHaveLength(2);
+	});
+
+	it('adds the supporting character only when one was given', () => {
+		const withSide = buildAdminPageImagePrompt(
+			PROMPT_DEFAULTS['7-8'].image_page, descriptor, 'a pond', 'a small green parrot'
+		);
+		expect(withSide.body).toContain('a small green parrot');
+
+		const without = buildAdminPageImagePrompt(PROMPT_DEFAULTS['7-8'].image_page, descriptor, 'a pond');
+		expect(without.body).not.toContain('Also in this picture');
+		expect(without.body).toContain(descriptor);
 	});
 });
