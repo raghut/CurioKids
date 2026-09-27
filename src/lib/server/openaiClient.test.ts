@@ -1,0 +1,49 @@
+import { describe, it, expect } from 'vitest';
+import { parseStoryJson } from './openaiClient';
+
+const page = (n: number) => ({ text: `Page ${n} text.`, image_prompt: `scene ${n}` });
+const good = {
+	title: 'Motu Finds A Banana',
+	pages: [1, 2, 3, 4, 5].map(page),
+	moral: 'Sharing makes friends happy.',
+	reflection_question: 'What would you share?',
+	scene: 'a baby elephant holding a banana',
+	hero_descriptor: 'a small grey baby elephant with big ears and a curled trunk'
+};
+
+describe('parseStoryJson', () => {
+	it('accepts a well-formed payload and keeps hero_descriptor', () => {
+		const r = parseStoryJson(JSON.stringify(good));
+		expect(r.title).toBe('Motu Finds A Banana');
+		expect(r.pages).toHaveLength(5);
+		expect(r.hero_descriptor).toContain('baby elephant');
+	});
+
+	it('rejects non-JSON', () => {
+		expect(() => parseStoryJson('not json')).toThrow(/invalid JSON/);
+	});
+
+	it('rejects the wrong page count', () => {
+		expect(() => parseStoryJson(JSON.stringify({ ...good, pages: [1, 2, 3, 4].map(page) }))).toThrow(
+			/missing required fields/
+		);
+	});
+
+	it('rejects a missing title, moral, or reflection question', () => {
+		for (const field of ['title', 'moral', 'reflection_question'] as const) {
+			const bad = { ...good, [field]: '' };
+			expect(() => parseStoryJson(JSON.stringify(bad)), field).toThrow(/missing required fields/);
+		}
+	});
+
+	it('rejects an empty page', () => {
+		const pages = [1, 2, 3, 4, 5].map(page);
+		pages[2] = { text: '   ', image_prompt: 'x' };
+		expect(() => parseStoryJson(JSON.stringify({ ...good, pages }))).toThrow(/empty page/);
+	});
+
+	it('still parses when hero_descriptor is absent (the kid flow never asks for it)', () => {
+		const { hero_descriptor: _omit, ...withoutHero } = good;
+		expect(parseStoryJson(JSON.stringify(withoutHero)).hero_descriptor).toBeUndefined();
+	});
+});

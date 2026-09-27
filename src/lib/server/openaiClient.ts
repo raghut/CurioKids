@@ -21,7 +21,44 @@ export type StoryTextResult = {
 	moral: string;
 	reflection_question: string;
 	scene: string;
+	/**
+	 * The model's own visual description of the hero it just wrote — species, size,
+	 * colours, markings. This is the only thing the image model is told about the
+	 * hero, and it is reused for every page, which is what keeps the character from
+	 * drifting into a different creature. Optional: the kid flow's prompt does not
+	 * ask for it (it always has a locked character descriptor to use instead).
+	 */
+	hero_descriptor?: string;
 };
+
+/**
+ * Parse and check an OpenAI story payload. Pure, so the contract is unit-testable
+ * without a network call.
+ */
+export function parseStoryJson(content: string): StoryTextResult {
+	let parsed: StoryTextResult;
+	try {
+		parsed = JSON.parse(content);
+	} catch {
+		throw new Error('OpenAI chat returned invalid JSON');
+	}
+
+	if (
+		!parsed.title ||
+		!Array.isArray(parsed.pages) ||
+		parsed.pages.length !== 5 ||
+		!parsed.moral ||
+		!parsed.reflection_question
+	) {
+		throw new Error('OpenAI story JSON missing required fields');
+	}
+
+	if (parsed.pages.some((p) => !p || typeof p.text !== 'string' || !p.text.trim())) {
+		throw new Error('OpenAI story JSON has an empty page');
+	}
+
+	return parsed;
+}
 
 /**
  * Generate the story text with gpt-4o-mini. Uses response_format json_object
@@ -51,24 +88,7 @@ export async function generateStoryText(messages: ChatMessage[]): Promise<StoryT
 	const content = data?.choices?.[0]?.message?.content;
 	if (!content) throw new Error('OpenAI chat returned no content');
 
-	let parsed: StoryTextResult;
-	try {
-		parsed = JSON.parse(content);
-	} catch {
-		throw new Error('OpenAI chat returned invalid JSON');
-	}
-
-	if (
-		!parsed.title ||
-		!Array.isArray(parsed.pages) ||
-		parsed.pages.length !== 5 ||
-		!parsed.moral ||
-		!parsed.reflection_question
-	) {
-		throw new Error('OpenAI story JSON missing required fields');
-	}
-
-	return parsed;
+	return parseStoryJson(content);
 }
 
 /**
