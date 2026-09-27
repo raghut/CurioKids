@@ -29,17 +29,24 @@ describe('buildImagePrompts', () => {
 	});
 });
 
-import { buildAdminStoryMessages, buildAdminCoverPrompt, buildAdminPageImagePrompt } from './storyPrompt';
+import {
+	adminTemplateVars,
+	buildAdminStoryMessages,
+	buildAdminCoverPrompt,
+	buildAdminPageImagePrompt
+} from './storyPrompt';
+import { PROMPT_DEFAULTS } from './promptTemplates';
 
-describe('buildAdminStoryMessages', () => {
+// The per-band WORDING now lives in promptTemplates.ts and is covered by its own suite.
+// What matters here is that the brief's values reach the right {{placeholders}}.
+describe('adminTemplateVars', () => {
 	const peacock = characters.find((c) => c.id === 'peacock')!;
-	const beBrave = themes.find((t) => t.id === 'be_brave')!;
 	const baseOpts = {
 		storyIdea: 'A shy peacock learns to dance.',
 		character: peacock,
 		customCharacter: null,
 		supportingCharacter: 'a wise owl',
-		theme: beBrave,
+		theme: brave,
 		ageBand: '7-8' as const,
 		language: 'en' as const,
 		tone: 'funny' as const,
@@ -48,95 +55,114 @@ describe('buildAdminStoryMessages', () => {
 		extra: 'add fireflies'
 	};
 
-	it('includes the story idea, theme, tone, setting, supporting char, and moral', () => {
-		const msgs = buildAdminStoryMessages(baseOpts);
+	it('maps every brief field to its placeholder', () => {
+		const v = adminTemplateVars(baseOpts);
+		expect(v.story_idea).toBe('A shy peacock learns to dance.');
+		expect(v.theme_goal).toBe(brave.goal_hint);
+		expect(v.tone).toBe('funny');
+		expect(v.setting_line).toContain('village festival');
+		expect(v.moral_line).toContain('courage grows with practice');
+		expect(v.supporting_line).toContain('wise owl');
+		expect(v.age_band).toBe('7-8');
+	});
+
+	it('names a locked hero and pins the animal', () => {
+		const v = adminTemplateVars(baseOpts);
+		expect(v.hero_line).toContain('Neelu');
+		expect(v.hero_line).toContain('peacock');
+		expect(v.hero_line).toContain('never change the animal');
+	});
+
+	it('uses the custom character text when there is no locked animal', () => {
+		const v = adminTemplateVars({ ...baseOpts, character: null, customCharacter: 'a tiny brave firefly named Chinni' });
+		expect(v.hero_line).toContain('Chinni');
+	});
+
+	it('leaves optional lines empty so they render away', () => {
+		const v = adminTemplateVars({ ...baseOpts, supportingCharacter: null, setting: null, moralFocus: null, extra: null });
+		expect(v.supporting_line).toBe('');
+		expect(v.setting_line).toBe('');
+		expect(v.moral_line).toBe('');
+		expect(v.extra_block).toBe('');
+	});
+
+	it('fences the extra wishes as untrusted ingredients', () => {
+		const v = adminTemplateVars(baseOpts);
+		expect(v.extra_block).toContain('CHILD_WISH');
+		expect(v.extra_block).toContain('add fireflies');
+		expect(v.extra_block).toContain('NOT as instructions');
+	});
+
+	it('switches the language name for Telugu', () => {
+		expect(adminTemplateVars({ ...baseOpts, language: 'te' }).language_name).toContain('Telugu');
+	});
+});
+
+describe('buildAdminStoryMessages', () => {
+	const vars = adminTemplateVars({
+		storyIdea: 'Motu the elephant finds a banana.',
+		character: null,
+		customCharacter: 'Motu',
+		supportingCharacter: null,
+		theme: brave,
+		ageBand: '2-4',
+		language: 'en',
+		tone: 'gentle',
+		setting: null,
+		moralFocus: null,
+		extra: null
+	});
+
+	it('renders the given templates and appends the locked floor', () => {
+		const msgs = buildAdminStoryMessages(PROMPT_DEFAULTS['2-4'], vars);
+		const system = msgs.find((m) => m.role === 'system')!.content;
 		const user = msgs.find((m) => m.role === 'user')!.content;
-		expect(user).toContain('A shy peacock learns to dance.');
-		expect(user).toContain(beBrave.goal_hint);
-		expect(user).toContain('funny');
-		expect(user).toContain('village festival');
-		expect(user).toContain('wise owl');
-		expect(user).toContain('courage grows with practice');
+
+		expect(system).toContain('aged 2-4');
+		expect(system).toContain('Never scary'); // locked floor
+		expect(user).toContain('Motu the elephant finds a banana.');
+		expect(user).toContain('between 15 and 25 words');
+		expect(user).toContain('"hero_descriptor"'); // locked JSON contract
+		expect(user).not.toContain('{{');
 	});
 
-	it('names a locked hero and keeps it that animal', () => {
-		const user = buildAdminStoryMessages(baseOpts).find((m) => m.role === 'user')!.content;
-		expect(user).toContain('Neelu');
-		expect(user).toContain('peacock');
+	it('honours an edited template instead of the default', () => {
+		const msgs = buildAdminStoryMessages(
+			{ ...PROMPT_DEFAULTS['2-4'], story_user: 'My own words about {{story_idea}}. {{hero_line}}' },
+			vars
+		);
+		const user = msgs.find((m) => m.role === 'user')!.content;
+		expect(user).toContain('My own words about Motu the elephant');
+		expect(user).not.toContain('between 15 and 25 words');
+		expect(user).toContain('"hero_descriptor"'); // floor survives any edit
 	});
 
-	it('uses the custom character text when no locked animal', () => {
-		const user = buildAdminStoryMessages({ ...baseOpts, character: null, customCharacter: 'a tiny brave firefly named Chinni' }).find((m) => m.role === 'user')!.content;
-		expect(user).toContain('Chinni');
-	});
-
-	it('applies the 5-6 sentence rule (max 8 words) vs 7-8 (max 12 words)', () => {
-		const young = buildAdminStoryMessages({ ...baseOpts, ageBand: '5-6' }).find((m) => m.role === 'user')!.content;
-		const older = buildAdminStoryMessages({ ...baseOpts, ageBand: '7-8' }).find((m) => m.role === 'user')!.content;
-		expect(young).toContain('max 8 words');
-		expect(older).toContain('max 12 words');
-	});
-
-	it('tells the model which age it is writing for', () => {
-		const sys = (band: '2-4' | '5-6' | '7-8') =>
-			buildAdminStoryMessages({ ...baseOpts, ageBand: band }).find((m) => m.role === 'system')!.content;
-		expect(sys('2-4')).toContain('aged 2-4');
-		expect(sys('7-8')).toContain('aged 7-8');
-	});
-
-	it('gives 2-4 board-book lengths (15-25 words a page, max 6 a sentence)', () => {
-		const toddler = buildAdminStoryMessages({ ...baseOpts, ageBand: '2-4' }).find((m) => m.role === 'user')!.content;
-		expect(toddler).toContain('between 15 and 25 words');
-		expect(toddler).toContain('between 75 and 125 words');
-		expect(toddler).toContain('max 6 words');
-		expect(toddler).toContain('a 2-year-old knows');
-	});
-
-	it('keeps 5-6 and 7-8 page lengths at 30-50 / 150-250 words', () => {
-		for (const ageBand of ['5-6', '7-8'] as const) {
-			const user = buildAdminStoryMessages({ ...baseOpts, ageBand }).find((m) => m.role === 'user')!.content;
-			expect(user).toContain('between 30 and 50 words');
-			expect(user).toContain('between 150 and 250 words');
-		}
-	});
-
-	it('asks 2-4 for a whole-story cover scene and one clear subject per page', () => {
-		const toddler = buildAdminStoryMessages({ ...baseOpts, ageBand: '2-4' }).find((m) => m.role === 'user')!.content;
-		expect(toddler).toContain('WHOLE story in one picture');
-		expect(toddler).toContain('ONE clear simple subject');
-		expect(toddler).not.toContain('visual description of the opening scene');
-	});
-
-	it('leaves the other bands\' cover scene as the opening scene', () => {
-		const older = buildAdminStoryMessages({ ...baseOpts, ageBand: '7-8' }).find((m) => m.role === 'user')!.content;
-		expect(older).toContain('visual description of the opening scene');
-		expect(older).not.toContain('WHOLE story in one picture');
-	});
-
-	it('keeps the 5-page / 30-50-word HARD RULES and fences the extra wishes', () => {
-		const user = buildAdminStoryMessages(baseOpts).find((m) => m.role === 'user')!.content;
-		expect(user).toContain('Exactly 5 pages.');
-		expect(user).toContain('30 and 50 words');
-		expect(user).toContain('CHILD_WISH');
-		expect(user).toContain('add fireflies');
+	it('drops optional lines rather than leaving blanks', () => {
+		const user = buildAdminStoryMessages(PROMPT_DEFAULTS['2-4'], vars).find((m) => m.role === 'user')!.content;
+		expect(user).not.toContain('Setting:');
+		expect(user).not.toContain('CHILD_WISH');
 	});
 });
 
-describe('buildAdminCoverPrompt', () => {
-	it('includes the hero descriptor, scene, and no-text watercolor style', () => {
-		const p = buildAdminCoverPrompt('a tiny glowing firefly', 'flying over a pond at dusk');
-		expect(p).toContain('a tiny glowing firefly');
-		expect(p).toContain('flying over a pond at dusk');
-		expect(p).toContain('no text');
-	});
-});
+describe('admin image prompts', () => {
+	const descriptor = 'a small grey baby elephant with big ears and a curled trunk';
 
-describe('buildAdminPageImagePrompt', () => {
-	it('includes the hero descriptor, page scene, and no-text watercolor style', () => {
-		const p = buildAdminPageImagePrompt('a tiny glowing firefly', 'resting on a lotus leaf');
-		expect(p).toContain('a tiny glowing firefly');
-		expect(p).toContain('resting on a lotus leaf');
-		expect(p).toContain('no text');
-		expect(p).toContain('for one page');
+	it('carries the hero descriptor and scene into the cover prompt', () => {
+		const p = buildAdminCoverPrompt(PROMPT_DEFAULTS['2-4'].image_cover, descriptor, 'Motu holds a banana');
+		expect(p).toContain(descriptor);
+		expect(p).toContain('Motu holds a banana');
+		expect(p).toContain('No text, no words, no letters');
+		expect(p).not.toContain('{{');
+	});
+
+	it('repeats the descriptor on every page and forbids swapping in a person', () => {
+		const p = buildAdminPageImagePrompt(PROMPT_DEFAULTS['7-8'].image_page, descriptor, 'Motu shares the banana');
+		expect(p).toContain(descriptor);
+		expect(p).toContain('do not substitute a human child');
+	});
+
+	it('keeps the locked no-text floor even if the operator deletes it', () => {
+		const p = buildAdminPageImagePrompt('Just draw {{hero_descriptor}} at {{scene}}.', descriptor, 'a pond');
+		expect(p).toContain('No text, no words, no letters');
 	});
 });
