@@ -74,6 +74,8 @@ Full product strategy is in `docs/strategy.md`. **Always re-read it if you're un
 - Admin can review, publish/unpublish, and **delete** gallery stories (row + Vercel Blob images). This admin-side moderation is in scope; kid-facing social features remain out of scope.
 - Increment 1 (auth + status gate + manage) is built. Generation-from-brief, editing, and cost visibility are later increments — see `docs/superpowers/specs/2026-09-19-admin-dashboard-inc1-design.md`.
 - **Admin age bands (approved 2026-09-25):** admin create-from-brief offers three bands — `2-4`, `5-6`, `7-8` — stored in the promoted `age_tag` column. They steer vocabulary and sentence length, and `2-4` is a **board book**: 5 pages of 15–25 words, **an illustration on every page** (cover + 5 page images, ~₹20–25 per story), and a cover that pictures the whole story rather than the opening scene. `5-6` and `7-8` stay cover-only with 30–50-word pages. The band itself switches page images on — this does **not** read `GENERATE_PAGE_IMAGES`, which remains the kid flow's flag. `GeneratedStory.age_range` stays the locked `'5-8'`; `age_tag` carries the real band. The kid `/create` screen has no age picker — the bands are admin-only. See `docs/superpowers/specs/2026-09-25-admin-create-from-brief-design.md`.
+- **Editable prompts (approved 2026-09-27):** the prompts driving admin story generation are **not hardcoded**. `/admin/prompts` edits four templates — `story_system`, `story_user`, `image_cover`, `image_page` — **per age band** (12 in all), stored as overrides in a `prompt_templates` table (`age_band` + `kind` primary key). Defaults live in `src/lib/server/promptTemplates.ts`; a band/kind with no row uses the default, so "reset" is a DELETE and later deploys still improve the baseline. Every rendered prompt is the operator's body **plus a non-editable `LOCKED_FLOOR`** carrying the child-safety rules and the JSON output contract — an edit can't strip the guardrails or make output unparseable. `validateTemplate` rejects unknown `{{placeholders}}` and refuses to drop `{{hero_descriptor}}` from an image template. The kid `/create` prompt stays hardcoded (it auto-publishes, with no draft review). **Re-run `npm run db:init`** after pulling this.
+- **Character continuity:** the story model returns a `hero_descriptor` — its own visual description of the hero it wrote — and that feeds every image call for **custom** characters. Locked animals keep their locked `prompt_descriptor`. `gpt-image-1` has no memory between calls, so repeating this descriptor is the only thing keeping the hero from changing species between pages.
 - **No** Supabase, no Firebase, no other backend services beyond Neon Postgres + Vercel Blob. There is still no user auth and no user accounts. **An admin dashboard is now in scope (approved 2026-09-19)** — a content-production tool gated by a single shared `ADMIN_PASSCODE` (a door-code, not accounts) — see the admin dashboard note below.
 
 ## Folder structure
@@ -119,7 +121,7 @@ curiokids/
         storyPrompt.ts               # prompt builder (incl. per-page image prompts)
       types.ts                       # Fact, Story, GeneratedStory, StorySummary, Character, Theme
   scripts/
-    init-db.mjs                      # one-time Postgres schema creation
+    init-db.mjs                      # Postgres schema creation (stories + prompt_templates)
   static/
     content/
       facts/
@@ -403,4 +405,4 @@ These are not decided yet — flag if relevant to your work and I'll choose:
 
 ---
 
-_Last updated: 2026-09-25. Update this file whenever a scope decision changes._
+_Last updated: 2026-09-27. Update this file whenever a scope decision changes._
