@@ -1,11 +1,17 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { validateAdminBrief } from '$lib/server/validate';
-import { buildAdminStoryMessages, buildAdminCoverPrompt, buildAdminPageImagePrompt } from '$lib/server/storyPrompt';
+import {
+	adminTemplateVars,
+	buildAdminStoryMessages,
+	buildAdminCoverPrompt,
+	buildAdminPageImagePrompt
+} from '$lib/server/storyPrompt';
+import { resolveTemplates } from '$lib/server/promptTemplates';
 import { generateStoryText, generateImage } from '$lib/server/openaiClient';
 import { uploadImage } from '$lib/server/blob';
 import { assembleStory } from '$lib/server/assembleStory';
-import { insertStory } from '$lib/server/db';
+import { insertStory, getPromptOverrides } from '$lib/server/db';
 
 // Auth is enforced by hooks.server.ts (all /api/admin/* need a valid admin cookie).
 // Admin generation has NO family passcode and NO daily cap. 5-6 and 7-8 get a cover
@@ -31,8 +37,18 @@ export const POST: RequestHandler = async ({ request }) => {
 	const v = validateAdminBrief(body);
 	if (!v.ok) return fail(v.code, v.message, 400);
 
+	// Operator-edited templates for this band, falling back to the code defaults —
+	// including when the prompt_templates table doesn't exist yet (pre-db:init).
+	let overrides = {};
 	try {
-		const messages = buildAdminStoryMessages({
+		overrides = await getPromptOverrides(v.ageBand);
+	} catch (e) {
+		console.error('prompt overrides unavailable, using defaults:', e instanceof Error ? e.message : 'unknown');
+	}
+	const templates = resolveTemplates(v.ageBand, overrides);
+
+	try {
+		const vars = adminTemplateVars({
 			storyIdea: v.storyIdea,
 			character: v.character,
 			customCharacter: v.customCharacter,
@@ -45,17 +61,23 @@ export const POST: RequestHandler = async ({ request }) => {
 			moralFocus: v.moralFocus,
 			extra: v.extra
 		});
-		const text = await generateStoryText(messages);
+		const text = await generateStoryText(buildAdminStoryMessages(templates, vars));
 
-		const heroDescriptor = v.character ? v.character.prompt_descriptor : (v.customCharacter as string);
+		// A locked animal keeps its locked descriptor (consistent across every story).
+		// A custom character has no descriptor of its own, so we use the one the story
+		// model derived from the story it just wrote — without this, the illustrator only
+		// ever saw the raw free-text and drew whatever it liked.
+		const heroDescriptor = v.character
+			? v.character.prompt_descriptor
+			: (text.hero_descriptor?.trim() || (v.customCharacter as string));
 
 		// The 2-4 band always illustrates every page — the band itself is the switch,
 		// deliberately not GENERATE_PAGE_IMAGES (that flag is for the kid flow).
 		const withPageImages = v.ageBand === '2-4';
 		const imagePrompts = [
-			buildAdminCoverPrompt(heroDescriptor, text.scene),
+			buildAdminCoverPrompt(templates.image_cover, heroDescriptor, text.scene),
 			...(withPageImages
-				? text.pages.map((pg) => buildAdminPageImagePrompt(heroDescriptor, pg.image_prompt))
+				? text.pages.map((pg) => buildAdminPageImagePrompt(templates.image_page, heroDescriptor, pg.image_prompt))
 				: [])
 		];
 

@@ -24,4 +24,14 @@ await sql`CREATE INDEX IF NOT EXISTS stories_lang_created_idx ON stories (langua
 await sql`CREATE INDEX IF NOT EXISTS stories_age_idx ON stories (age_tag)`;
 await sql`CREATE INDEX IF NOT EXISTS stories_status_idx ON stories (status)`;
 
-console.log('✅ stories table ready');
+await sql`
+	CREATE TABLE IF NOT EXISTS prompt_templates (
+		age_band   text NOT NULL,
+		kind       text NOT NULL,
+		body       text NOT NULL,
+		updated_at timestamptz NOT NULL DEFAULT now(),
+		PRIMARY KEY (age_band, kind)
+	)
+`;
+
+console.log('✅ stories + prompt_templates tables ready');

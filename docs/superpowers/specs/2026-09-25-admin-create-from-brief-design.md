@@ -202,3 +202,52 @@ nothing throttles this — it is the operator's call per story, and the form say
 
 **Unchanged:** `GeneratedStory.age_range` stays the locked literal `'5-8'`; `age_tag` (the DB
 column) carries the real band. The kid `/create` screen gets no age picker — `2-4` is admin-only.
+
+---
+
+## Amendment 2026-09-27 — editable prompts + character continuity (approved)
+
+### Why
+
+Two problems, one root. Prompts were hardcoded, so tuning a word meant a deploy. And the Custom
+character field is used verbatim as the hero's *visual description*, so briefs that typed
+instructions there (`"take roles from the story"`) sent `gpt-image-1` no description of the hero
+at all — later pages drew a human child instead of the elephant the text described.
+
+### Editable templates
+
+Four kinds — `story_system`, `story_user`, `image_cover`, `image_page` — **per age band**, so 12
+templates, edited at `/admin/prompts`.
+
+- **Defaults in code, overrides in the DB.** `PROMPT_DEFAULTS` in `promptTemplates.ts` holds the
+  baseline; the `prompt_templates` table (`age_band` + `kind` PK) stores only what the operator
+  changed. A missing row means "use the default", so Reset is a `DELETE` and a later deploy can
+  still improve the wording for anyone who hasn't overridden it. Reads fall back to defaults if
+  the table is missing, so generation survives a deploy that precedes `db:init`.
+- **Locked floor.** Every rendered prompt is `<editable body>` + `LOCKED_FLOOR[kind]`: the
+  child-safety rules, and — for `story_user` — the full JSON output contract. No edit can strip
+  the guardrails or make the model's output unparseable. Shown greyed-out in the UI.
+- **Validation on save.** `validateTemplate` rejects unknown `{{placeholders}}`, enforces a 6000
+  character cap, and **refuses to drop `{{hero_descriptor}}` from an image template** — that
+  omission is precisely the bug above, so the guard makes it unrepeatable.
+- **Preview** renders the textarea's current text against a sample brief through the same
+  server-side renderer the generator uses, so the screen can't drift from reality.
+- The builders in `storyPrompt.ts` stay pure: `adminTemplateVars` maps the brief to placeholders
+  and the caller passes templates in. `AGE_RULES` is gone — each band's numbers are simply written
+  into that band's default template.
+
+### Character continuity
+
+The story model now also returns `hero_descriptor`: its own visual description of the hero it just
+wrote (species, size, colours, markings). For a **custom** character that descriptor drives the
+cover and every page; a **locked animal** keeps its locked `prompt_descriptor`, which is what keeps
+Ganga looking like Ganga across different stories. The default page template also states the hero
+must not be swapped for a human child, and each page's `image_prompt` must name the creature rather
+than only its name. `parseStoryJson` was extracted from the fetch wrapper so the contract is
+unit-testable.
+
+### Scope
+
+Admin flow only — the kid `/create` prompt stays hardcoded, because kid stories auto-publish with
+no draft review in between. This is an admin content tool, not the kid-facing settings screen that
+CLAUDE.md caps at a language reset. **`npm run db:init` must be re-run.**

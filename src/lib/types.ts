@@ -98,3 +98,14 @@ export type Theme = {
 
 export type AgeBand = '2-4' | '5-6' | '7-8';
 export type Tone = 'gentle' | 'funny' | 'adventurous';
+
+/** The four admin-editable prompt templates. One set per age band. */
+export type PromptKind = 'story_system' | 'story_user' | 'image_cover' | 'image_page';
+
+/** A saved override of a default template. Absent = that band/kind uses the code default. */
+export type PromptOverride = {
+	age_band: AgeBand;
+	kind: PromptKind;
+	body: string;
+	updated_at: string;
+};

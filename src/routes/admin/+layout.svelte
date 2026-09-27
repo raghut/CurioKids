@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../layout.css';
-	import { LayoutGrid, LogOut, Menu, X, Plus } from 'lucide-svelte';
+	import { LayoutGrid, LogOut, Menu, X, Plus, SlidersHorizontal } from 'lucide-svelte';
 	let { children, data } = $props();
 	let drawerOpen = $state(false);
 
@@ -76,6 +76,13 @@
 			onclick={() => (drawerOpen = false)}
 		>
 			<Plus size={18} strokeWidth={1.5} /> Create story
+		</a>
+		<a
+			href="/admin/prompts"
+			class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+			onclick={() => (drawerOpen = false)}
+		>
+			<SlidersHorizontal size={18} strokeWidth={1.5} /> Prompts
 		</a>
 		<form method="POST" action="/admin/login?/logout" class="mt-auto">
 			<button
