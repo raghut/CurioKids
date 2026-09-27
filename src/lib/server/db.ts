@@ -1,6 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import { env } from '$env/dynamic/private';
-import type { GeneratedStory, StorySummary, AdminStorySummary } from '$lib/types';
+import type { GeneratedStory, StorySummary, AdminStorySummary, AgeBand, PromptKind, PromptOverride } from '$lib/types';
 
 function sql() {
 	if (!env.DATABASE_URL) throw new Error('DATABASE_URL not configured');
@@ -74,4 +74,46 @@ export async function setStoryStatus(id: string, status: 'draft' | 'published'):
 export async function deleteStory(id: string): Promise<void> {
 	const q = sql();
 	await q`DELETE FROM stories WHERE id = ${id}`;
+}
+
+// --- Prompt templates ------------------------------------------------------------
+// Only OVERRIDES are stored. A band/kind with no row uses the code default in
+// promptTemplates.ts, which is why resetting a template is a plain DELETE.
+
+/** Every saved override. Callers layer these over the defaults via resolveTemplates. */
+export async function listPromptOverrides(): Promise<PromptOverride[]> {
+	const q = sql();
+	const rows = await q`SELECT age_band, kind, body, updated_at FROM prompt_templates`;
+	return rows as PromptOverride[];
+}
+
+/** Overrides for one band, shaped for resolveTemplates. */
+export async function getPromptOverrides(
+	band: AgeBand
+): Promise<Partial<Record<PromptKind, string>>> {
+	const q = sql();
+	const rows = await q`SELECT kind, body FROM prompt_templates WHERE age_band = ${band}`;
+	const out: Partial<Record<PromptKind, string>> = {};
+	for (const r of rows as Array<{ kind: PromptKind; body: string }>) out[r.kind] = r.body;
+	return out;
+}
+
+/** Save (or replace) one override. */
+export async function upsertPromptTemplate(
+	band: AgeBand,
+	kind: PromptKind,
+	body: string
+): Promise<void> {
+	const q = sql();
+	await q`
+		INSERT INTO prompt_templates (age_band, kind, body, updated_at)
+		VALUES (${band}, ${kind}, ${body}, now())
+		ON CONFLICT (age_band, kind) DO UPDATE SET body = ${body}, updated_at = now()
+	`;
+}
+
+/** Reset one template back to the code default by removing its override. */
+export async function deletePromptTemplate(band: AgeBand, kind: PromptKind): Promise<void> {
+	const q = sql();
+	await q`DELETE FROM prompt_templates WHERE age_band = ${band} AND kind = ${kind}`;
 }
