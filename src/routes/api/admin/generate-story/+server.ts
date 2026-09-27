@@ -74,18 +74,30 @@ export const POST: RequestHandler = async ({ request }) => {
 		// The 2-4 band always illustrates every page — the band itself is the switch,
 		// deliberately not GENERATE_PAGE_IMAGES (that flag is for the kid flow).
 		const withPageImages = v.ageBand === '2-4';
+
+		// The supporting character gets its own descriptor, added only to the pages the
+		// model says it actually appears on — so it looks the same wherever it shows up
+		// without wandering into scenes the text never puts it in.
+		const supporting = text.supporting_descriptor?.trim() ?? '';
 		const imagePrompts = [
-			buildAdminCoverPrompt(templates.image_cover, heroDescriptor, text.scene),
+			buildAdminCoverPrompt(templates.image_cover, heroDescriptor, text.scene, supporting),
 			...(withPageImages
-				? text.pages.map((pg) => buildAdminPageImagePrompt(templates.image_page, heroDescriptor, pg.image_prompt))
+				? text.pages.map((pg) =>
+						buildAdminPageImagePrompt(
+							templates.image_page,
+							heroDescriptor,
+							pg.image_prompt,
+							pg.has_supporting ? supporting : ''
+						)
+					)
 				: [])
 		];
 
 		// Generate in parallel; a failed image becomes "" for that slot rather than
 		// failing the whole story.
 		const imageResults = await Promise.all(
-			imagePrompts.map((prompt, i) =>
-				generateImage(prompt)
+			imagePrompts.map(({ full }, i) =>
+				generateImage(full)
 					.then((bytes) => uploadImage(bytes, i === 0 ? 'admin-cover' : `admin-page-${i}`))
 					.catch((e) => {
 						console.error(`admin image ${i} failed:`, e instanceof Error ? e.message : 'unknown');
@@ -106,6 +118,10 @@ export const POST: RequestHandler = async ({ request }) => {
 			childName: null,
 			coverUrl,
 			pageUrls,
+			// Store the editable BODY, not the floored text — the floor is re-applied on
+			// every regeneration, so storing it would double it.
+			coverPrompt: imagePrompts[0].body,
+			pagePrompts: withPageImages ? imagePrompts.slice(1).map((p) => p.body) : [],
 			createdAt: new Date().toISOString(),
 			status: 'draft',
 			age_tag: v.ageBand

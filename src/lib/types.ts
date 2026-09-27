@@ -48,7 +48,13 @@ export type GeneratedStory = {
 	child_name: string | null;
 	title: string;
 	cover_image_url: string;
-	pages: Array<{ text: string; image_url: string }>;
+	/**
+	 * The rendered prompt that produced cover_image_url. Stored so the admin edit
+	 * screen can show and re-run it. Absent on stories made before page editing.
+	 */
+	cover_prompt?: string;
+	/** image_prompt is the rendered prompt behind image_url — same reason as above. */
+	pages: Array<{ text: string; image_url: string; image_prompt?: string }>;
 	moral: string;
 	reflection_question: string;
 	created_at: string;

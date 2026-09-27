@@ -1,0 +1,5 @@
+Next requirement:
+1. every page image may contain support characters also right? that character also should be considered as a part of the image and should be included in the image description so that the side character also consistent across the story.
+ the current prompt is "Children's picture-book illustration for one page. The hero is exactly this character, unchanged: {{hero_descriptor}}. Draw this same character — do not substitute a human child, a person, or a different animal. Scene: {{scene}}. Soft watercolor style, warm gentle colors, calm mood. One clear simple subject, large and centred, uncluttered background a toddler can read at a glance.". I think this prompt should be fixed.
+2. I feel for every page I need edit prompt to change/update image or description of that page. it will help to fix things, After story generation.
+

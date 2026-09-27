@@ -15,6 +15,9 @@ export function assembleStory(input: {
 	childName: string | null;
 	coverUrl: string;
 	pageUrls: string[];
+	/** The rendered prompts actually sent to the image model, kept so they can be edited later. */
+	coverPrompt?: string;
+	pagePrompts?: string[];
 	createdAt: string;
 	status: 'draft' | 'published';
 	age_tag?: string;
@@ -31,7 +34,12 @@ export function assembleStory(input: {
 		child_name: input.childName,
 		title: input.text.title,
 		cover_image_url: input.coverUrl,
-		pages: input.text.pages.map((p, i) => ({ text: p.text, image_url: input.pageUrls[i] ?? '' })),
+		cover_prompt: input.coverPrompt ?? '',
+		pages: input.text.pages.map((p, i) => ({
+			text: p.text,
+			image_url: input.pageUrls[i] ?? '',
+			image_prompt: input.pagePrompts?.[i] ?? ''
+		})),
 		moral: input.text.moral,
 		reflection_question: input.text.reflection_question,
 		created_at: input.createdAt,

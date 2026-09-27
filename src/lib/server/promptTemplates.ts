@@ -36,8 +36,8 @@ export const ALLOWED_VARS: Record<PromptKind, readonly string[]> = {
 		'extra_block',
 		'language_name'
 	],
-	image_cover: ['hero_descriptor', 'scene'],
-	image_page: ['hero_descriptor', 'scene']
+	image_cover: ['hero_descriptor', 'supporting_descriptor', 'scene'],
+	image_page: ['hero_descriptor', 'supporting_descriptor', 'scene']
 };
 
 /**
@@ -68,16 +68,17 @@ export const LOCKED_FLOOR: Record<PromptKind, string> = {
 		`{`,
 		`  "title": string,`,
 		`  "pages": [`,
-		`    { "text": string, "image_prompt": string },`,
-		`    { "text": string, "image_prompt": string },`,
-		`    { "text": string, "image_prompt": string },`,
-		`    { "text": string, "image_prompt": string },`,
-		`    { "text": string, "image_prompt": string }`,
+		`    { "text": string, "image_prompt": string, "has_supporting": boolean },`,
+		`    { "text": string, "image_prompt": string, "has_supporting": boolean },`,
+		`    { "text": string, "image_prompt": string, "has_supporting": boolean },`,
+		`    { "text": string, "image_prompt": string, "has_supporting": boolean },`,
+		`    { "text": string, "image_prompt": string, "has_supporting": boolean }`,
 		`  ],`,
 		`  "moral": string,`,
 		`  "reflection_question": string,`,
 		`  "scene": string,  // short English visual description for the cover illustration`,
-		`  "hero_descriptor": string  // detailed ENGLISH visual description of the hero exactly as you wrote it: what kind of creature it is, size, colours, clothing or markings. This is the only thing the illustrator sees, and it is reused to draw the hero identically on every page. Never describe a human child unless the hero truly is one.`,
+		`  "hero_descriptor": string,  // detailed ENGLISH visual description of the hero exactly as you wrote it: what kind of creature it is, size, colours, clothing or markings. This is the only thing the illustrator sees, and it is reused to draw the hero identically on every page. Never describe a human child unless the hero truly is one.`,
+		`  "supporting_descriptor": string  // the same kind of detailed ENGLISH description for the supporting character, if the story has one — it is reused to draw that character identically too. Use "" when the story has no supporting character. Set each page's "has_supporting" to true ONLY for pages where this character actually appears.`,
 		`}`
 	].join('\n'),
 
@@ -110,20 +111,24 @@ const storyUser = (hardRules: string[]) =>
 		`- Warm, calm tone. A happy or hopeful ending.`
 	].join('\n');
 
+// The supporting descriptor sits on its OWN line: renderTemplate drops a line whose
+// placeholder renders empty, so stories without a side character lose it cleanly.
 const IMAGE_COVER_BASE = [
 	`Children's picture-book cover illustration.`,
 	`The hero is exactly this character: {{hero_descriptor}}.`,
+	`Also in this picture, drawn exactly the same way every time: {{supporting_descriptor}}.`,
 	`Scene: {{scene}}.`,
 	`Soft watercolor style, warm gentle colors, calm mood.`
-].join(' ');
+].join('\n');
 
 const IMAGE_PAGE_BASE = [
 	`Children's picture-book illustration for one page.`,
 	`The hero is exactly this character, unchanged: {{hero_descriptor}}.`,
 	`Draw this same character — do not substitute a human child, a person, or a different animal.`,
+	`Also in this picture, drawn exactly the same way on every page: {{supporting_descriptor}}.`,
 	`Scene: {{scene}}.`,
 	`Soft watercolor style, warm gentle colors, calm mood.`
-].join(' ');
+].join('\n');
 
 export const PROMPT_DEFAULTS: Record<AgeBand, Record<PromptKind, string>> = {
 	'2-4': {
@@ -139,8 +144,8 @@ export const PROMPT_DEFAULTS: Record<AgeBand, Record<PromptKind, string>> = {
 			`- Every page of this story WILL be illustrated. Each "image_prompt" must show ONE clear simple subject — the hero doing one thing — with an uncluttered background a 2-year-old can read at a glance.`,
 			`- "scene" is for the COVER: describe the WHOLE story in one picture (the hero plus the story's main idea), not the opening moment.`
 		]),
-		image_cover: IMAGE_COVER_BASE + ` One clear subject, large and centred, uncluttered background.`,
-		image_page: IMAGE_PAGE_BASE + ` One clear simple subject, large and centred, uncluttered background a toddler can read at a glance.`
+		image_cover: IMAGE_COVER_BASE + `\nOne clear simple action, large and centred, uncluttered background.`,
+		image_page: IMAGE_PAGE_BASE + `\nOne clear simple action, large and centred, uncluttered background a toddler can read at a glance.`
 	},
 	'5-6': {
 		story_system: STORY_SYSTEM('5-6'),
@@ -181,17 +186,23 @@ const VAR_RE = /\{\{\s*([a-z_]+)\s*\}\}/g;
 export type TemplateVars = Record<string, string>;
 
 /**
- * Substitute {{placeholders}}. A line that HELD a placeholder and renders empty is
- * dropped, so optional fields (setting, moral focus, extra wishes) leave no blank gap —
- * while intentional blank lines in the template survive untouched.
+ * Substitute {{placeholders}}.
+ *
+ * A line is DROPPED when any placeholder on it has no value, so an optional field
+ * takes its whole sentence with it rather than leaving a dangling fragment like
+ * "Also in this picture: .". Intentional blank lines, which hold no placeholder,
+ * survive untouched. Put each optional value on its own line.
  */
 export function renderTemplate(body: string, vars: TemplateVars): string {
 	const kept: string[] = [];
 	for (const line of body.split('\n')) {
-		VAR_RE.lastIndex = 0;
-		const hadVar = VAR_RE.test(line);
-		const rendered = line.replace(VAR_RE, (_m, name: string) => vars[name] ?? '');
-		if (hadVar && rendered.trim() === '') continue;
+		let missing = false;
+		const rendered = line.replace(VAR_RE, (_m, name: string) => {
+			const value = vars[name] ?? '';
+			if (!value.trim()) missing = true;
+			return value;
+		});
+		if (missing) continue;
 		kept.push(rendered);
 	}
 	return kept.join('\n');

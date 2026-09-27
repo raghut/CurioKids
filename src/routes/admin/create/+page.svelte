@@ -127,6 +127,9 @@
 				<button onclick={publish} disabled={publishing} class="rounded-xl bg-mint px-5 py-2.5 font-bold text-emerald-900 hover:brightness-105 disabled:opacity-60">
 					{publishing ? 'Publishing…' : 'Publish'}
 				</button>
+				<button onclick={() => goto(`/admin/stories/${draft?.id}`)} class="rounded-xl bg-slate-100 px-5 py-2.5 font-semibold text-slate-600 hover:bg-slate-200">
+					Edit pages
+				</button>
 				<button onclick={() => goto('/admin')} class="rounded-xl bg-slate-100 px-5 py-2.5 font-semibold text-slate-600 hover:bg-slate-200">
 					Keep as draft
 				</button>

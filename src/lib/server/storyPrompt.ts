@@ -1,5 +1,5 @@
 import type { Character, Theme, Language, AgeBand, Tone, PromptKind } from '$lib/types';
-import { renderWithFloor, type TemplateVars } from './promptTemplates';
+import { renderTemplate, renderWithFloor, type TemplateVars } from './promptTemplates';
 
 export type ChatMessage = { role: 'system' | 'user'; content: string };
 
@@ -191,12 +191,40 @@ export function buildAdminStoryMessages(
 }
 
 /**
+ * An image prompt in both the forms we need: `full` goes to the image model, `body` is
+ * stored on the story and shown in the edit screen. They are kept apart deliberately —
+ * the locked floor must be applied exactly once, so storing the floored text would
+ * double it the next time the operator edits and regenerates.
+ */
+export type RenderedPrompt = { full: string; body: string };
+
+function renderImagePrompt(
+	kind: 'image_cover' | 'image_page',
+	template: string,
+	vars: TemplateVars
+): RenderedPrompt {
+	return {
+		full: renderWithFloor(kind, template, vars),
+		body: renderTemplate(template, vars)
+	};
+}
+
+/**
  * Cover-image prompt for the admin flow. heroDescriptor is the locked animal's
  * prompt_descriptor, or — for a custom character — the description the story model
  * derived from the story it just wrote.
  */
-export function buildAdminCoverPrompt(template: string, heroDescriptor: string, scene: string): string {
-	return renderWithFloor('image_cover', template, { hero_descriptor: heroDescriptor, scene });
+export function buildAdminCoverPrompt(
+	template: string,
+	heroDescriptor: string,
+	scene: string,
+	supportingDescriptor = ''
+): RenderedPrompt {
+	return renderImagePrompt('image_cover', template, {
+		hero_descriptor: heroDescriptor,
+		supporting_descriptor: supportingDescriptor,
+		scene
+	});
 }
 
 /**
@@ -204,6 +232,15 @@ export function buildAdminCoverPrompt(template: string, heroDescriptor: string, 
  * same hero descriptor on every page is the only thing keeping the character
  * consistent, since the image model has no memory between calls.
  */
-export function buildAdminPageImagePrompt(template: string, heroDescriptor: string, pageScene: string): string {
-	return renderWithFloor('image_page', template, { hero_descriptor: heroDescriptor, scene: pageScene });
+export function buildAdminPageImagePrompt(
+	template: string,
+	heroDescriptor: string,
+	pageScene: string,
+	supportingDescriptor = ''
+): RenderedPrompt {
+	return renderImagePrompt('image_page', template, {
+		hero_descriptor: heroDescriptor,
+		supporting_descriptor: supportingDescriptor,
+		scene: pageScene
+	});
 }

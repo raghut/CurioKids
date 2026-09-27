@@ -251,3 +251,46 @@ unit-testable.
 Admin flow only — the kid `/create` prompt stays hardcoded, because kid stories auto-publish with
 no draft review in between. This is an admin content tool, not the kid-facing settings screen that
 CLAUDE.md caps at a language reset. **`npm run db:init` must be re-run.**
+
+---
+
+## Amendment 2026-09-27b — supporting characters + per-page editing (approved)
+
+From `docs/requirements/next-requirement.txt`.
+
+### Supporting-character consistency
+
+Only the hero had a descriptor, so a supporting character was redrawn differently on every page.
+The model now returns `supporting_descriptor` alongside `hero_descriptor` and sets `has_supporting`
+per page; that descriptor is injected into the prompts of those pages only, so the character stays
+consistent where it appears without wandering into scenes the text never puts it in. The image
+templates gained an optional `{{supporting_descriptor}}` — allowed but never required, since a
+story may have no side character.
+
+This exposed a flaw in `renderTemplate`: it only dropped lines that rendered *entirely* blank, so
+an empty supporting descriptor left a dangling `"Also in this picture: ."`. The rule is now "drop
+the whole line when any placeholder on it is empty", which is what a template author expects and
+why each optional value sits on its own line.
+
+The 2-4 templates also stopped asking for "one clear simple **subject**" — that actively excluded a
+second character — in favour of "one clear simple **action**", keeping the toddler-legibility intent.
+
+### Per-page editing
+
+`/admin/stories/[id]`, reachable from the story list and from the create preview:
+
+- **Page text** — a plain manual edit. No model call, no cost.
+- **Page and cover images** — edit the prompt, regenerate that one picture. The old Blob image is
+  deleted, but only after the new URL is safely stored.
+
+This required persisting the prompts: `cover_prompt` on the story and `image_prompt` per page, both
+optional so existing stories keep working. What is stored is the rendered **body**, deliberately
+*without* the locked floor — the floor is re-applied exactly once per generation, so storing the
+floored text would double it on the next edit. The image builders therefore return
+`{ full, body }`: `full` goes to the model, `body` is stored and shown in the editor.
+
+`validatePageEdit` is pure and covers index bounds (`-1` = cover), unknown actions, empty text or
+prompt, and length caps. `updateStory` writes the JSONB blob back and re-syncs the promoted `title`
+and `cover_url` columns.
+
+Not included: editing title, moral or reflection question — the same save path would extend to them.

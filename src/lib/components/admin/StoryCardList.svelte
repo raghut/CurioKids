@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { AdminStorySummary } from '$lib/types';
 	import StatusChip from './StatusChip.svelte';
-	import { Eye, Send, EyeOff, Trash2 } from 'lucide-svelte';
+	import { Eye, Send, EyeOff, Trash2, Pencil } from 'lucide-svelte';
 	let {
 		stories,
 		onpreview,
@@ -32,6 +32,9 @@
 				</div>
 			</div>
 			<div class="mt-3 flex gap-2">
+				<a class="{action} bg-slate-100 text-slate-600" href="/admin/stories/{s.id}">
+					<Pencil size={16} strokeWidth={1.5} /> Edit
+				</a>
 				<button class="{action} bg-slate-100 text-slate-600" onclick={() => onpreview(s)}>
 					<Eye size={16} strokeWidth={1.5} /> Preview
 				</button>
