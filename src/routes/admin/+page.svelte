@@ -1,11 +1,10 @@
 <script lang="ts">
-	import type { AdminStorySummary, GeneratedStory } from '$lib/types';
+	import type { AdminStorySummary } from '$lib/types';
 	import FilterBar from '$lib/components/admin/FilterBar.svelte';
 	import StoryTable from '$lib/components/admin/StoryTable.svelte';
 	import StoryCardList from '$lib/components/admin/StoryCardList.svelte';
 	import ConfirmDialog from '$lib/components/admin/ConfirmDialog.svelte';
-	import { invalidateAll } from '$app/navigation';
-	import { X } from 'lucide-svelte';
+	import { invalidateAll, goto } from '$app/navigation';
 
 	let { data } = $props();
 
@@ -19,17 +18,6 @@
 	// Delete confirm
 	let confirmOpen = $state(false);
 	let pendingDelete = $state<AdminStorySummary | null>(null);
-
-	// Preview
-	let previewStory = $state<GeneratedStory | null>(null);
-	let previewLoading = $state(false);
-	let previewError = $state('');
-	const previewOpen = $derived(previewLoading || !!previewStory || !!previewError);
-
-	function closePreview() {
-		previewStory = null;
-		previewError = '';
-	}
 
 	const filtered = $derived(
 		(data.stories as AdminStorySummary[]).filter((s) => {
@@ -79,19 +67,8 @@
 		}
 	}
 
-	async function preview(s: AdminStorySummary) {
-		previewLoading = true;
-		previewStory = null;
-		try {
-			// Admin preview endpoint returns any status (drafts included).
-			const res = await fetch(`/api/admin/stories/${s.id}?preview=1`);
-			if (res.ok) previewStory = (await res.json()).story ?? null;
-			else previewError = 'Could not load the preview. Try again.';
-		} catch {
-			previewError = 'Could not load the preview. Try again.';
-		} finally {
-			previewLoading = false;
-		}
+	function preview(s: AdminStorySummary) {
+		goto(`/admin/stories/${s.id}/preview`);
 	}
 </script>
 
@@ -136,48 +113,3 @@
 	destructive
 	onconfirm={doDelete}
 />
-
-<svelte:window on:keydown={(e) => previewOpen && e.key === 'Escape' && closePreview()} />
-
-{#if previewOpen}
-	<div
-		class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4"
-		role="dialog"
-		aria-modal="true"
-		aria-label="Story preview"
-	>
-		<button class="absolute inset-0 bg-slate-900/50" aria-label="Close preview" onclick={closePreview}></button>
-		<div class="relative my-8 w-full max-w-md rounded-2xl bg-white p-5 shadow-xl">
-			<div class="mb-3 flex items-center justify-between">
-				<h2 class="text-lg font-bold text-slate-800">Preview</h2>
-				<button
-					aria-label="Close preview"
-					class="grid h-9 w-9 place-items-center rounded-lg text-slate-500 hover:bg-slate-100"
-					onclick={closePreview}
-				>
-					<X size={18} strokeWidth={1.5} />
-				</button>
-			</div>
-			{#if previewLoading}
-				<p class="py-8 text-center text-slate-400">Loading…</p>
-			{:else if previewError}
-				<p class="py-8 text-center text-coral" role="alert">{previewError}</p>
-			{:else if previewStory}
-				{#if previewStory.cover_image_url}
-					<img src={previewStory.cover_image_url} alt="" class="mb-4 w-full rounded-xl object-cover" />
-				{/if}
-				<h3 class="mb-3 font-[family-name:var(--font-fraunces)] text-xl font-bold" lang={previewStory.language}>
-					{previewStory.title}
-				</h3>
-				<div class="flex flex-col gap-4">
-					{#each previewStory.pages as p, i (i)}
-						<p class="text-base leading-relaxed text-slate-700" lang={previewStory.language}>{p.text}</p>
-					{/each}
-				</div>
-				<p class="mt-4 rounded-lg bg-mint/20 px-3 py-2 text-sm text-slate-700" lang={previewStory.language}>
-					{previewStory.moral}
-				</p>
-			{/if}
-		</div>
-	</div>
-{/if}
