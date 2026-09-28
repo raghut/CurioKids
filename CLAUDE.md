@@ -19,7 +19,7 @@ Build a calm, hybrid-offline curiosity app for children aged 5–8, starting wit
 
 Content is in **English and Telugu**. We are NOT building an engagement loop. We optimize for curiosity, replay, and follow-up questions — not screen time.
 
-Full product strategy is in `docs/strategy.md`. **Always re-read it if you're unsure about scope.** If a request conflicts with the strategy, flag it before implementing.
+Full product strategy is in `docs/strategy.md`. **Always re-read it if you're unsure about scope.** The end-to-end generation pipeline — inputs, every OpenAI/Blob/Postgres call, and their order — is in `docs/architecture.md`. If a request conflicts with the strategy, flag it before implementing.
 
 ## Hard scope rules
 
@@ -151,6 +151,7 @@ curiokids/
       NotoSansTelugu-Bold.ttf
   docs/
     strategy.md                      # the full product strategy
+    architecture.md                  # story generation: inputs and every API call
   .env                               # OPENAI_API_KEY, DATABASE_URL, BLOB_READ_WRITE_TOKEN, GENERATE_PAGE_IMAGES, DAILY_GENERATION_CAP — gitignored
   .env.example                       # template, committed
   CLAUDE.md                          # this file
