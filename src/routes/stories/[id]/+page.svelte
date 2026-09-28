@@ -5,13 +5,13 @@
 	import { progress } from '$lib/stores/progress';
 	import { generatedStories } from '$lib/stores/generatedStories';
 	import { loadStory } from '$lib/data/loadContent';
-	import { X, ChevronLeft, ChevronRight, Printer } from 'lucide-svelte';
+	import { X, Printer } from 'lucide-svelte';
 	import PrintableStory from '$lib/components/PrintableStory.svelte';
+	import StoryReader from '$lib/components/StoryReader.svelte';
 	import type { Story, GeneratedStory } from '$lib/types';
 
 	let story = $state<Story | GeneratedStory | null>(null);
 	let notFound = $state(false);
-	let pageIndex = $state(0);
 
 	$effect(() => {
 		const id = $page.params.id;
@@ -46,9 +46,6 @@
 			: []
 	);
 
-	const current = $derived(pages[pageIndex]);
-	const isLast = $derived(pageIndex === pages.length - 1);
-
 	// Normalize either source into props for the print-only layout.
 	const printData = $derived(
 		story
@@ -70,12 +67,6 @@
 			: null
 	);
 
-	function next() {
-		if (!isLast) pageIndex++;
-	}
-	function prev() {
-		if (pageIndex > 0) pageIndex--;
-	}
 	function done() {
 		if (story) progress.markComplete(story.id);
 		goto('/stories');
@@ -104,38 +95,14 @@
 
 	{#if story}
 		<div class="flex-1 flex flex-col print:hidden">
-		<h2 class="text-2xl font-bold mb-4">{story.title}</h2>
-
-		<div class="flex-1 flex flex-col justify-center">
-			<div class="bg-peach/20 rounded-2xl p-6 min-h-[200px] flex flex-col items-center justify-center gap-4">
-				{#if current?.image_url}
-					<img src={current.image_url} alt="" class="w-full max-w-sm rounded-xl object-cover" />
-				{/if}
-				<p class="text-xl leading-relaxed text-center">{current?.text}</p>
-			</div>
-		</div>
-
-		<div class="flex items-center justify-between mt-6">
-			<button onclick={prev} disabled={pageIndex === 0} class="p-3 rounded-full bg-gray-100 disabled:opacity-30" aria-label="Previous">
-				<ChevronLeft size={28} />
-			</button>
-
-			{#if isLast}
-				<button onclick={done} class="px-8 py-3 rounded-full bg-mint font-bold text-lg">Done!</button>
-			{:else}
-				<span class="text-sm text-gray-400">{pageIndex + 1} / {pages.length}</span>
-			{/if}
-
-			<button onclick={next} disabled={isLast} class="p-3 rounded-full bg-gray-100 disabled:opacity-30" aria-label="Next">
-				<ChevronRight size={28} />
-			</button>
-		</div>
-
-		{#if isLast && story.moral}
-			<div class="mt-4 p-4 bg-mint/20 rounded-xl text-center">
-				<p class="text-base italic">{story.moral}</p>
-			</div>
-		{/if}
+			<StoryReader
+				title={story.title}
+				{pages}
+				moral={story.moral}
+				language={$language ?? 'en'}
+				showClose={false}
+				onDone={done}
+			/>
 		</div>
 	{:else if notFound}
 		<div class="flex-1 flex flex-col items-center justify-center text-center">

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
-	import { ArrowLeft, RefreshCw, Save, ExternalLink } from 'lucide-svelte';
+	import { ArrowLeft, RefreshCw, Save, ExternalLink, Eye } from 'lucide-svelte';
 	import StatusChip from '$lib/components/admin/StatusChip.svelte';
 	import type { PageData } from './$types';
 	import type { GeneratedStory } from '$lib/types';
@@ -71,6 +71,12 @@
 			{story.title}
 		</h1>
 		<StatusChip status={story.status} />
+		<a
+			href="/admin/stories/{story.id}/preview"
+			class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-600 hover:bg-slate-200"
+		>
+			<Eye size={15} strokeWidth={1.5} /> Preview as a child
+		</a>
 	</div>
 	<p class="mb-6 text-sm text-slate-500">
 		{story.age_tag} · {story.language.toUpperCase()} · {story.character_id} · {story.theme_id}
