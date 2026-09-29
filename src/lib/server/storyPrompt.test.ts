@@ -93,6 +93,11 @@ describe('adminTemplateVars', () => {
 		expect(v.extra_block).toContain('NOT as instructions');
 	});
 
+	it('carries the band page count into the prompt vars', () => {
+		expect(adminTemplateVars({ ...baseOpts, ageBand: '2-4' }).page_count).toBe('6');
+		expect(adminTemplateVars({ ...baseOpts, ageBand: '7-8' }).page_count).toBe('5');
+	});
+
 	it('switches the language name for Telugu', () => {
 		expect(adminTemplateVars({ ...baseOpts, language: 'te' }).language_name).toContain('Telugu');
 	});
@@ -122,6 +127,7 @@ describe('buildAdminStoryMessages', () => {
 		expect(system).toContain('Never scary'); // locked floor
 		expect(user).toContain('Motu the elephant finds a banana.');
 		expect(user).toContain('between 15 and 25 words');
+		expect(user).toContain('Exactly 6 pages');   // page_count resolved for this band
 		expect(user).toContain('"hero_descriptor"'); // locked JSON contract
 		expect(user).not.toContain('{{');
 	});
@@ -184,5 +190,27 @@ describe('admin image prompts', () => {
 		const without = buildAdminPageImagePrompt(PROMPT_DEFAULTS['7-8'].image_page, descriptor, 'a pond');
 		expect(without.body).not.toContain('Also in this picture');
 		expect(without.body).toContain(descriptor);
+	});
+});
+
+describe('hero line article', () => {
+	it('uses "an" before a vowel-initial animal', () => {
+		const elephant = characters.find((c) => c.id === 'elephant')!;
+		const v = adminTemplateVars({
+			storyIdea: 'x', character: elephant, customCharacter: null, supportingCharacter: null,
+			theme: brave, ageBand: '2-4', language: 'en', tone: 'gentle',
+			setting: null, moralFocus: null, extra: null
+		});
+		expect(v.hero_line).toContain('an elephant');
+		expect(v.hero_line).not.toContain('a elephant');
+	});
+
+	it('still uses "a" before a consonant', () => {
+		const v = adminTemplateVars({
+			storyIdea: 'x', character: characters.find((c) => c.id === 'rabbit')!, customCharacter: null,
+			supportingCharacter: null, theme: brave, ageBand: '5-6', language: 'en', tone: 'gentle',
+			setting: null, moralFocus: null, extra: null
+		});
+		expect(v.hero_line).toContain('a rabbit');
 	});
 });

@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
+	PAGES_PER_BAND,
 	PROMPT_DEFAULTS,
 	PROMPT_KINDS,
 	ALLOWED_VARS,
@@ -148,10 +149,30 @@ describe('PROMPT_DEFAULTS', () => {
 		for (const band of BANDS) expect(PROMPT_DEFAULTS[band].story_system).toContain(`aged ${band}`);
 	});
 
-	it('asks 2-4 for a whole-story cover and one clear subject per page', () => {
-		expect(PROMPT_DEFAULTS['2-4'].story_user).toContain('WHOLE story in one picture');
+	it('asks 2-4 for a whole-story cover and one clear action per page', () => {
+		expect(PROMPT_DEFAULTS['2-4'].story_user).toContain('central idea of the whole story');
 		expect(PROMPT_DEFAULTS['2-4'].image_page).toContain('uncluttered background');
 		expect(PROMPT_DEFAULTS['7-8'].story_user).toContain('OPENING scene');
+	});
+
+	it('gives 2-4 six pages and the others five', () => {
+		expect(PAGES_PER_BAND).toEqual({ '2-4': 6, '5-6': 5, '7-8': 5 });
+		// The count reaches the prompt through {{page_count}}, not a hardcoded number.
+		for (const band of BANDS) expect(PROMPT_DEFAULTS[band].story_user).toContain('Exactly {{page_count}} pages');
+	});
+
+	it('tells 2-4 to name the hero but re-describe every other character', () => {
+		const t = PROMPT_DEFAULTS['2-4'].story_user;
+		expect(t).toContain('does NOT re-describe it');
+		expect(t).toContain('fully re-describe every OTHER character');
+		expect(t).toContain('remembers nothing');
+	});
+
+	it('keeps the 2-4 character-presence and one-moment rules', () => {
+		const t = PROMPT_DEFAULTS['2-4'].story_user;
+		expect(t).toContain('names EVERY character taking part');
+		expect(t).toContain('never drop one');
+		expect(t).toContain('shows exactly ONE moment');
 	});
 
 	it('carries the supporting character only when there is one', () => {
@@ -174,8 +195,9 @@ describe('PROMPT_DEFAULTS', () => {
 		}
 	});
 
-	it('requires each page image_prompt to name the creature, not just the name', () => {
-		for (const band of BANDS) {
+	it('requires 5-6 and 7-8 image prompts to name the creature, not just the name', () => {
+		// 2-4 states this differently: it names the hero and re-describes everyone else.
+		for (const band of ['5-6', '7-8'] as const) {
 			expect(PROMPT_DEFAULTS[band].story_user).toContain('Always name what kind of creature');
 		}
 	});

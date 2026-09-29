@@ -7,7 +7,7 @@ import {
 	buildAdminCoverPrompt,
 	buildAdminPageImagePrompt
 } from '$lib/server/storyPrompt';
-import { resolveTemplates } from '$lib/server/promptTemplates';
+import { resolveTemplates, PAGES_PER_BAND } from '$lib/server/promptTemplates';
 import { generateStoryText, generateImage } from '$lib/server/openaiClient';
 import { uploadImage } from '$lib/server/blob';
 import { assembleStory } from '$lib/server/assembleStory';
@@ -61,7 +61,10 @@ export const POST: RequestHandler = async ({ request }) => {
 			moralFocus: v.moralFocus,
 			extra: v.extra
 		});
-		const text = await generateStoryText(buildAdminStoryMessages(templates, vars));
+		const text = await generateStoryText(
+			buildAdminStoryMessages(templates, vars),
+			PAGES_PER_BAND[v.ageBand]
+		);
 
 		// A locked animal keeps its locked descriptor (consistent across every story).
 		// A custom character has no descriptor of its own, so we use the one the story

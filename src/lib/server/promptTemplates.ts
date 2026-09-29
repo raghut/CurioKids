@@ -15,6 +15,13 @@ import type { AgeBand, PromptKind } from '$lib/types';
 
 export const PROMPT_KINDS: PromptKind[] = ['story_system', 'story_user', 'image_cover', 'image_page'];
 
+/**
+ * Pages per age band. 2-4 is a board book with an illustration on every page, so it
+ * runs slightly longer in pages while staying far shorter in words. This is the only
+ * place the count is decided — the prompt states it and parseStoryJson enforces it.
+ */
+export const PAGES_PER_BAND: Record<AgeBand, number> = { '2-4': 6, '5-6': 5, '7-8': 5 };
+
 export const PROMPT_KIND_LABELS: Record<PromptKind, string> = {
 	story_system: 'Story — system message',
 	story_user: 'Story — instructions',
@@ -34,7 +41,8 @@ export const ALLOWED_VARS: Record<PromptKind, readonly string[]> = {
 		'moral_line',
 		'tone',
 		'extra_block',
-		'language_name'
+		'language_name',
+		'page_count'
 	],
 	image_cover: ['hero_descriptor', 'supporting_descriptor', 'scene'],
 	image_page: ['hero_descriptor', 'supporting_descriptor', 'scene']
@@ -68,11 +76,8 @@ export const LOCKED_FLOOR: Record<PromptKind, string> = {
 		`{`,
 		`  "title": string,`,
 		`  "pages": [`,
-		`    { "text": string, "image_prompt": string, "has_supporting": boolean },`,
-		`    { "text": string, "image_prompt": string, "has_supporting": boolean },`,
-		`    { "text": string, "image_prompt": string, "has_supporting": boolean },`,
-		`    { "text": string, "image_prompt": string, "has_supporting": boolean },`,
 		`    { "text": string, "image_prompt": string, "has_supporting": boolean }`,
+		`    // EXACTLY {{page_count}} page objects, no more and no fewer`,
 		`  ],`,
 		`  "moral": string,`,
 		`  "reflection_question": string,`,
@@ -133,24 +138,64 @@ const IMAGE_PAGE_BASE = [
 export const PROMPT_DEFAULTS: Record<AgeBand, Record<PromptKind, string>> = {
 	'2-4': {
 		story_system: STORY_SYSTEM('2-4'),
-		story_user: storyUser([
-			`- Exactly 5 pages.`,
-			`- Each page MUST be between 15 and 25 words. Pages under 15 words are WRONG — add another gentle sentence until each page reaches 15 to 25 words.`,
-			`- Total story body (all 5 pages) MUST be between 75 and 125 words.`,
-			`- Title: max 8 words.`,
-			`- Moral: exactly 1 sentence, max 15 words.`,
-			`- Reflection question: 1 open-ended question, max 15 words.`,
-			`- Audience age 2-4: use only words a 2-year-old knows. One idea per page. Sentences: max 6 words each. Active voice. No subordinate clauses.`,
-			`- Every page of this story WILL be illustrated. Each "image_prompt" must show ONE clear simple subject — the hero doing one thing — with an uncluttered background a 2-year-old can read at a glance.`,
-			`- "scene" is for the COVER: describe the WHOLE story in one picture (the hero plus the story's main idea), not the opening moment.`
-		]),
+		// The 2-4 band is a board book: every page is illustrated, so this template puts
+		// most of its effort into image_prompt quality and character consistency.
+		story_user: [
+			`Write a short illustrated picture-book story for children aged 2-4.`,
+			``,
+			`Base the story on this idea: {{story_idea}}`,
+			`{{hero_line}}`,
+			`{{supporting_line}}`,
+			`THEME: {{theme_goal}}.`,
+			`{{setting_line}}`,
+			`{{moral_line}}`,
+			`Overall tone: {{tone}} — but always calm, warm, and never scary.`,
+			`{{extra_block}}`,
+			``,
+			`CHARACTER BIBLE`,
+			`Before writing, fix a visual identity for every character in the story: species or type,`,
+			`size, colours, markings, clothing, and any accessory. These details are the SOURCE OF TRUTH`,
+			`for the illustrations. Never change a character's species, face, body shape, colours,`,
+			`clothing or relative size between pages.`,
+			``,
+			`STORY RULES`,
+			`- Exactly {{page_count}} pages.`,
+			`- Each page MUST be between 15 and 25 words.`,
+			`- Each sentence: max 6 words. 2-4 short sentences per page.`,
+			`- Use only words a 2-year-old knows. Familiar, everyday words. Active voice.`,
+			`- ONE simple idea per page. No abstract explanation, no long description.`,
+			`- Page 1 introduces the characters and the situation. The middle pages bring a simple`,
+			`  problem or choice and show the characters helping, sharing, trying or caring. The last`,
+			`  page ends warm and hopeful. Do not force this shape if the idea needs another.`,
+			`- Show the lesson through what the characters DO. Never explain it twice.`,
+			`- Simple dialogue is welcome when it makes the story livelier.`,
+			``,
+			`IMAGE PROMPTS — the illustrator sees ONE page at a time and remembers nothing.`,
+			`Each page needs an "image_prompt", one English sentence, that:`,
+			`- shows exactly ONE moment. Two characters interacting IS one moment;`,
+			`  "she shares an apple and he hugs her" is one action, not two.`,
+			`- names EVERY character taking part in that page's action, and no one else. If the page`,
+			`  text has two characters interacting, both must be in the picture — never drop one.`,
+			`- names the hero but does NOT re-describe it: the illustrator already holds a fixed`,
+			`  description of the hero and will contradict itself if given a second one.`,
+			`- DOES fully re-describe every OTHER character on every page they appear — species,`,
+			`  size, colours, markings, clothing. Repeating this each time is required, not redundant;`,
+			`  it is the only thing keeping those characters looking the same across pages.`,
+			`- names the place in a few words and keeps the background simple and uncluttered.`,
+			`- matches the page text. Nothing important may appear only in the picture.`,
+			`Set "has_supporting" true only on pages where the supporting character really appears.`,
+			``,
+			`COVER`,
+			`"scene" is the COVER: the central idea of the whole story in one simple, cheerful picture —`,
+			`the main characters and what the story is about, not a summary of every event.`
+		].join('\n'),
 		image_cover: IMAGE_COVER_BASE + `\nOne clear simple action, large and centred, uncluttered background.`,
 		image_page: IMAGE_PAGE_BASE + `\nOne clear simple action, large and centred, uncluttered background a toddler can read at a glance.`
 	},
 	'5-6': {
 		story_system: STORY_SYSTEM('5-6'),
 		story_user: storyUser([
-			`- Exactly 5 pages.`,
+			`- Exactly {{page_count}} pages.`,
 			`- Each page MUST be between 30 and 50 words. Pages under 30 words are WRONG — add another gentle sentence of action or sensory detail until each page reaches 30 to 50 words.`,
 			`- Total story body (all 5 pages) MUST be between 150 and 250 words.`,
 			`- Title: max 8 words.`,
@@ -165,7 +210,7 @@ export const PROMPT_DEFAULTS: Record<AgeBand, Record<PromptKind, string>> = {
 	'7-8': {
 		story_system: STORY_SYSTEM('7-8'),
 		story_user: storyUser([
-			`- Exactly 5 pages.`,
+			`- Exactly {{page_count}} pages.`,
 			`- Each page MUST be between 30 and 50 words. Pages under 30 words are WRONG — add another gentle sentence of action or sensory detail until each page reaches 30 to 50 words.`,
 			`- Total story body (all 5 pages) MUST be between 150 and 250 words.`,
 			`- Title: max 8 words.`,
