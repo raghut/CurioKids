@@ -64,3 +64,21 @@ describe('supporting character fields', () => {
 		expect(parseStoryJson(JSON.stringify(good)).supporting_descriptor).toBeUndefined();
 	});
 });
+
+describe('expectedPages', () => {
+	const withPages = (n: number) => JSON.stringify({ ...good, pages: Array.from({ length: n }, (_, i) => page(i + 1)) });
+
+	it('defaults to 5, which keeps the kid flow unchanged', () => {
+		expect(parseStoryJson(withPages(5)).pages).toHaveLength(5);
+		expect(() => parseStoryJson(withPages(6))).toThrow(/missing required fields/);
+	});
+
+	it('accepts 6 pages when 6 are expected (the 2-4 band)', () => {
+		expect(parseStoryJson(withPages(6), 6).pages).toHaveLength(6);
+	});
+
+	it('is an exact match — 5 pages fails when 6 were asked for', () => {
+		// A band that asked for 6 and got 5 is a failure worth seeing, not one to absorb.
+		expect(() => parseStoryJson(withPages(5), 6)).toThrow(/missing required fields/);
+	});
+});

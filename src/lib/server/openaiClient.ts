@@ -40,9 +40,10 @@ export type StoryTextResult = {
 
 /**
  * Parse and check an OpenAI story payload. Pure, so the contract is unit-testable
- * without a network call.
+ * without a network call. expectedPages is an exact match, not a floor: a band that
+ * asked for 6 pages and got 5 is a failure worth seeing, not one to absorb quietly.
  */
-export function parseStoryJson(content: string): StoryTextResult {
+export function parseStoryJson(content: string, expectedPages = 5): StoryTextResult {
 	let parsed: StoryTextResult;
 	try {
 		parsed = JSON.parse(content);
@@ -53,7 +54,7 @@ export function parseStoryJson(content: string): StoryTextResult {
 	if (
 		!parsed.title ||
 		!Array.isArray(parsed.pages) ||
-		parsed.pages.length !== 5 ||
+		parsed.pages.length !== expectedPages ||
 		!parsed.moral ||
 		!parsed.reflection_question
 	) {
@@ -71,7 +72,10 @@ export function parseStoryJson(content: string): StoryTextResult {
  * Generate the story text with gpt-4o-mini. Uses response_format json_object
  * to guarantee parseable output.
  */
-export async function generateStoryText(messages: ChatMessage[]): Promise<StoryTextResult> {
+export async function generateStoryText(
+	messages: ChatMessage[],
+	expectedPages = 5
+): Promise<StoryTextResult> {
 	const res = await fetch(`${OPENAI_BASE}/chat/completions`, {
 		method: 'POST',
 		headers: {
@@ -95,7 +99,7 @@ export async function generateStoryText(messages: ChatMessage[]): Promise<StoryT
 	const content = data?.choices?.[0]?.message?.content;
 	if (!content) throw new Error('OpenAI chat returned no content');
 
-	return parseStoryJson(content);
+	return parseStoryJson(content, expectedPages);
 }
 
 /**

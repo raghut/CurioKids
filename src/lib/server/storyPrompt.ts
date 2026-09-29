@@ -1,5 +1,5 @@
 import type { Character, Theme, Language, AgeBand, Tone, PromptKind } from '$lib/types';
-import { renderTemplate, renderWithFloor, type TemplateVars } from './promptTemplates';
+import { PAGES_PER_BAND, renderTemplate, renderWithFloor, type TemplateVars } from './promptTemplates';
 
 export type ChatMessage = { role: 'system' | 'user'; content: string };
 
@@ -133,6 +133,11 @@ export function buildImagePrompts(
  * in, and renderWithFloor appends the non-editable safety + JSON contract.
  */
 
+/** "a elephant" reads badly in a prompt; the animal ids make this safe to do by vowel. */
+function article(word: string): string {
+	return /^[aeiou]/i.test(word) ? 'an' : 'a';
+}
+
 /** Build the brief's values into the {{placeholders}} the templates reference. */
 export function adminTemplateVars(opts: {
 	storyIdea: string;
@@ -152,7 +157,7 @@ export function adminTemplateVars(opts: {
 	const languageName = language === 'te' ? 'Telugu (తెలుగు script)' : 'English';
 
 	const heroLine = character
-		? `HERO: ${language === 'te' ? character.name_te : character.name_en}, a ${character.id}. Personality: ${character.personality_hint}. Keep the hero a ${character.id} on every page — never change the animal — and use the correct ${languageName} word for a ${character.id}.`
+		? `HERO: ${language === 'te' ? character.name_te : character.name_en}, ${article(character.id)} ${character.id}. Personality: ${character.personality_hint}. Keep the hero ${article(character.id)} ${character.id} on every page — never change the animal — and use the correct ${languageName} word for ${article(character.id)} ${character.id}.`
 		: `HERO: ${customCharacter}. Keep this hero the same on every page. If the idea above implies what kind of creature the hero is, follow that.`;
 
 	// The optional extra wishes are UNTRUSTED — story ingredients only, never instructions.
@@ -163,6 +168,7 @@ export function adminTemplateVars(opts: {
 	return {
 		language_name: languageName,
 		age_band: ageBand,
+		page_count: String(PAGES_PER_BAND[ageBand]),
 		story_idea: storyIdea,
 		hero_line: heroLine,
 		supporting_line: supportingCharacter
