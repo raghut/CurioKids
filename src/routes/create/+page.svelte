@@ -5,12 +5,19 @@
 	import CharacterPicker from '$lib/components/CharacterPicker.svelte';
 	import ThemePicker from '$lib/components/ThemePicker.svelte';
 	import { ArrowLeft, Lock } from 'lucide-svelte';
-	import type { CharacterId, ThemeId } from '$lib/types';
+	import { seedActiveThemes } from '$lib/data/themes';
+	import type { CharacterId, ThemeId, ThemeOption } from '$lib/types';
 
 	let selectedCharacter = $state<CharacterId | null>(null);
 	let selectedTheme = $state<ThemeId | null>(null);
 	let childName = $state('');
 	let extra = $state('');
+
+	// Operator-managed, so fetched. Falls back to the bundled active set rather than
+	// rendering an empty picker — this screen already needs network to generate.
+	let themeOptions = $state<ThemeOption[]>(
+		seedActiveThemes.map(({ id, label_en, label_te }) => ({ id, label_en, label_te }))
+	);
 
 	// --- Family passcode gate (UX only; real guard is server-side) ---
 	let unlocked = $state(false);
@@ -31,6 +38,16 @@
 	});
 
 	async function init() {
+		try {
+			const res = await fetch('/api/themes');
+			if (res.ok) {
+				const data = (await res.json()) as { themes: ThemeOption[] };
+				if (data.themes?.length) themeOptions = data.themes;
+			}
+		} catch {
+			// Keep the bundled fallback already in themeOptions.
+		}
+
 		// Already unlocked on this device → straight in.
 		if (familyCode.get()) {
 			unlocked = true;
@@ -150,7 +167,7 @@
 				<h2 class="text-lg font-bold mb-3" lang={te ? 'te' : undefined}>
 					{te ? 'కథ రకం' : 'Pick a theme'}
 				</h2>
-				<ThemePicker bind:selected={selectedTheme} lang={$language ?? 'en'} />
+				<ThemePicker themes={themeOptions} bind:selected={selectedTheme} lang={$language ?? 'en'} />
 			</section>
 
 			<section>

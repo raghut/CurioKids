@@ -3,7 +3,8 @@
 	import ThemePicker from '$lib/components/ThemePicker.svelte';
 	import { goto } from '$app/navigation';
 	import { Sparkles, ArrowLeft } from 'lucide-svelte';
-	import type { CharacterId, ThemeId, GeneratedStory, AgeBand } from '$lib/types';
+	import { seedActiveThemes } from '$lib/data/themes';
+	import type { CharacterId, ThemeId, GeneratedStory, AgeBand, ThemeOption } from '$lib/types';
 
 	// Brief state
 	let storyIdea = $state('');
@@ -18,6 +19,24 @@
 	let setting = $state('');
 	let moralFocus = $state('');
 	let extra = $state('');
+
+	let themeOptions = $state<ThemeOption[]>(
+		seedActiveThemes.map(({ id, label_en, label_te }) => ({ id, label_en, label_te }))
+	);
+
+	$effect(() => {
+		void (async () => {
+			try {
+				const res = await fetch('/api/themes');
+				if (res.ok) {
+					const data = (await res.json()) as { themes: ThemeOption[] };
+					if (data.themes?.length) themeOptions = data.themes;
+				}
+			} catch {
+				// Bundled fallback stands.
+			}
+		})();
+	});
 
 	// Flow state
 	let generating = $state(false);
@@ -167,7 +186,7 @@
 
 			<div class="flex flex-col gap-2">
 				<span class="text-sm font-bold text-slate-700">Theme <span class="text-coral">*</span></span>
-				<ThemePicker bind:selected={selectedTheme} lang={language} />
+				<ThemePicker themes={themeOptions} bind:selected={selectedTheme} lang={language} />
 			</div>
 
 			<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">

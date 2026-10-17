@@ -6,7 +6,7 @@
 	import { generatedStories } from '$lib/stores/generatedStories';
 	import { familyCode } from '$lib/stores/familyCode';
 	import { characters } from '$lib/data/characters';
-	import type { CharacterId, GeneratedStory, ThemeId } from '$lib/types';
+	import type { CharacterId, GeneratedStory } from '$lib/types';
 
 	type Phase = 'loading' | 'error' | 'limit';
 
@@ -34,7 +34,8 @@
 
 	async function generate() {
 		const character_id = $page.url.searchParams.get('character') as CharacterId | null;
-		const theme_id = $page.url.searchParams.get('theme') as ThemeId | null;
+		// A plain string now — the server validates it against the resolved theme list.
+		const theme_id = $page.url.searchParams.get('theme');
 		const child_name = $page.url.searchParams.get('name');
 		const extra = $page.url.searchParams.get('extra');
 		const lang = get(language) ?? 'en';
