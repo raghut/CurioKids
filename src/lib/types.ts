@@ -68,6 +68,12 @@ export type StorySummary = {
 	age_tag: string;
 	language: string;
 	created_at: string;
+	/**
+	 * Extracted from the JSONB blob for the stories filter chips. Null on a row whose
+	 * blob predates theme_id, and on a story whose theme has since been archived —
+	 * both simply match no chip.
+	 */
+	theme_id: string | null;
 };
 
 export type AdminStorySummary = {
