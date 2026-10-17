@@ -14,6 +14,10 @@ export const SOFT_ACTIVE_LIMIT = 6;
  * Layer DB override rows over the code defaults. A row with a matching id replaces
  * that theme wholesale; a row with a new id is an addition; a default with no row
  * stands as-is. Sorted by sort_order, then label_en.
+ *
+ * If `rows` somehow contains duplicate ids the later one wins. The themes table's
+ * primary key makes that impossible in practice, but this module is deliberately
+ * decoupled from the DB, so the contract is stated rather than assumed.
  */
 export function mergeThemes(defaults: Theme[], rows: Theme[]): Theme[] {
 	const byId = new Map<string, Theme>();
@@ -32,9 +36,15 @@ export function findTheme(id: string, all: Theme[]): Theme | undefined {
 	return all.find((t) => t.id === id);
 }
 
-/** "Good Habits" -> "good_habits". Returns "" when nothing usable survives. */
-export function slugifyThemeId(labelEn: string): string {
-	return String(labelEn ?? '')
+/**
+ * "Good Habits" -> "good_habits". Returns "" when nothing usable survives.
+ *
+ * Takes any raw text, not just a label: the admin form's id field may be left blank
+ * (and filled from the English label) or typed by hand, so validateThemeInput slugs
+ * whatever arrives. Idempotent on an already-slugged id.
+ */
+export function slugifyThemeId(raw: string): string {
+	return String(raw ?? '')
 		.toLowerCase()
 		.replace(/[^a-z0-9]+/g, '_')
 		.replace(/^_+|_+$/g, '');
@@ -81,11 +91,25 @@ export function validateThemeInput(input: unknown, collidingIds: string[]): Them
 	const goal_hint = sanitizeGoalHint(b.goal_hint);
 	if (!goal_hint) return err('A goal hint is required — it tells the model what the story is about.');
 
-	const sort_order = Number(b.sort_order);
+	// Number() turns '', '   ', null and false into 0 and true into 1, all of which
+	// Number.isInteger happily accepts — so a cleared form field would silently become
+	// sort_order 0 and jump the theme to the front of the picker. Reject those first.
+	const rawSort = b.sort_order;
+	if (
+		rawSort === null ||
+		rawSort === undefined ||
+		typeof rawSort === 'boolean' ||
+		(typeof rawSort === 'string' && rawSort.trim() === '')
+	) {
+		return err('Sort order must be a whole number.');
+	}
+	const sort_order = Number(rawSort);
 	if (!Number.isInteger(sort_order)) return err('Sort order must be a whole number.');
 
 	return {
 		ok: true,
+		// Strictly === true: an absent checkbox must mean false, and a stray string
+		// like "false" must not read as truthy.
 		theme: { id, label_en, label_te, goal_hint, sort_order, archived: b.archived === true }
 	};
 }

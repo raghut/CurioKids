@@ -165,6 +165,27 @@ describe('validateThemeInput', () => {
 
 	it('rejects a non-integer sort order', () => {
 		expect(validateThemeInput({ ...base, sort_order: 'abc' }, []).ok).toBe(false);
+		expect(validateThemeInput({ ...base, sort_order: '1.5' }, []).ok).toBe(false);
+	});
+
+	// Number('') and Number(null) are 0, Number(true) is 1, and Number.isInteger
+	// accepts all three — so without an explicit guard a cleared sort field would
+	// silently become 0 and reorder the picker with no error shown.
+	it.each([
+		['an empty string', ''],
+		['whitespace only', '   '],
+		['null', null],
+		['undefined', undefined],
+		['true', true],
+		['false', false]
+	])('rejects a sort order of %s rather than coercing it', (_label, value) => {
+		expect(validateThemeInput({ ...base, sort_order: value }, []).ok).toBe(false);
+	});
+
+	it('accepts a negative sort order, so a theme can be pinned ahead of the defaults', () => {
+		const r = validateThemeInput({ ...base, sort_order: '-5' }, []);
+		expect(r.ok).toBe(true);
+		if (r.ok) expect(r.theme.sort_order).toBe(-5);
 	});
 
 	it('defaults archived to false when absent', () => {
