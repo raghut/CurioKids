@@ -35,7 +35,7 @@ function sampleVars(band: AgeBand) {
 		character: characters.find((c) => c.id === 'elephant') ?? null,
 		customCharacter: null,
 		supportingCharacter: 'a cheerful parrot',
-		theme: themes.find((t) => t.id === 'help_friend')!,
+		theme: themes.find((t) => t.id === 'sharing')!,
 		ageBand: band,
 		language: 'en',
 		tone: 'gentle',
