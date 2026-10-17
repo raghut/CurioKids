@@ -10,13 +10,14 @@
 		curatedToFilterable,
 		filterToParams,
 		generatedToFilterable,
+		isFilterActive,
 		matchesFilter,
 		parseFilter,
 		type StoryFilter
 	} from '$lib/data/filterStories';
 	import ContentCard from '$lib/components/ContentCard.svelte';
-	import StoryFilters from '$lib/components/StoryFilters.svelte';
-	import { ArrowLeft } from 'lucide-svelte';
+	import StoryFilterSheet from '$lib/components/StoryFilterSheet.svelte';
+	import { ArrowLeft, SlidersHorizontal } from 'lucide-svelte';
 	import type { Story, StorySummary, ThemeOption } from '$lib/types';
 
 	let curated = $state<Story[]>([]);
@@ -65,7 +66,10 @@
 	// it survives reading a story and coming back.
 	const filter = $derived(parseFilter($page.url.searchParams));
 
+	let sheetOpen = $state(false);
+
 	function applyFilter(next: StoryFilter) {
+		sheetOpen = false;
 		const qs = filterToParams(next).toString();
 		// replaceState keeps chip taps out of the back history, so Back from the grid
 		// goes home rather than walking back through filter states.
@@ -84,6 +88,7 @@
 	);
 
 	const te = $derived($language === 'te');
+	const filtered = $derived(isFilterActive(filter));
 	const nothingLoaded = $derived(curated.length === 0 && generated.length === 0);
 	const nothingMatched = $derived(visibleCurated.length === 0 && visibleGenerated.length === 0);
 </script>
@@ -94,9 +99,31 @@
 			<ArrowLeft size={24} strokeWidth={1.5} />
 		</a>
 		<h1 class="text-2xl font-bold" lang={te ? 'te' : undefined}>{te ? 'కథలు' : 'Stories'}</h1>
+
+		<!-- Filters live behind this icon so the grid starts at the top of the screen.
+		     The coral dot is the only hint a child gets that the grid is narrowed, so
+		     it is not decoration — without it a short grid looks like missing stories. -->
+		<button
+			type="button"
+			class="relative ml-auto grid min-h-[64px] min-w-[64px] place-items-center rounded-full hover:bg-gray-100"
+			aria-label={te ? 'కథలు ఎంచుకో' : 'Choose stories'}
+			onclick={() => (sheetOpen = true)}
+		>
+			<SlidersHorizontal size={26} strokeWidth={1.5} />
+			{#if filtered}
+				<span class="absolute right-3 top-3 h-3 w-3 rounded-full bg-coral"></span>
+			{/if}
+		</button>
 	</header>
 
-	<StoryFilters {filter} themes={themeOptions} lang={$language ?? 'en'} onchange={applyFilter} />
+	<StoryFilterSheet
+		open={sheetOpen}
+		{filter}
+		themes={themeOptions}
+		lang={$language ?? 'en'}
+		onapply={applyFilter}
+		onclose={() => (sheetOpen = false)}
+	/>
 
 	<div class="grid grid-cols-2 gap-4">
 		{#each visibleCurated as story (story.id)}
