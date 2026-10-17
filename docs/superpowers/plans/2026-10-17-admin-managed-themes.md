@@ -14,7 +14,9 @@
 1. Admin CRUD uses **SvelteKit form actions** in `src/routes/admin/themes/+page.server.ts`, not a `/api/admin/themes` JSON endpoint. `/admin/prompts` — the closest analog — already does this, and form actions need no client fetch code. The public `GET /api/themes` is still a real endpoint because the kid `/create` screen fetches it from the browser.
 2. `validateGenerateRequest` receives the **full** resolved list (archived included) and filters archived itself, so no caller can accidentally permit an archived theme.
 
-**Node:** use nvm v22.23.1 (`nvm use 22.23.1`). Homebrew `node@22` is v23 and breaks the build.
+**Node:** use nvm v22.23.1 (`source ~/.nvm/nvm.sh && nvm use 22.23.1`). Homebrew `node@22` is v23 and breaks the build.
+
+**There is no `npm run lint`.** CLAUDE.md documents `lint` and `format` scripts, but `package.json` has neither and eslint/prettier are not installed. `npm run check` (svelte-check + tsc) is the only static gate. Do not add eslint as part of this plan — adding a dependency needs the user's approval.
 
 ---
 
@@ -1107,12 +1109,12 @@ with:
 		const theme_id = $page.url.searchParams.get('theme');
 ```
 
-If `ThemeId` becomes an unused import in that file, remove it from the import list to keep `npm run lint` clean.
+If `ThemeId` becomes an unused import in that file, remove it from the import list — `npm run check` reports unused imports as warnings.
 
 - [ ] **Step 5: Verify**
 
-Run: `npm run check && npm run lint`
-Expected: PASS both.
+Run: `npm run check`
+Expected: PASS.
 
 Run: `npm run dev`, open `/create`
 Expected: four theme cards — Sharing, Friendship, Brave, Good Habits — with the pastel fills, and a coral border on the one you tap. Picking a character + theme and pressing "Make my story" still generates.
@@ -1521,8 +1523,8 @@ Then insert a link in the `nav` snippet, immediately after the `/admin/prompts` 
 
 - [ ] **Step 4: Verify**
 
-Run: `npm run check && npm run lint`
-Expected: PASS both.
+Run: `npm run check`
+Expected: PASS.
 
 Run: `npm run dev`, log in at `/admin/login`, open `/admin/themes`
 Expected:
@@ -1591,10 +1593,10 @@ git commit -m "fix: prompt preview sample uses an active theme"
 Run: `npm test`
 Expected: PASS, including the new `themeRules` tests and the updated `validate` tests.
 
-- [ ] **Step 2: Typecheck and lint**
+- [ ] **Step 2: Typecheck**
 
-Run: `npm run check && npm run lint`
-Expected: PASS both, zero errors.
+Run: `npm run check`
+Expected: PASS, zero errors.
 
 - [ ] **Step 3: Build**
 
