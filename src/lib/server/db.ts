@@ -19,9 +19,11 @@ export async function insertStory(story: GeneratedStory): Promise<void> {
 /** Lightweight gallery list (published only) from promoted columns. */
 export async function listStories(language?: string): Promise<StorySummary[]> {
 	const q = sql();
+	// theme_id comes out of the jsonb blob rather than a promoted column — the same
+	// extraction listStoriesAdmin uses, so the filters need no migration.
 	const rows = language
-		? await q`SELECT id, title, cover_url, age_tag, language, created_at FROM stories WHERE status = 'published' AND language = ${language} ORDER BY created_at DESC`
-		: await q`SELECT id, title, cover_url, age_tag, language, created_at FROM stories WHERE status = 'published' ORDER BY created_at DESC`;
+		? await q`SELECT id, title, cover_url, age_tag, language, created_at, story->>'theme_id' AS theme_id FROM stories WHERE status = 'published' AND language = ${language} ORDER BY created_at DESC`
+		: await q`SELECT id, title, cover_url, age_tag, language, created_at, story->>'theme_id' AS theme_id FROM stories WHERE status = 'published' ORDER BY created_at DESC`;
 	return rows as StorySummary[];
 }
 
