@@ -115,24 +115,10 @@ export const actions: Actions = {
 		return { created: check.theme.id };
 	},
 
-	// Archive / unarchive. Writes a row even for a code default — that row IS the
-	// archive flag, and "reset" removes it again.
-	archive: async ({ request }) => {
-		const form = await request.formData();
-		const id = String(form.get('id') ?? '');
-		const archived = form.get('archived') === 'true';
-
-		const current = (await resolveThemes()).find((t) => t.id === id);
-		if (!current) return fail(400, { error: 'Unknown theme.', id });
-
-		try {
-			await upsertThemeRow({ ...current, archived });
-		} catch (err) {
-			console.error('theme archive failed:', err instanceof Error ? err.message : 'unknown');
-			return fail(500, { error: 'Could not save.', id });
-		}
-		return { saved: id };
-	},
+	// Archiving needs no action of its own: the Archived checkbox is part of each
+	// theme's form, so ticking it and pressing Save goes through `save` above, which
+	// upserts a row carrying the flag. For a code default that row IS the archive,
+	// and Reset removes it again.
 
 	// Reset a code default, or hard-delete an admin-added theme nothing references.
 	remove: async ({ request }) => {
