@@ -1,5 +1,4 @@
 import { characters } from '$lib/data/characters';
-import { themes } from '$lib/data/themes';
 import type { AgeBand, Character, Language, Theme, Tone } from '$lib/types';
 
 type Ok = {
@@ -43,11 +42,23 @@ function sanitizeExtra(value: unknown): string | null {
 }
 
 /**
- * Validate the generate-story request body against the locked enums. Pure — no
- * I/O. child_name is trimmed and capped; empty becomes null. extra is a
- * sanitized, length-capped content hint (never an instruction).
+ * Resolve a submitted theme id against the list the caller passed in.
+ *
+ * Takes the FULL resolved list (archived included) and filters archived here, so no
+ * caller can accidentally permit a retired theme just by forgetting to filter.
+ * Archived themes must still resolve elsewhere (findTheme) so old stories keep
+ * their label — they simply cannot start new ones.
  */
-export function validateGenerateRequest(body: unknown): Ok | Err {
+function pickActiveTheme(themeId: unknown, themes: Theme[]): Theme | undefined {
+	return themes.find((t) => t.id === themeId && !t.archived);
+}
+
+/**
+ * Validate the generate-story request body. Pure — no I/O; the caller resolves the
+ * theme list and passes it in. child_name is trimmed and capped; empty becomes null.
+ * extra is a sanitized, length-capped content hint (never an instruction).
+ */
+export function validateGenerateRequest(body: unknown, themes: Theme[]): Ok | Err {
 	const { character_id, theme_id, child_name, language, extra } = (body ?? {}) as Record<
 		string,
 		unknown
@@ -56,7 +67,7 @@ export function validateGenerateRequest(body: unknown): Ok | Err {
 	const character = characters.find((c) => c.id === character_id);
 	if (!character) return { ok: false, code: 'invalid_input', message: 'Please pick a character first.' };
 
-	const theme = themes.find((t) => t.id === theme_id);
+	const theme = pickActiveTheme(theme_id, themes);
 	if (!theme) return { ok: false, code: 'invalid_input', message: 'Please pick a story kind first.' };
 
 	if (!LANGUAGES.includes(language as Language)) {
@@ -101,7 +112,7 @@ const FIELD_MAX = 120;
  * one of character_id (locked animal) / custom_character (free text) must be given.
  * Free-text fields are sanitized + capped. tone defaults to gentle.
  */
-export function validateAdminBrief(body: unknown): AdminBriefOk | Err {
+export function validateAdminBrief(body: unknown, themes: Theme[]): AdminBriefOk | Err {
 	const b = (body ?? {}) as Record<string, unknown>;
 	const err = (message: string): Err => ({ ok: false, code: 'invalid_input', message });
 
@@ -113,7 +124,7 @@ export function validateAdminBrief(body: unknown): AdminBriefOk | Err {
 	if (!character && !customCharacter) return err('Please pick a character or describe one.');
 	if (character && customCharacter) return err('Pick a character OR describe a custom one, not both.');
 
-	const theme = themes.find((t) => t.id === b.theme_id);
+	const theme = pickActiveTheme(b.theme_id, themes);
 	if (!theme) return err('Please pick a story kind first.');
 
 	if (!AGE_BANDS.includes(b.age_band as AgeBand)) return err('Please choose an age band.');

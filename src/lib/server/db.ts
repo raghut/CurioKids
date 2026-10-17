@@ -1,6 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import { env } from '$env/dynamic/private';
-import type { GeneratedStory, StorySummary, AdminStorySummary, AgeBand, PromptKind, PromptOverride } from '$lib/types';
+import type { GeneratedStory, StorySummary, AdminStorySummary, AgeBand, PromptKind, PromptOverride, Theme } from '$lib/types';
 
 function sql() {
 	if (!env.DATABASE_URL) throw new Error('DATABASE_URL not configured');
@@ -131,4 +131,47 @@ export async function upsertPromptTemplate(
 export async function deletePromptTemplate(band: AgeBand, kind: PromptKind): Promise<void> {
 	const q = sql();
 	await q`DELETE FROM prompt_templates WHERE age_band = ${band} AND kind = ${kind}`;
+}
+
+// --- Themes ----------------------------------------------------------------------
+// Only OVERRIDES and ADDITIONS are stored. A theme with no row uses the code default
+// in src/lib/data/themes.ts, which is why resetting a theme is a plain DELETE.
+
+/** Every saved theme row. Callers layer these over the defaults via resolveThemes. */
+export async function listThemeRows(): Promise<Theme[]> {
+	const q = sql();
+	const rows = await q`
+		SELECT id, label_en, label_te, goal_hint, sort_order, archived
+		FROM themes
+	`;
+	return rows as Theme[];
+}
+
+/** Save (or replace) one theme row. */
+export async function upsertThemeRow(t: Theme): Promise<void> {
+	const q = sql();
+	await q`
+		INSERT INTO themes (id, label_en, label_te, goal_hint, sort_order, archived, updated_at)
+		VALUES (${t.id}, ${t.label_en}, ${t.label_te}, ${t.goal_hint}, ${t.sort_order}, ${t.archived}, now())
+		ON CONFLICT (id) DO UPDATE SET
+			label_en = ${t.label_en},
+			label_te = ${t.label_te},
+			goal_hint = ${t.goal_hint},
+			sort_order = ${t.sort_order},
+			archived = ${t.archived},
+			updated_at = now()
+	`;
+}
+
+/** Remove one theme row: resets a code default, or deletes an admin-added theme. */
+export async function deleteThemeRow(id: string): Promise<void> {
+	const q = sql();
+	await q`DELETE FROM themes WHERE id = ${id}`;
+}
+
+/** How many stories reference this theme — the guard before any hard delete. */
+export async function countStoriesUsingTheme(id: string): Promise<number> {
+	const q = sql();
+	const rows = await q`SELECT count(*)::int AS n FROM stories WHERE story->>'theme_id' = ${id}`;
+	return (rows[0]?.n as number) ?? 0;
 }

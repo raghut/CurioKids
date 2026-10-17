@@ -12,6 +12,7 @@ import { generateStoryText, generateImage } from '$lib/server/openaiClient';
 import { uploadImage } from '$lib/server/blob';
 import { assembleStory } from '$lib/server/assembleStory';
 import { insertStory, getPromptOverrides } from '$lib/server/db';
+import { resolveThemes } from '$lib/server/themes';
 
 // Auth is enforced by hooks.server.ts (all /api/admin/* need a valid admin cookie).
 // Admin generation has NO family passcode and NO daily cap. 5-6 and 7-8 get a cover
@@ -34,7 +35,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		return fail('invalid_input', 'Something is off with the brief. Please try again.', 400);
 	}
 
-	const v = validateAdminBrief(body);
+	const v = validateAdminBrief(body, await resolveThemes());
 	if (!v.ok) return fail(v.code, v.message, 400);
 
 	// Operator-edited templates for this band, falling back to the code defaults —

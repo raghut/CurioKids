@@ -93,14 +93,27 @@ export type Character = {
 	personality_hint: string;
 };
 
-export type ThemeId = 'be_brave' | 'help_friend' | 'find_lost' | 'learn_new';
+/**
+ * Themes are operator-managed data (see /admin/themes), so this is a plain string
+ * validated at runtime rather than a compile-time union. The runtime guard in
+ * validate.ts is what replaces the old type safety.
+ */
+export type ThemeId = string;
 
 export type Theme = {
 	id: ThemeId;
 	label_en: string;
 	label_te: string;
+	/** One-line goal fed to the story prompt. Operator-written, so sanitised + capped. */
 	goal_hint: string;
+	/** Display order in pickers and filter chips. Lower first. */
+	sort_order: number;
+	/** Hidden from pickers and chips, but still resolves by id so old stories keep their label. */
+	archived: boolean;
 };
+
+/** What GET /api/themes returns. goal_hint is withheld — it is prompt-internal. */
+export type ThemeOption = Pick<Theme, 'id' | 'label_en' | 'label_te'>;
 
 export type AgeBand = '2-4' | '5-6' | '7-8';
 export type Tone = 'gentle' | 'funny' | 'adventurous';

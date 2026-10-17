@@ -6,7 +6,7 @@
 	import { generatedStories } from '$lib/stores/generatedStories';
 	import { familyCode } from '$lib/stores/familyCode';
 	import { characters } from '$lib/data/characters';
-	import type { CharacterId, GeneratedStory, ThemeId } from '$lib/types';
+	import type { CharacterId, GeneratedStory } from '$lib/types';
 
 	type Phase = 'loading' | 'error' | 'limit';
 
@@ -34,7 +34,8 @@
 
 	async function generate() {
 		const character_id = $page.url.searchParams.get('character') as CharacterId | null;
-		const theme_id = $page.url.searchParams.get('theme') as ThemeId | null;
+		// A plain string now — the server validates it against the resolved theme list.
+		const theme_id = $page.url.searchParams.get('theme');
 		const child_name = $page.url.searchParams.get('name');
 		const extra = $page.url.searchParams.get('extra');
 		const lang = get(language) ?? 'en';
@@ -64,6 +65,15 @@
 			if (res.status === 401) {
 				// Code missing or rotated — forget it and send them back to re-enter.
 				familyCode.clear();
+				await goto('/create');
+				return;
+			}
+
+			if (res.status === 400) {
+				// Now that themes are operator-managed data, the picked theme can be
+				// archived between loading /create and submitting (or come from a stale
+				// cached shell). That is not a network problem, so don't show the wifi
+				// screen — send them back to pick again from a fresh list.
 				await goto('/create');
 				return;
 			}

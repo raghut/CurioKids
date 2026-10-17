@@ -34,4 +34,16 @@ await sql`
 	)
 `;
 
-console.log('✅ stories + prompt_templates tables ready');
+await sql`
+	CREATE TABLE IF NOT EXISTS themes (
+		id          text PRIMARY KEY,
+		label_en    text NOT NULL,
+		label_te    text NOT NULL,
+		goal_hint   text NOT NULL,
+		sort_order  int  NOT NULL DEFAULT 100,
+		archived    boolean NOT NULL DEFAULT false,
+		updated_at  timestamptz NOT NULL DEFAULT now()
+	)
+`;
+
+console.log('✅ stories + prompt_templates + themes tables ready');
