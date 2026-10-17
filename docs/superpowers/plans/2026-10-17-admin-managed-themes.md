@@ -16,6 +16,10 @@
 
 **Node:** use nvm v22.23.1 (`source ~/.nvm/nvm.sh && nvm use 22.23.1`). Homebrew `node@22` is v23 and breaks the build.
 
+**Page-level `curl` checks do not work on kid routes.** `src/routes/+layout.svelte:9` starts `showSplash = $state(true)` and only clears it in `onMount`, so server-rendered HTML for `/`, `/create`, `/stories` etc. contains the splash screen and nothing else. Verify client behaviour through `/api/*` endpoints, `npm run check`, `npm test` and `npm run build` — or in a real browser. Do not treat an empty `curl | grep` of a kid page as a failure.
+
+**Admin routes need `ADMIN_PASSCODE`** and kid story creation needs `CREATE_PASSCODE` when set. Never submit, guess, or echo those values to verify something; leave passcode-gated visual checks to the user.
+
 **There is no `npm run lint`.** CLAUDE.md documents `lint` and `format` scripts, but `package.json` has neither and eslint/prettier are not installed. `npm run check` (svelte-check + tsc) is the only static gate. Do not add eslint as part of this plan — adding a dependency needs the user's approval.
 
 ---
@@ -1603,16 +1607,40 @@ Expected: PASS, zero errors.
 Run: `npm run build`
 Expected: PASS. This catches any route that still imports the removed `ThemeId` union members.
 
-- [ ] **Step 4: End-to-end by hand**
+- [ ] **Step 4: Endpoint-level checks (no secrets needed)**
 
-With `npm run dev`:
+With the dev server running:
 
-1. `/create` → four themes, pick one, generate a story. It publishes and appears in the gallery.
-2. `/admin/create` → four themes, generate with age band `5-6`. It saves as a draft.
-3. `/admin/themes` → archive `good_habits`; confirm it disappears from `/create` and from `/api/themes`, and that a story already made under it still opens.
-4. `curl -s localhost:5173/api/themes | grep goal_hint` → **no match**; `goal_hint` must not be on the wire.
+```bash
+curl -s localhost:5173/api/themes
+```
+Expected: exactly the four active themes, each with `id`, `label_en`, `label_te`.
 
-- [ ] **Step 5: Confirm the archived path really is rejected server-side**
+```bash
+curl -s localhost:5173/api/themes | grep -c goal_hint
+```
+Expected: `0` — `goal_hint` must never be on the wire.
+
+```bash
+curl -s localhost:5173/api/themes | grep -cE 'help_friend|find_lost|learn_new'
+```
+Expected: `0` — archived themes must not be offered.
+
+```bash
+curl -s -o /dev/null -w '%{http_code}\n' localhost:5173/admin/themes
+```
+Expected: a redirect or 401/403, proving `hooks.server.ts` gates the new admin route. **Do not** attempt to authenticate.
+
+- [ ] **Step 5: Visual check — hand this to the user**
+
+The remaining checks need the family and admin passcodes, so they are the user's to run, not an agent's:
+
+1. `/create` → four theme cards (Sharing, Friendship, Brave, Good Habits); pick one and generate.
+2. `/admin/themes` → seven rows, four active and three marked archived; rename one, save, confirm it shows as `edited`, then Reset to default.
+3. Add a theme; confirm it appears at `/create` and in `/api/themes`.
+4. Archive a theme; confirm it vanishes from `/create` but a story already made under it still opens.
+
+- [ ] **Step 6: Confirm the archived path really is rejected server-side**
 
 Run:
 
@@ -1624,7 +1652,7 @@ curl -s -X POST localhost:5173/api/generate-story \
 
 Expected: a 400 with `{"error":"invalid_input","message":"Please pick a story kind first."}`. This is the guard that replaced the compile-time union — if it passes instead, Task 5 is wrong.
 
-- [ ] **Step 6: Commit anything outstanding**
+- [ ] **Step 7: Commit anything outstanding**
 
 ```bash
 git status --short
