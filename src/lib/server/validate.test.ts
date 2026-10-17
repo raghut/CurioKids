@@ -1,9 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { validateGenerateRequest } from './validate';
+import { themes } from '$lib/data/themes';
 
 describe('validateGenerateRequest', () => {
 	it('accepts valid input and trims child_name', () => {
-		const r = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'en', child_name: '  Geeta  ' });
+		const r = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'en', child_name: '  Geeta  ' }, themes);
 		expect(r.ok).toBe(true);
 		if (r.ok) {
 			expect(r.character.id).toBe('rabbit');
@@ -13,25 +14,25 @@ describe('validateGenerateRequest', () => {
 		}
 	});
 	it('rejects unknown character', () => {
-		const r = validateGenerateRequest({ character_id: 'dragon', theme_id: 'be_brave', language: 'en' });
+		const r = validateGenerateRequest({ character_id: 'dragon', theme_id: 'be_brave', language: 'en' }, themes);
 		expect(r.ok).toBe(false);
 		if (!r.ok) expect(r.code).toBe('invalid_input');
 	});
 	it('rejects unknown theme', () => {
-		const r = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'nope', language: 'en' });
+		const r = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'nope', language: 'en' }, themes);
 		expect(r.ok).toBe(false);
 	});
 	it('rejects unknown language', () => {
-		const r = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'fr' });
+		const r = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'fr' }, themes);
 		expect(r.ok).toBe(false);
 	});
 	it('treats empty child_name as null', () => {
-		const r = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'en', child_name: '   ' });
+		const r = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'en', child_name: '   ' }, themes);
 		expect(r.ok).toBe(true);
 		if (r.ok) expect(r.childName).toBeNull();
 	});
 	it('defaults extra to null when absent', () => {
-		const r = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'en' });
+		const r = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'en' }, themes);
 		expect(r.ok).toBe(true);
 		if (r.ok) expect(r.extra).toBeNull();
 	});
@@ -41,7 +42,7 @@ describe('validateGenerateRequest', () => {
 			theme_id: 'be_brave',
 			language: 'en',
 			extra: '  add a "turtle"\nand a  frog  '
-		});
+		}, themes);
 		expect(r.ok).toBe(true);
 		if (r.ok) expect(r.extra).toBe('add a turtle and a frog');
 	});
@@ -51,13 +52,13 @@ describe('validateGenerateRequest', () => {
 			theme_id: 'be_brave',
 			language: 'en',
 			extra: 'a'.repeat(500)
-		});
+		}, themes);
 		expect(r.ok).toBe(true);
 		if (r.ok) expect(r.extra?.length).toBe(200);
 	});
 	it('treats blank/non-string extra as null', () => {
-		const r1 = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'en', extra: '   ' });
-		const r2 = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'en', extra: 42 });
+		const r1 = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'en', extra: '   ' }, themes);
+		const r2 = validateGenerateRequest({ character_id: 'rabbit', theme_id: 'be_brave', language: 'en', extra: 42 }, themes);
 		if (r1.ok) expect(r1.extra).toBeNull();
 		if (r2.ok) expect(r2.extra).toBeNull();
 	});
@@ -75,7 +76,7 @@ describe('validateAdminBrief', () => {
 	};
 
 	it('accepts a full valid brief with a locked animal', () => {
-		const r = validateAdminBrief({ ...base, tone: 'funny', setting: 'festival', moral_focus: 'courage', supporting_character: 'a wise owl', extra: 'add fireflies' });
+		const r = validateAdminBrief({ ...base, tone: 'funny', setting: 'festival', moral_focus: 'courage', supporting_character: 'a wise owl', extra: 'add fireflies' }, themes);
 		expect(r.ok).toBe(true);
 		if (r.ok) {
 			expect(r.character?.id).toBe('peacock');
@@ -90,7 +91,7 @@ describe('validateAdminBrief', () => {
 	});
 
 	it('accepts a custom-character brief (no character_id)', () => {
-		const r = validateAdminBrief({ ...base, character_id: undefined, custom_character: 'a tiny brave firefly named Chinni' });
+		const r = validateAdminBrief({ ...base, character_id: undefined, custom_character: 'a tiny brave firefly named Chinni' }, themes);
 		expect(r.ok).toBe(true);
 		if (r.ok) {
 			expect(r.character).toBe(null);
@@ -99,41 +100,101 @@ describe('validateAdminBrief', () => {
 	});
 
 	it('defaults tone to gentle when missing/invalid', () => {
-		const r = validateAdminBrief({ ...base, tone: 'spicy' });
+		const r = validateAdminBrief({ ...base, tone: 'spicy' }, themes);
 		expect(r.ok).toBe(true);
 		if (r.ok) expect(r.tone).toBe('gentle');
 	});
 
 	it('rejects an empty story idea', () => {
-		const r = validateAdminBrief({ ...base, story_idea: '   ' });
+		const r = validateAdminBrief({ ...base, story_idea: '   ' }, themes);
 		expect(r.ok).toBe(false);
 	});
 
 	it('rejects when neither character nor custom is given', () => {
-		const r = validateAdminBrief({ ...base, character_id: undefined });
+		const r = validateAdminBrief({ ...base, character_id: undefined }, themes);
 		expect(r.ok).toBe(false);
 	});
 
 	it('rejects when BOTH character and custom are given', () => {
-		const r = validateAdminBrief({ ...base, custom_character: 'a fox' });
+		const r = validateAdminBrief({ ...base, custom_character: 'a fox' }, themes);
 		expect(r.ok).toBe(false);
 	});
 
 	it('accepts the 2-4 age band', () => {
-		const r = validateAdminBrief({ ...base, age_band: '2-4' });
+		const r = validateAdminBrief({ ...base, age_band: '2-4' }, themes);
 		expect(r.ok).toBe(true);
 		if (r.ok) expect(r.ageBand).toBe('2-4');
 	});
 
 	it('rejects bad theme, age band, and language', () => {
-		expect(validateAdminBrief({ ...base, theme_id: 'nope' }).ok).toBe(false);
-		expect(validateAdminBrief({ ...base, age_band: '9-10' }).ok).toBe(false);
-		expect(validateAdminBrief({ ...base, language: 'fr' }).ok).toBe(false);
+		expect(validateAdminBrief({ ...base, theme_id: 'nope' }, themes).ok).toBe(false);
+		expect(validateAdminBrief({ ...base, age_band: '9-10' }, themes).ok).toBe(false);
+		expect(validateAdminBrief({ ...base, language: 'fr' }, themes).ok).toBe(false);
 	});
 
 	it('sanitizes and caps free-text fields', () => {
-		const r = validateAdminBrief({ ...base, moral_focus: '  be `brave`  and "kind"  ' });
+		const r = validateAdminBrief({ ...base, moral_focus: '  be `brave`  and "kind"  ' }, themes);
 		expect(r.ok).toBe(true);
 		if (r.ok) expect(r.moralFocus).toBe('be brave and kind');
+	});
+});
+
+describe('theme validation against the resolved list', () => {
+	it('accepts an active theme', () => {
+		const r = validateGenerateRequest(
+			{ character_id: 'rabbit', theme_id: 'sharing', language: 'en' },
+			themes
+		);
+		expect(r.ok).toBe(true);
+		if (r.ok) expect(r.theme.id).toBe('sharing');
+	});
+
+	it('rejects an unknown theme', () => {
+		const r = validateGenerateRequest(
+			{ character_id: 'rabbit', theme_id: 'nope', language: 'en' },
+			themes
+		);
+		expect(r.ok).toBe(false);
+	});
+
+	it('rejects an ARCHIVED theme — retired themes cannot start new stories', () => {
+		const r = validateGenerateRequest(
+			{ character_id: 'rabbit', theme_id: 'help_friend', language: 'en' },
+			themes
+		);
+		expect(r.ok).toBe(false);
+	});
+
+	it('rejects an archived theme on the admin brief path too', () => {
+		const r = validateAdminBrief(
+			{
+				story_idea: 'A rabbit shares a carrot.',
+				character_id: 'rabbit',
+				theme_id: 'help_friend',
+				age_band: '5-6',
+				language: 'en'
+			},
+			themes
+		);
+		expect(r.ok).toBe(false);
+	});
+
+	it('accepts an admin-added theme that is not a code default', () => {
+		const extended = [
+			...themes,
+			{
+				id: 'kindness',
+				label_en: 'Kindness',
+				label_te: 'దయ',
+				goal_hint: 'being kind to someone small',
+				sort_order: 50,
+				archived: false
+			}
+		];
+		const r = validateGenerateRequest(
+			{ character_id: 'rabbit', theme_id: 'kindness', language: 'en' },
+			extended
+		);
+		expect(r.ok).toBe(true);
 	});
 });

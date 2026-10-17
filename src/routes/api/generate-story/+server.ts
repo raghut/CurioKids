@@ -8,6 +8,7 @@ import { uploadImage } from '$lib/server/blob';
 import { assembleStory } from '$lib/server/assembleStory';
 import { insertStory, countStoriesToday } from '$lib/server/db';
 import { checkPasscode } from '$lib/server/passcode';
+import { resolveThemes } from '$lib/server/themes';
 
 type ErrorCode = 'invalid_input' | 'unauthorized' | 'rate_limit' | 'openai_failed' | 'server_error';
 
@@ -29,7 +30,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		return fail('invalid_input', "Something's not right. Let's go back and try again.", 400);
 	}
 
-	const v = validateGenerateRequest(body);
+	const v = validateGenerateRequest(body, await resolveThemes());
 	if (!v.ok) return fail(v.code, v.message, 400);
 	const { character, theme, language, childName, extra } = v;
 
