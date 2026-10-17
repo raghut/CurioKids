@@ -8,7 +8,7 @@ _Working doc. Last updated: 2026-06-07_
 
 **What's in:**
 - **Pillar 1A — Curated Stories**: 10 hand-crafted, bundled, offline, audio-narrated
-- **Pillar 1B — Generated Stories**: child picks 1 of 6 animals + 1 of 4 themes + optional name → OpenAI generates a 5-page story + DALL-E cover image. Cached locally for offline re-read.
+- **Pillar 1B — Generated Stories**: child picks 1 of 6 animals + 1 of the active themes + optional name → OpenAI generates a 5-page story + DALL-E cover image. Cached locally for offline re-read.
 - **Pillar 2 — Nature Facts**: 10 hand-crafted, bundled, offline, audio-narrated
 - 2 languages: English + Telugu
 - No login, no auth, no profile
@@ -19,7 +19,7 @@ _Working doc. Last updated: 2026-06-07_
 - Shared library / social
 - Audio narration for generated stories (text only — curated stories have audio)
 - Per-page DALL-E images for generated stories (cover only)
-- Custom character or theme creation (locked to 6 animals + 4 themes)
+- Custom character creation by the child (locked to 6 animals). Themes are operator-managed from `/admin/themes` as of 2026-10-17; the child still only selects one.
 - Analytics, missions UI, parent dashboard
 - Personalization beyond the character pick
 

@@ -41,8 +41,11 @@
 		try {
 			const res = await fetch('/api/themes');
 			if (res.ok) {
+				// Trust the server's list even when it is empty: an operator who archived
+				// everything means there is nothing to pick, and showing the bundled
+				// themes anyway would let the child choose one the server then rejects.
 				const data = (await res.json()) as { themes: ThemeOption[] };
-				if (data.themes?.length) themeOptions = data.themes;
+				themeOptions = data.themes ?? [];
 			}
 		} catch {
 			// Keep the bundled fallback already in themeOptions.

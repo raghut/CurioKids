@@ -10,7 +10,7 @@ There are two generation paths. They share almost all the machinery:
 | Entry | `/create` → `POST /api/generate-story` | `/admin/create` → `POST /api/admin/generate-story` |
 | Gate | family passcode (`CREATE_PASSCODE`) | admin session cookie (`ADMIN_PASSCODE`) |
 | Daily cap | yes — `DAILY_GENERATION_CAP`, global | **none** |
-| Inputs | 6 locked animals × 4 themes | free-text brief |
+| Inputs | 6 locked animals × the active themes | free-text brief |
 | Prompts | hardcoded in `storyPrompt.ts` | editable per age band at `/admin/prompts` |
 | Images | cover only (unless `GENERATE_PAGE_IMAGES=true`) | cover only; **every page when age band is `2-4`** |
 | Saved as | `published` | `draft` |
@@ -26,7 +26,7 @@ POST /api/generate-story
 Header: x-create-code: <family passcode>   // only when CREATE_PASSCODE is set
 {
   "character_id": "rabbit",     // must be one of the 6 locked animals
-  "theme_id":     "be_brave",   // must be one of the 4 locked themes
+  "theme_id":     "sharing",    // must be an active theme id (see /admin/themes)
   "child_name":   "Geetha",     // optional, trimmed, capped at 40 chars
   "extra":        "add fireflies", // optional free text, sanitized, capped at 200
   "language":     "en"          // "en" | "te"

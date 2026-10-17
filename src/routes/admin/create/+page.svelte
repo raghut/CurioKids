@@ -29,8 +29,9 @@
 			try {
 				const res = await fetch('/api/themes');
 				if (res.ok) {
+					// Trust the server's list even when empty — see the kid /create screen.
 					const data = (await res.json()) as { themes: ThemeOption[] };
-					if (data.themes?.length) themeOptions = data.themes;
+					themeOptions = data.themes ?? [];
 				}
 			} catch {
 				// Bundled fallback stands.

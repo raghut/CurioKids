@@ -18,6 +18,7 @@ import {
 } from '$lib/server/db';
 import { characters } from '$lib/data/characters';
 import { themes } from '$lib/data/themes';
+import { resolveThemes } from '$lib/server/themes';
 
 const BANDS: AgeBand[] = ['2-4', '5-6', '7-8'];
 
@@ -28,14 +29,22 @@ function isKind(v: unknown): v is PromptKind {
 	return PROMPT_KINDS.includes(v as PromptKind);
 }
 
-/** A representative brief, so Preview shows a prompt exactly as the model will get it. */
-function sampleVars(band: AgeBand) {
+/**
+ * A representative brief, so Preview shows a prompt exactly as the model will get it.
+ *
+ * The theme is RESOLVED, not read from the code defaults: once an operator edits a
+ * theme's goal_hint at /admin/themes, a preview built from the bundled wording would
+ * quietly contradict the promise in the line above. Falls back to the first code
+ * default if every theme has been archived.
+ */
+async function sampleVars(band: AgeBand) {
+	const active = (await resolveThemes()).filter((t) => !t.archived);
 	return adminTemplateVars({
 		storyIdea: 'Motu the elephant finds a big banana and shares it.',
 		character: characters.find((c) => c.id === 'elephant') ?? null,
 		customCharacter: null,
 		supportingCharacter: 'a cheerful parrot',
-		theme: themes.find((t) => t.id === 'sharing')!,
+		theme: active[0] ?? themes[0],
 		ageBand: band,
 		language: 'en',
 		tone: 'gentle',
@@ -134,7 +143,7 @@ export const actions: Actions = {
 						hero_descriptor: 'a small grey baby elephant with big ears and a curled trunk',
 						scene: 'Motu shares the banana beside the pond'
 					}
-				: sampleVars(band);
+				: await sampleVars(band);
 
 		return { preview: renderWithFloor(kind, body, vars), band, kind, body };
 	}

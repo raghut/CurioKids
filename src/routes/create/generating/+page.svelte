@@ -69,6 +69,15 @@
 				return;
 			}
 
+			if (res.status === 400) {
+				// Now that themes are operator-managed data, the picked theme can be
+				// archived between loading /create and submitting (or come from a stale
+				// cached shell). That is not a network problem, so don't show the wifi
+				// screen — send them back to pick again from a fresh list.
+				await goto('/create');
+				return;
+			}
+
 			if (!res.ok) {
 				phase = 'error';
 				return;

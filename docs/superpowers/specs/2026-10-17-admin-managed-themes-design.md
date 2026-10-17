@@ -147,7 +147,7 @@ export function mergeThemes(defaults: Theme[], rows: Theme[]): Theme[];
 /** Lookup across the full resolved list, archived included, so old stories resolve. */
 export function findTheme(id: string, all: Theme[]): Theme | undefined;
 export function slugifyThemeId(labelEn: string): string;
-export function sanitizeGoalHint(raw: string): string;       // collapse ws, strip ` ' " , cap 120
+export function sanitizeGoalHint(raw: unknown): string;      // collapse ws, strip ` and " , cap 120
 export function validateThemeInput(input: unknown, existingIds: string[]): Ok | Err;
 
 /** The three DELETE outcomes, as a pure decision the endpoint just executes. */
