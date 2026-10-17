@@ -2,8 +2,9 @@
 	import { untrack } from 'svelte';
 	import { ArrowLeft, RefreshCw, Save, ExternalLink, Eye } from 'lucide-svelte';
 	import StatusChip from '$lib/components/admin/StatusChip.svelte';
+	import { AGE_BANDS } from '$lib/data/filterStories';
 	import type { PageData } from './$types';
-	import type { GeneratedStory } from '$lib/types';
+	import type { AgeBand, GeneratedStory } from '$lib/types';
 
 	let { data }: { data: PageData } = $props();
 
@@ -53,6 +54,49 @@
 	const saveText = (i: number) => send(i, { action: 'text', text: pageTexts[i] }, 'text');
 	const regen = (i: number, prompt: string) => send(i, { action: 'image', prompt }, 'image');
 
+	// --- Tags (theme + age band) ---------------------------------------------------
+	// A story on an archived theme, or on the legacy '5-8' age value, has no valid
+	// option to preselect; '' forces the operator to choose and keeps Save disabled.
+	const themeRetired = untrack(() => !data.themes.some((t) => t.id === data.story.theme_id));
+	let retagTheme = $state(untrack(() => (themeRetired ? '' : data.story.theme_id)));
+	let retagAge = $state(
+		untrack(() => (AGE_BANDS.includes(data.story.age_tag as AgeBand) ? data.story.age_tag : ''))
+	);
+	let retagBusy = $state(false);
+	let retagNote = $state<{ kind: 'ok' | 'err'; text: string } | null>(null);
+
+	const retagChanged = $derived(
+		retagTheme !== '' &&
+			retagAge !== '' &&
+			(retagTheme !== story.theme_id || retagAge !== story.age_tag)
+	);
+
+	async function saveTags() {
+		retagBusy = true;
+		retagNote = null;
+		try {
+			const res = await fetch(`/api/admin/stories/${story.id}`, {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ action: 'retag', theme_id: retagTheme, age_tag: retagAge })
+			});
+			const body = await res.json();
+			if (!res.ok) {
+				retagNote = { kind: 'err', text: body?.message ?? 'That did not work.' };
+				return;
+			}
+			// Keep the local copy in step so the Save button settles and the header
+			// reflects what is now stored.
+			story.theme_id = body.theme_id;
+			story.age_tag = body.age_tag;
+			retagNote = { kind: 'ok', text: 'Tags saved.' };
+		} catch {
+			retagNote = { kind: 'err', text: 'Could not reach the server.' };
+		} finally {
+			retagBusy = false;
+		}
+	}
+
 	const inputClass =
 		'w-full rounded-lg border border-slate-300 p-3 text-sm outline-none focus:border-sky-blue focus:ring-2 focus:ring-sky-blue/30';
 	const promptClass = inputClass + ' font-mono text-xs leading-relaxed';
@@ -78,14 +122,71 @@
 			<Eye size={15} strokeWidth={1.5} /> Preview as a child
 		</a>
 	</div>
-	<p class="mb-6 text-sm text-slate-500">
-		{story.age_tag} · {story.language.toUpperCase()} · {story.character_id} · {story.theme_id}
+	<p class="mb-4 text-sm text-slate-500">
+		{story.language.toUpperCase()} · {story.character_id}
 		{#if story.status === 'published'}
 			· <a href="/stories/{story.id}" class="inline-flex items-center gap-1 underline">
 				view as a child <ExternalLink size={12} strokeWidth={1.5} />
 			</a>
 		{/if}
 	</p>
+
+	<!-- Theme + age band decide which filter chips find this story on /stories, so
+	     they are editable here. Changing them rewrites no text and no pictures. -->
+	<section class="mb-6 rounded-2xl bg-white p-5 ring-1 ring-slate-200">
+		<h2 class="mb-1 font-bold text-slate-800">Tags</h2>
+		<p class="mb-3 text-xs text-slate-500">
+			These decide which filters find this story. They don't change its words or pictures.
+		</p>
+
+		<div class="flex flex-wrap items-end gap-3">
+			<label class="flex flex-col gap-1.5">
+				<span class="text-xs font-bold text-slate-600">Theme</span>
+				<select bind:value={retagTheme} class={inputClass + ' py-2'}>
+					{#if themeRetired}
+						<!-- The story's current theme is archived, so it isn't in the list. Show
+						     it as an unselectable placeholder so the operator can see what it is
+						     and must choose a replacement. -->
+						<option value="" disabled>{story.theme_id} (retired — pick one)</option>
+					{/if}
+					{#each data.themes as t (t.id)}
+						<option value={t.id}>{t.label_en}</option>
+					{/each}
+				</select>
+			</label>
+
+			<label class="flex flex-col gap-1.5">
+				<span class="text-xs font-bold text-slate-600">Age band</span>
+				<select bind:value={retagAge} class={inputClass + ' py-2'}>
+					{#if !AGE_BANDS.includes(story.age_tag as AgeBand)}
+						<option value="" disabled>{story.age_tag} (legacy — pick one)</option>
+					{/if}
+					{#each AGE_BANDS as band (band)}
+						<option value={band}>{band}</option>
+					{/each}
+				</select>
+			</label>
+
+			<button
+				class={btn + ' bg-slate-900 text-white hover:bg-slate-700'}
+				disabled={!retagChanged || retagBusy}
+				onclick={saveTags}
+			>
+				<Save size={15} strokeWidth={1.5} />
+				{retagBusy ? 'Saving…' : 'Save tags'}
+			</button>
+
+			{#if data.themes.length === 0}
+				<span class="text-xs text-amber-700">No active themes — add one at /admin/themes first.</span>
+			{/if}
+		</div>
+
+		{#if retagNote}
+			<p class="mt-3 text-xs font-semibold {retagNote.kind === 'ok' ? 'text-green-700' : 'text-red-700'}">
+				{retagNote.text}
+			</p>
+		{/if}
+	</section>
 
 	<!-- Cover -->
 	<section class="mb-6 rounded-2xl bg-white p-5 ring-1 ring-slate-200">

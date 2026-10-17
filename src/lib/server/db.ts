@@ -61,6 +61,27 @@ export async function getStoryAdmin(id: string): Promise<GeneratedStory | null> 
 	return rows.length ? (rows[0].story as GeneratedStory) : null;
 }
 
+/**
+ * Re-tag an existing story's theme and age band. Keeps the promoted age_tag column
+ * and the jsonb blob in step, the same way setStoryStatus does — theme_id lives only
+ * in the blob, age_tag lives in both.
+ *
+ * This does NOT rewrite the story's text or pictures: the band drove the prompt at
+ * generation time, so a re-tagged story still reads the way it was written.
+ */
+export async function retagStory(id: string, themeId: string, ageTag: string): Promise<void> {
+	const q = sql();
+	await q`
+		UPDATE stories
+		SET age_tag = ${ageTag},
+		    story = jsonb_set(
+		        jsonb_set(story, '{theme_id}', to_jsonb(${themeId}::text)),
+		        '{age_tag}', to_jsonb(${ageTag}::text)
+		    )
+		WHERE id = ${id}
+	`;
+}
+
 /** Publish/unpublish: update the promoted column and mirror into the jsonb blob. */
 export async function setStoryStatus(id: string, status: 'draft' | 'published'): Promise<void> {
 	const q = sql();

@@ -1,6 +1,8 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { getStoryAdmin, setStoryStatus, deleteStory } from '$lib/server/db';
+import { getStoryAdmin, setStoryStatus, deleteStory, retagStory } from '$lib/server/db';
+import { resolveThemes } from '$lib/server/themes';
+import { validateRetag } from '$lib/server/retag';
 import { deleteImages } from '$lib/server/blob';
 
 // Auth is enforced in hooks.server.ts (all /api/admin/* require a valid cookie).
@@ -25,6 +27,22 @@ export const POST: RequestHandler = async ({ params, request }) => {
 		body = await request.json();
 	} catch {
 		return json({ error: 'invalid_input', message: 'Bad request.' }, { status: 400 });
+	}
+
+	// Re-tag an existing story's theme + age band. No model call, no cost — it only
+	// changes which filter chips find the story, never its text or pictures.
+	if (body.action === 'retag') {
+		const v = validateRetag(body, await resolveThemes());
+		if (!v.ok) return json({ error: 'invalid_input', message: v.message }, { status: 400 });
+		try {
+			const story = await getStoryAdmin(params.id);
+			if (!story) return json({ error: 'not_found', message: 'Story not found.' }, { status: 404 });
+			await retagStory(params.id, v.themeId, v.ageTag);
+			return json({ ok: true, theme_id: v.themeId, age_tag: v.ageTag });
+		} catch (err) {
+			console.error('retagStory failed:', err instanceof Error ? err.message : 'unknown');
+			return json({ error: 'server_error', message: 'Could not re-tag the story.' }, { status: 500 });
+		}
 	}
 
 	if (body.action !== 'publish' && body.action !== 'unpublish') {
