@@ -3,6 +3,9 @@
 **Date:** 2026-10-17
 **Status:** approved
 **Screen touched:** `/stories` (existing kid screen — no new screen)
+**Depends on:** `2026-10-17-admin-managed-themes-design.md` — build that first.
+Themes became operator-managed data on 2026-10-17, so the theme chips read the
+resolved active list rather than a compiled-in enum. See "Theme chips" below.
 
 ## Goal
 
@@ -94,7 +97,13 @@ export function curatedToFilterable(s: Story): FilterableStory;
 export function isFilterActive(f: StoryFilter): boolean;
 export function matchesFilter(s: FilterableStory, f: StoryFilter, completedIds: string[]): boolean;
 
-/** URL -> filter. Unknown values are dropped, so a mistyped URL shows everything. */
+/**
+ * URL -> filter. An unknown `age` or `unread` value is dropped, so a mistyped URL
+ * shows everything. `theme` is NOT validated here — theme ids are operator-managed
+ * data, not a compile-time enum, and this module stays pure with no theme list to
+ * check against. An unknown theme id simply matches no story, which the
+ * nothing-matched state already handles gracefully.
+ */
 export function parseFilter(params: URLSearchParams): StoryFilter;
 
 /** filter -> URL. Omits nulls and false, so a cleared filter yields an empty query string. */
@@ -108,9 +117,11 @@ equals the chip, **or** when its `ageTag` is `'5-8'` and the chip is `5-6` or
 `7-8`. A `'5-8'` story never matches the `2-4` chip.
 
 **Theme** — `null` matches everything. Otherwise `themeId` must equal the chip
-exactly. A story whose theme is null or not one of the four locked ids matches no
+exactly. A story whose theme is null, or is an id no active theme has, matches no
 theme chip: it is visible unfiltered and absent while a theme chip is lit. Never
-an error.
+an error. **This is what an archived theme looks like** — its stories stay in the
+grid and stay readable, they just aren't reachable by a chip, which is exactly the
+intent of archiving.
 
 **Not read yet** — `false` matches everything. Otherwise the story's `id` must be
 absent from the `progress` store's completed-id list.
@@ -125,16 +136,16 @@ The three combine with AND.
 | curated (`Story`) | `age_range` (locked `'5-8'`) | `theme` |
 
 **Curated-content convention to document in CLAUDE.md:** author curated story JSON
-with `theme` set to one of the four locked ids (`be_brave`, `help_friend`,
-`find_lost`, `learn_new`) for it to be reachable by a theme chip. `theme` stays a
-free `string` in the `Story` type — this is a convention, not a schema change.
+with `theme` set to an **active theme id** (as listed on `/admin/themes`) for it to
+be reachable by a theme chip. `theme` stays a free `string` in the `Story` type —
+this is a convention, not a schema change.
 
 ### URL contract
 
 | Param | Values | Omitted when |
 |---|---|---|
 | `age` | `2-4` \| `5-6` \| `7-8` | no age selected |
-| `theme` | `be_brave` \| `help_friend` \| `find_lost` \| `learn_new` | no theme selected |
+| `theme` | any theme id | no theme selected |
 | `unread` | `1` | toggle off |
 
 Example: `/stories?age=7-8&theme=be_brave&unread=1`. A cleared filter is plain
@@ -146,12 +157,16 @@ Presentational. Renders chips, reports the new filter up. Knows nothing about
 stories, fetching, or the URL.
 
 ```ts
-let { filter, lang, onchange }: {
+let { filter, themes, lang, onchange }: {
   filter: StoryFilter;
+  themes: ThemeOption[];        // the resolved ACTIVE list, passed in
   lang: Language;
   onchange: (next: StoryFilter) => void;
 } = $props();
 ```
+
+The theme list is a prop, not an import — same shape as `ThemePicker.svelte` after
+the themes phase. The component renders however many it is given.
 
 ### Layout
 
@@ -161,8 +176,8 @@ let { filter, lang, onchange }: {
   │                                     │
   │  ( 2-4 )  ( 5-6 )  ( 7-8 )          │   age — one row
   │                                     │
-  │  ( Be Brave  ) ( Help a Friend  )   │   theme — 2x2
-  │  ( Find Lost ) ( Learn New      )   │
+  │  ( Sharing   ) ( Friendship     )   │   theme — 2 cols,
+  │  ( Brave     ) ( Good Habits    )   │   as many rows as needed
   │                                     │
   │  ( ○ Not read yet )     [ Show all ]│   toggle + clear
   │                                     │
@@ -172,16 +187,18 @@ let { filter, lang, onchange }: {
 ```
 
 - **Age:** three chips, one row. Numerals — identical in both languages.
-- **Theme:** 2×2 grid reusing `ThemePicker.svelte`'s existing look — the per-theme
-  pastel fills (`bg-peach/30`, `bg-sky-blue/30`, `bg-mint/30`, `bg-butter/30`) with
-  `border-coral` when selected, `border-transparent` otherwise. Two rows because
-  "Learn Something New" and `కొత్తది నేర్చుకో` do not fit four-across on a phone.
-  Labels come from `themes.ts` (`label_en` / `label_te`).
+- **Theme:** a 2-column grid reusing `ThemePicker.svelte`'s existing look — the
+  pastel fills cycling `colors[i % 4]` (`bg-peach/30`, `bg-sky-blue/30`,
+  `bg-mint/30`, `bg-butter/30`) with `border-coral` when selected,
+  `border-transparent` otherwise. Two columns rather than four because long labels
+  in either language do not fit four-across on a phone; the row count follows the
+  number of active themes. Labels come from the passed list (`label_en` /
+  `label_te`).
 - **Not read yet:** one wide chip, same selected affordance.
 - **Show all:** rendered only when `isFilterActive(filter)`. Clears everything.
 - Every chip `min-h-16` (64px tap-target rule). Labels `text-xl` (20px) —
   **approved exception** to the 22pt content-screen minimum, because chips are
-  chrome, not content, and at 22pt the Telugu theme labels overflow even a 2×2 grid.
+  chrome, not content, and at 22pt the Telugu theme labels overflow a 2-column grid.
 - Telugu chips carry `lang="te"` and `leading-relaxed` for the 1.6 line-height rule.
 - Transitions are colour-only (`transition-colors`), matching the existing pickers.
   No bounce, no pop.
@@ -215,6 +232,20 @@ The page's fetching is unchanged. It additionally:
    grid returns home rather than walking back through filter states.
 3. Filters both arrays through `matchesFilter` before rendering, leaving the
    curated-then-generated order and the `✨` badge exactly as they are.
+
+### Theme chips
+
+The page fetches `/api/themes` alongside the gallery and passes the active list to
+`StoryFilters`. Three consequences worth stating:
+
+- **The two fetches are independent.** A failed theme fetch does not hide the
+  stories, and a failed gallery fetch does not hide the chips.
+- **Offline, the theme row falls back to the bundled active defaults** from
+  `themes.ts`, matching what kid `/create` does. The chips stay usable; only
+  admin-added themes are missing, and a story under one of those wouldn't have
+  loaded anyway.
+- **Zero active themes renders no theme row at all** — not an empty grid. Age and
+  not-read-yet still work.
 
 ## Nothing-matched state
 
@@ -251,7 +282,8 @@ existing wifi message still shows and any curated stories remain filterable.
 - `themeId: null` and an unknown theme string: visible unfiltered, hidden when a
   theme chip is lit
 - unread excludes completed ids and keeps unknown ids
-- `parseFilter` drops unknown `age` / `theme` / `unread` values
+- `parseFilter` drops an unknown `age` and an unknown `unread`, and **keeps** an
+  arbitrary `theme` string (theme ids are data, not an enum — see `parseFilter`)
 - `parseFilter(filterToParams(f))` round-trips every filter, including `EMPTY_FILTER`
 - `filterToParams(EMPTY_FILTER)` is empty
 - `isFilterActive` false only for `EMPTY_FILTER`
@@ -268,10 +300,11 @@ Plus `npm run check` and `npm run lint`.
 | `src/lib/data/filterStories.ts` | new — all filter rules + URL codec |
 | `src/lib/data/filterStories.test.ts` | new — unit tests |
 | `src/lib/components/StoryFilters.svelte` | new — chip UI |
-| `src/routes/stories/+page.svelte` | reads URL filter, applies it, empty state |
+| `src/routes/stories/+page.svelte` | reads URL filter, fetches themes, applies it, empty state |
 | `CLAUDE.md` | curated `theme` convention; note the filters on `/stories` |
 
-No migration. No new dependency. No env var.
+No migration. No new dependency. No env var. `/api/themes` and the active-theme
+fallback both come from the themes phase, which lands first.
 
 ## Out of scope
 

@@ -61,7 +61,8 @@ Full product strategy is in `docs/strategy.md`. **Always re-read it if you're un
   - `src/routes/api/stories/+server.ts` — GET, lists the shared gallery (lightweight summaries) from Postgres, optionally filtered by `?language=`.
   - `src/routes/api/stories/[id]/+server.ts` — GET, returns one full generated story (the JSONB blob) by id.
   - `src/routes/api/verify-code/+server.ts` — POST `{code}`, returns `{ok}` (200) or 401. UX-only helper so the create screen can validate the family passcode at unlock time; the real enforcement is inside `generate-story`.
-- **Database**: Postgres via **Neon** (`@neondatabase/serverless`), a single `stories` table storing the full `GeneratedStory` as a JSONB column plus a few promoted columns (`id`, `language`, `title`, `cover_url`, `age_tag`, `created_at`) for cheap listing/filtering/counting. This is anonymous shared storage for the gallery — not a user database (no auth, no accounts).
+  - `src/routes/api/themes/+server.ts` — GET, the **active** theme list as `{id, label_en, label_te}` for the kid create screen and the stories filter chips. `goal_hint` is deliberately withheld — it is prompt-internal. Admin CRUD lives at `/api/admin/themes`.
+- **Database**: Postgres via **Neon** (`@neondatabase/serverless`), a `stories` table storing the full `GeneratedStory` as a JSONB column plus a few promoted columns (`id`, `language`, `title`, `cover_url`, `age_tag`, `created_at`) for cheap listing/filtering/counting, plus a `prompt_templates` table and a `themes` table holding operator overrides. This is anonymous shared storage for the gallery — not a user database (no auth, no accounts).
 - **Image storage**: **Vercel Blob** (`@vercel/blob`) holds cover images and, when enabled, per-page images as public JPEG URLs.
 - **AI**: OpenAI `gpt-4o-mini` for story text (cheap, fast, good enough). OpenAI `gpt-image-1` for cover + optional per-page images. Use `gpt-4o` only if `mini` quality is visibly bad in testing.
 - **Env vars**: `OPENAI_API_KEY`, `DATABASE_URL` (Neon connection string), `BLOB_READ_WRITE_TOKEN` (Vercel Blob), `GENERATE_PAGE_IMAGES` (`true`/`false`, default `false`), `DAILY_GENERATION_CAP` (integer, default `20`), `CREATE_PASSCODE` (shared family passcode gating story creation; blank = gate off), `ADMIN_PASSCODE` (shared admin door-code gating the whole admin dashboard; blank = admin OFF), `ADMIN_SESSION_SECRET` (HMAC secret for the admin session cookie; blank = falls back to `ADMIN_PASSCODE`) — see `.env.example`.
@@ -75,6 +76,8 @@ Full product strategy is in `docs/strategy.md`. **Always re-read it if you're un
 - Increment 1 (auth + status gate + manage) is built. Generation-from-brief, editing, and cost visibility are later increments — see `docs/superpowers/specs/2026-09-19-admin-dashboard-inc1-design.md`.
 - **Admin age bands (approved 2026-09-25):** admin create-from-brief offers three bands — `2-4`, `5-6`, `7-8` — stored in the promoted `age_tag` column. They steer vocabulary and sentence length, and `2-4` is a **board book**: 5 pages of 15–25 words, **an illustration on every page** (6 pages → cover + 6 page images, ~₹28 per story), and a cover that pictures the whole story rather than the opening scene. `5-6` and `7-8` stay cover-only with 30–50-word pages. The band itself switches page images on — this does **not** read `GENERATE_PAGE_IMAGES`, which remains the kid flow's flag. `GeneratedStory.age_range` stays the locked `'5-8'`; `age_tag` carries the real band. The kid `/create` screen has no age picker — the bands are admin-only. See `docs/superpowers/specs/2026-09-25-admin-create-from-brief-design.md`.
 - **Editable prompts (approved 2026-09-27):** the prompts driving admin story generation are **not hardcoded**. `/admin/prompts` edits four templates — `story_system`, `story_user`, `image_cover`, `image_page` — **per age band** (12 in all), stored as overrides in a `prompt_templates` table (`age_band` + `kind` primary key). Defaults live in `src/lib/server/promptTemplates.ts`; a band/kind with no row uses the default, so "reset" is a DELETE and later deploys still improve the baseline. Every rendered prompt is the operator's body **plus a non-editable `LOCKED_FLOOR`** carrying the child-safety rules and the JSON output contract — an edit can't strip the guardrails or make output unparseable. `validateTemplate` rejects unknown `{{placeholders}}` and refuses to drop `{{hero_descriptor}}` from an image template. The kid `/create` prompt stays hardcoded (it auto-publishes, with no draft review). **Re-run `npm run db:init`** after pulling this.
+- **Admin-managed themes (approved 2026-10-17):** themes are **no longer a locked enum** — they are operator-managed through `/admin/themes` (add, rename, edit `goal_hint`, reorder, archive). Seeded with `sharing`, `friendship`, `be_brave`, `good_habits`; the three retired ones (`help_friend`, `find_lost`, `learn_new`) are **archived, not deleted** — hidden from pickers and filter chips but still resolving by id so existing stories keep their label. Defaults live in `src/lib/data/themes.ts` and DB rows in a `themes` table override or extend them, so "reset" is a DELETE and offline falls back to the bundled list — the same contract as the editable prompts. A theme's **`id` is immutable** once created (it is the key inside every story's JSONB `theme_id`), and hard delete is refused while any story references it. `goal_hint` reaches the model, so it is sanitized and capped at 120 chars, and the existing `LOCKED_FLOOR` still carries the safety rules. `ThemeId` is now a plain `string` validated at runtime. The child only ever *selects* a theme. **Re-run `npm run db:init`** after pulling this.
+- **Stories filters (approved 2026-10-17):** `/stories` has three filters — age band (`2-4`/`5-6`/`7-8`), theme (the active list), and not-read-yet — single-select per row, tap again to clear, combined with AND. Filter state lives in **URL query params** (`/stories?age=7-8&theme=sharing&unread=1`), session-only: nothing in localStorage, so it survives reading a story and coming back but resets on a fresh entry from home. Filtering is **client-side** over the already-loaded list so chip taps need no spinner. A story whose `theme_id` matches no active theme (i.e. an archived one) stays in the grid but is unreachable by a chip — that is what archiving means. Legacy `age_tag: '5-8'` rows match **both** the `5-6` and `7-8` chips. Saved filter preferences and multi-user profiles are a later phase.
 - **2-4 prompt (approved 2026-09-29):** the `2-4` story template is built around character consistency — a character bible, one moment per illustration, and a rule that every `image_prompt` names every character taking part and fully re-describes all of them **except the hero**. The hero is deliberately not re-described there because the image template already supplies its fixed `{{hero_descriptor}}`, and two descriptions in one call contradict each other.
 - **Preview as a child (approved 2026-09-28):** `/admin/stories/[id]/preview` renders the story through `StoryReader` — the *same* component the child's `/stories/[id]` route uses — with a **Mobile / Desktop** toggle (phone-width frame vs full width). It loads via `getStoryAdmin`, so drafts preview too, and Done rewinds instead of marking progress. Sharing one component is the point: a second copy of the viewer would drift and the preview would stop telling the truth. This is an admin tool and does **not** count against the 6-screen kid UX rule.
 - **Per-page editing (approved 2026-09-27):** `/admin/stories/[id]` lets an operator fix a generated story after the fact — edit any page's **text** (a plain save, no model call, no cost) and edit any page's or the cover's **image prompt** and regenerate just that picture (~₹4 each; the replaced image is deleted from Blob). This is why `GeneratedStory` now carries `cover_prompt` and per-page `image_prompt` — the **rendered body** of the prompt, without the locked floor, which is re-applied once on each regeneration. Both fields are optional, so pre-existing stories still load (with empty prompt boxes). Title, moral and reflection question are not editable yet.
@@ -101,6 +104,7 @@ curiokids/
         generate-story/+server.ts    # generates + persists a story to Postgres/Blob
         stories/+server.ts           # GET — shared gallery list
         stories/[id]/+server.ts      # GET — single generated story
+        themes/+server.ts            # GET — active theme list (labels only)
     lib/
       components/
         ContentCard.svelte
@@ -108,6 +112,7 @@ curiokids/
         SectionRenderer.svelte
         CharacterPicker.svelte
         ThemePicker.svelte
+        StoryFilters.svelte
       stores/
         language.ts                  # language preference
         progress.ts                  # completed content IDs
@@ -115,7 +120,8 @@ curiokids/
       data/
         loadContent.ts               # reads JSON files
         characters.ts                # the 6 animal hero definitions
-        themes.ts                    # the 4 theme definitions
+        themes.ts                    # seed theme defaults (DB rows override)
+        filterStories.ts             # pure story-filter rules + URL codec
       server/
         db.ts                        # Neon client + story queries (insert/list/get/count-today)
         blob.ts                      # Vercel Blob upload helper
@@ -123,9 +129,11 @@ curiokids/
         assembleStory.ts             # pure GeneratedStory builder
         openaiClient.ts              # server-only OpenAI wrapper
         storyPrompt.ts               # prompt builder (incl. per-page image prompts)
+        themes.ts                    # resolve code defaults + DB overrides; theme queries
+        themeRules.ts                # pure merge/slug/sanitise/validate for themes
       types.ts                       # Fact, Story, GeneratedStory, StorySummary, Character, Theme
   scripts/
-    init-db.mjs                      # Postgres schema creation (stories + prompt_templates)
+    init-db.mjs                      # Postgres schema creation (stories + prompt_templates + themes)
   static/
     content/
       facts/
@@ -193,7 +201,8 @@ type Story = {
   source: "curated";
   language: "en" | "te";
   age_range: "5-8";
-  theme: string;
+  theme: string;                   // set this to an ACTIVE theme id (see /admin/themes)
+                                   // so the story is reachable by a theme filter chip
   title: string;
   cover_image: string;
   audio: string;
@@ -214,7 +223,7 @@ type GeneratedStory = {
   age_range: "5-8";
   age_tag: string;                  // promoted DB column; defaults "5-8"
   character_id: string;             // "rabbit" | "peacock" | etc.
-  theme_id: string;                 // "be_brave" | "help_friend" | etc.
+  theme_id: string;                 // an operator-managed theme id, e.g. "sharing"
   child_name: string | null;
   title: string;
   cover_image_url: string;          // Vercel Blob URL ("" if the cover image failed)
@@ -241,10 +250,12 @@ type Character = {
 };
 
 type Theme = {
-  id: "be_brave" | "help_friend" | "find_lost" | "learn_new";
+  id: string;                       // operator-managed; immutable once created
   label_en: string;
   label_te: string;
   goal_hint: string;                // one-line goal for the AI text prompt
+  sort_order: number;               // display order in pickers + filter chips
+  archived: boolean;                // hidden from pickers/chips, still resolves by id
 };
 ```
 
@@ -262,7 +273,7 @@ type Theme = {
 - **Home screen** has exactly 3 cards: Stories, Why? (Facts), Create. Nothing else.
 - **Content list** is a vertical scrolling grid (2 columns on mobile, 3 on tablet). Each tile shows cover + title + ✓ if completed.
 - **Stories grid** shows curated + generated stories together. Generated ones have a tiny "✨" badge.
-- **Story creator** is one screen: 6 character cards on top, 4 theme cards in middle, optional name input at bottom, big "Make my story" button. No multi-step wizard.
+- **Story creator** is one screen: 6 character cards on top, the active theme cards in middle (fetched from `/api/themes`), optional name input at bottom, big "Make my story" button. No multi-step wizard. Keep active themes to ~6 or the button falls below the fold.
 - **Generating screen**: shows the chosen character avatar with a soft pulse animation + a Telugu/English line like "నీ కథ సిద్ధం అవుతోంది..." / "Your story is coming...". No spinner — use the character.
 - **Generation failure**: if offline or API error, show the chosen character with a sad-but-cute look and "Let's try after wifi comes back!" with a button back to home.
 - **Content viewer** auto-plays audio when the screen opens (curated only — generated stories have no audio in MVP). Big play/pause button at bottom center.
@@ -272,7 +283,7 @@ type Theme = {
 
 ## Character set (MVP — locked)
 
-These 6 hero animals + 4 themes are the entire creator surface area. Don't add more without my approval.
+These 6 hero animals are the entire character surface area. Don't add more without my approval. **Themes are no longer locked** — they are operator-managed (see below).
 
 **Characters:**
 1. `rabbit` — Mishti (curious, gentle)
@@ -282,11 +293,13 @@ These 6 hero animals + 4 themes are the entire creator surface area. Don't add m
 5. `tortoise` — Dheera (patient, wise, slow)
 6. `parrot` — Mitthu (talkative, observant)
 
-**Themes:**
-1. `be_brave` — facing something scary
-2. `help_friend` — helping someone in trouble
-3. `find_lost` — searching for something missing
-4. `learn_new` — discovering something new about the world
+**Themes (seeded, operator-managed — approved 2026-10-17):**
+1. `sharing` — sharing something precious with others
+2. `friendship` — making or keeping a friend
+3. `be_brave` — facing something scary
+4. `good_habits` — learning a good everyday habit
+
+Archived (hidden from pickers and filter chips, still resolving by id so existing stories keep their label): `help_friend`, `find_lost`, `learn_new`.
 
 Each character has a locked `prompt_descriptor` that DALL-E uses for visual consistency across generations. **Never modify these descriptors without regenerating reference images** — character continuity matters.
 
@@ -393,7 +406,7 @@ npm run db:init      # one-time Postgres schema creation (scripts/init-db.mjs)
 - Analytics of any kind
 - Audio narration for generated stories (text only — curated stories have audio)
 - Custom character creation by the child (locked to the 6 animals)
-- Custom theme entry (locked to the 4 themes)
+- Theme creation or naming **by the child** (they only select; operators manage the set via `/admin/themes` — approved 2026-10-17)
 - Migrating old localStorage-cached generated stories into the new backend gallery
 
 If a feature request touches any of the above, **stop and ask me** before implementing.
@@ -411,4 +424,4 @@ These are not decided yet — flag if relevant to your work and I'll choose:
 
 ---
 
-_Last updated: 2026-09-27. Update this file whenever a scope decision changes._
+_Last updated: 2026-10-17. Update this file whenever a scope decision changes._
