@@ -7,11 +7,17 @@
 	import type { Fact } from '$lib/types';
 
 	let facts = $state<Fact[]>([]);
+	let loading = $state(true);
+	let failed = $state(false);
 
 	$effect(() => {
-		if ($language) {
-			loadFacts($language).then((f) => (facts = f));
-		}
+		if (!$language) return;
+		loading = true;
+		failed = false;
+		loadFacts($language)
+			.then((f) => (facts = f))
+			.catch(() => (failed = true))
+			.finally(() => (loading = false));
 	});
 
 	const te = $derived($language === 'te');
@@ -31,7 +37,15 @@
 		</h1>
 	</header>
 
-	{#if facts.length === 0}
+	{#if loading}
+		<p class="text-center text-gray-400 mt-12 text-xl" lang={te ? 'te' : undefined}>
+			{te ? 'విషయాలు వస్తున్నాయి...' : 'Loading facts...'}
+		</p>
+	{:else if failed}
+		<p class="text-center text-gray-400 mt-12 text-xl" lang={te ? 'te' : undefined}>
+			{te ? 'విషయాల కోసం వైఫై కావాలి.' : 'We need wifi to load facts.'}
+		</p>
+	{:else if facts.length === 0}
 		<p class="text-center text-gray-400 mt-12 text-xl">No facts yet!</p>
 	{:else}
 		<div class="flex flex-col gap-3">
