@@ -254,3 +254,19 @@ export async function deleteFact(id: string): Promise<void> {
 	const q = sql();
 	await q`DELETE FROM facts WHERE id = ${id}`;
 }
+
+/**
+ * Overwrite a fact's JSONB and re-sync the promoted columns that mirror it, the way
+ * updateStory and setFactStatus keep column and blob in step.
+ */
+export async function updateFact(fact: FactRecord): Promise<void> {
+	const q = sql();
+	await q`
+		UPDATE facts
+		SET fact = ${JSON.stringify(fact)},
+		    topic = ${fact.topic},
+		    status = ${fact.status},
+		    cover_url = ${fact.cover_image_url}
+		WHERE id = ${fact.id}
+	`;
+}
