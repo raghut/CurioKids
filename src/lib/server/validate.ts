@@ -1,5 +1,7 @@
 import { characters } from '$lib/data/characters';
 import type { AgeBand, Character, Language, Theme, Tone } from '$lib/types';
+import { ILLUSTRATION_LEVELS, type IllustrationLevel } from './factImages';
+import { MAX_SECTIONS } from './factParse';
 
 type Ok = {
 	ok: true;
@@ -147,5 +149,54 @@ export function validateAdminBrief(body: unknown, themes: Theme[]): AdminBriefOk
 		setting: sanitizeText(b.setting, FIELD_MAX),
 		moralFocus: sanitizeText(b.moral_focus, FIELD_MAX),
 		extra: sanitizeExtra(b.extra)
+	};
+}
+
+export type FactBriefOk = {
+	ok: true;
+	brief: string;
+	topic: string;
+	languages: Language[];
+	illustration: IllustrationLevel;
+	sectionTarget: number;
+};
+
+const BRIEF_MAX = 300;
+const TOPIC_MAX = 40;
+
+/**
+ * Validate the admin fact brief. Pure. The brief steers the topic only — the safety
+ * rules and the output contract live in factPrompt.ts's locked floor and cannot be
+ * reached from here.
+ */
+export function validateFactBrief(body: unknown): FactBriefOk | Err {
+	const b = (body !== null && typeof body === 'object' ? body : {}) as Record<string, unknown>;
+	const err = (message: string): Err => ({ ok: false, code: 'invalid_input', message });
+
+	const brief = sanitizeText(b.brief, BRIEF_MAX);
+	if (!brief) return err('Please write what the fact should explain.');
+
+	const topic = sanitizeText(b.topic, TOPIC_MAX);
+	if (!topic) return err('Please give the fact a topic.');
+
+	const langs = Array.isArray(b.languages) ? b.languages : [];
+	if (!langs.length) return err('Pick at least one language.');
+	if (!langs.every((l) => LANGUAGES.includes(l as Language))) return err('Unknown language.');
+
+	const illustration = b.illustration as IllustrationLevel;
+	if (!ILLUSTRATION_LEVELS.includes(illustration)) return err('Pick how much to illustrate.');
+
+	const sectionTarget = Number(b.section_target);
+	if (!Number.isInteger(sectionTarget) || sectionTarget < 1 || sectionTarget > MAX_SECTIONS) {
+		return err(`Pick between 1 and ${MAX_SECTIONS} screens.`);
+	}
+
+	return {
+		ok: true,
+		brief,
+		topic,
+		languages: langs as Language[],
+		illustration,
+		sectionTarget
 	};
 }

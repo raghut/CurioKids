@@ -134,3 +134,56 @@ export type PromptOverride = {
 	body: string;
 	updated_at: string;
 };
+
+// --- Admin-driven facts (stored shape) -------------------------------------------
+// A fact is ONE row holding every language. The section structure — types and image
+// prompts — lives outside `content`, so every language shares it by construction and
+// a single `section_images` array is valid for all of them.
+
+/** Language-neutral: what this section IS, and the prompt behind its picture. */
+export type FactStructureSection = {
+	type: 'question' | 'discovery' | 'fun_facts' | 'lesson';
+	/** Only ever set for question/discovery. '' or absent means this section has no picture. */
+	image_prompt?: string;
+};
+
+/** One language's words for one section. Positionally matched to the structure. */
+export type FactContentSection = { text?: string; items?: string[] };
+
+/** One language's words for the whole fact. */
+export type FactContent = {
+	title: string;
+	subtitle?: string;
+	sections: FactContentSection[];
+	reflection_question: string;
+	real_world_mission: string;
+};
+
+export type FactRecord = {
+	id: string;
+	type: 'nature_fact';
+	topic: string;
+	age_range: '5-8';
+	status: 'draft' | 'published';
+	cover_image_url: string;
+	/** The rendered prompt behind the cover, so a later increment can regenerate it. */
+	cover_prompt?: string;
+	/** Shared across languages; index-aligned with `structure`. '' where there is none. */
+	section_images: string[];
+	structure: FactStructureSection[];
+	/** Language code -> that language's words. At least one key; may be partially filled. */
+	content: Partial<Record<Language, FactContent>>;
+	created_at: string;
+};
+
+/** The admin list row. Shows which languages exist so a gap is visible, not silent. */
+export type AdminFactSummary = {
+	id: string;
+	topic: string;
+	title: string;
+	cover_url: string;
+	status: 'draft' | 'published';
+	languages: Language[];
+	section_count: number;
+	created_at: string;
+};

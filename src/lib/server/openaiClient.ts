@@ -72,10 +72,11 @@ export function parseStoryJson(content: string, expectedPages = 5): StoryTextRes
  * Generate the story text with gpt-4o-mini. Uses response_format json_object
  * to guarantee parseable output.
  */
-export async function generateStoryText(
-	messages: ChatMessage[],
-	expectedPages = 5
-): Promise<StoryTextResult> {
+/**
+ * One chat completion returning raw JSON text. Callers parse and validate it
+ * themselves, which keeps those contracts pure and unit-testable.
+ */
+export async function chatJson(messages: ChatMessage[], temperature = 0.8): Promise<string> {
 	const res = await fetch(`${OPENAI_BASE}/chat/completions`, {
 		method: 'POST',
 		headers: {
@@ -85,7 +86,7 @@ export async function generateStoryText(
 		body: JSON.stringify({
 			model: 'gpt-4o-mini',
 			messages,
-			temperature: 0.8,
+			temperature,
 			response_format: { type: 'json_object' }
 		})
 	});
@@ -98,8 +99,14 @@ export async function generateStoryText(
 	const data = await res.json();
 	const content = data?.choices?.[0]?.message?.content;
 	if (!content) throw new Error('OpenAI chat returned no content');
+	return content;
+}
 
-	return parseStoryJson(content, expectedPages);
+export async function generateStoryText(
+	messages: ChatMessage[],
+	expectedPages = 5
+): Promise<StoryTextResult> {
+	return parseStoryJson(await chatJson(messages), expectedPages);
 }
 
 /**

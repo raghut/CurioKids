@@ -139,6 +139,59 @@ describe('validateAdminBrief', () => {
 	});
 });
 
+import { validateFactBrief } from './validate';
+
+describe('validateFactBrief', () => {
+	const base = {
+		brief: 'why do ants walk in a line',
+		topic: 'Ants',
+		languages: ['en', 'te'],
+		illustration: 'cover_plus',
+		section_target: 4
+	};
+
+	it('accepts a good brief', () => {
+		const r = validateFactBrief(base);
+		expect(r.ok).toBe(true);
+		if (r.ok) {
+			expect(r.topic).toBe('Ants');
+			expect(r.languages).toEqual(['en', 'te']);
+			expect(r.illustration).toBe('cover_plus');
+			expect(r.sectionTarget).toBe(4);
+		}
+	});
+
+	it('rejects a blank brief or topic', () => {
+		expect(validateFactBrief({ ...base, brief: '   ' }).ok).toBe(false);
+		expect(validateFactBrief({ ...base, topic: '' }).ok).toBe(false);
+	});
+
+	it('sanitises the brief like other operator free text', () => {
+		const r = validateFactBrief({ ...base, brief: '  why do  "ants"  walk  ' });
+		expect(r.ok).toBe(true);
+		if (r.ok) expect(r.brief).toBe('why do ants walk');
+	});
+
+	it('rejects an unknown illustration level', () => {
+		expect(validateFactBrief({ ...base, illustration: 'all_the_pictures' }).ok).toBe(false);
+	});
+
+	it('rejects an unknown language and an empty language list', () => {
+		expect(validateFactBrief({ ...base, languages: ['en', 'fr'] }).ok).toBe(false);
+		expect(validateFactBrief({ ...base, languages: [] }).ok).toBe(false);
+	});
+
+	it('rejects a section target outside 1..10', () => {
+		expect(validateFactBrief({ ...base, section_target: 0 }).ok).toBe(false);
+		expect(validateFactBrief({ ...base, section_target: 11 }).ok).toBe(false);
+		expect(validateFactBrief({ ...base, section_target: 'four' }).ok).toBe(false);
+	});
+
+	it('rejects a null body', () => {
+		expect(validateFactBrief(null).ok).toBe(false);
+	});
+});
+
 describe('theme validation against the resolved list', () => {
 	it('accepts an active theme', () => {
 		const r = validateGenerateRequest(

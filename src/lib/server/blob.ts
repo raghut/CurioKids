@@ -4,11 +4,11 @@ import { env } from '$env/dynamic/private';
 /**
  * Upload JPEG bytes to Vercel Blob and return the public URL.
  * `key` is a human-readable prefix (e.g. "story-<id>-cover"); a random suffix
- * is added to avoid collisions.
+ * is added to avoid collisions. `folder` separates content types in the bucket.
  */
-export async function uploadImage(bytes: Buffer, key: string): Promise<string> {
+export async function uploadImage(bytes: Buffer, key: string, folder = 'stories'): Promise<string> {
 	if (!env.BLOB_READ_WRITE_TOKEN) throw new Error('BLOB_READ_WRITE_TOKEN not configured');
-	const { url } = await put(`stories/${key}.jpg`, bytes, {
+	const { url } = await put(`${folder}/${key}.jpg`, bytes, {
 		access: 'public',
 		contentType: 'image/jpeg',
 		token: env.BLOB_READ_WRITE_TOKEN,

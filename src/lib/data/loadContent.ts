@@ -1,14 +1,18 @@
 import type { Fact, Story, Language } from '$lib/types';
 
 export async function loadFacts(language: Language): Promise<Fact[]> {
-	const response = await fetch(`/content/facts/${language}/index.json`);
-	if (!response.ok) return [];
-	return response.json();
+	const response = await fetch(`/api/facts?language=${language}`);
+	if (!response.ok) throw new Error('facts load failed');
+	const data = (await response.json()) as { facts: Fact[] };
+	return data.facts;
 }
 
 export async function loadFact(id: string, language: Language): Promise<Fact | null> {
-	const facts = await loadFacts(language);
-	return facts.find((f) => f.id === id) ?? null;
+	const response = await fetch(`/api/facts/${id}?language=${language}`);
+	if (response.status === 404) return null;
+	if (!response.ok) throw new Error('fact load failed');
+	const data = (await response.json()) as { fact: Fact };
+	return data.fact;
 }
 
 export async function loadStories(language: Language): Promise<Story[]> {
