@@ -6,7 +6,7 @@ import { parseFactJson } from '$lib/server/factParse';
 import { imagePlan } from '$lib/server/factImages';
 import { chatJson, generateImage } from '$lib/server/openaiClient';
 import { uploadImage } from '$lib/server/blob';
-import { insertFact, listFactsAdmin } from '$lib/server/db';
+import { insertFact } from '$lib/server/db';
 import type { FactRecord } from '$lib/types';
 
 // Auth is enforced by hooks.server.ts (all /api/admin/* need a valid admin cookie).
@@ -20,15 +20,6 @@ type ErrorCode = 'invalid_input' | 'openai_failed' | 'server_error';
 function fail(code: ErrorCode, message: string, status: number) {
 	return json({ error: code, message }, { status });
 }
-
-export const GET: RequestHandler = async () => {
-	try {
-		return json({ facts: await listFactsAdmin() });
-	} catch (err) {
-		console.error('admin fact list failed:', err instanceof Error ? err.message : 'unknown');
-		return fail('server_error', 'Could not load facts.', 500);
-	}
-};
 
 export const POST: RequestHandler = async ({ request }) => {
 	let body: unknown;
