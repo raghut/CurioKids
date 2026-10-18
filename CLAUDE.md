@@ -13,7 +13,7 @@
 ## Mission
 
 Build a calm, hybrid-offline curiosity app for children aged 5–8, starting with my daughter Geethadhya (age 7) as the first user. The app has three content modes:
-1. **Nature facts** (Pillar 2) — hand-curated, bundled in app, fully offline
+1. **Nature facts** (Pillar 2) — generated from a brief in the admin dashboard, stored server-side (Postgres + Blob) as of 2026-10-18. Requires network until the offline-cache increment lands.
 2. **Curated stories** (Pillar 1A) — hand-curated, bundled in app, fully offline
 3. **Generated stories** (Pillar 1B) — child picks a character + theme, OpenAI generates a 5-page story with cover illustration. Requires network. Result cached locally for offline re-read.
 
@@ -24,7 +24,7 @@ Full product strategy is in `docs/strategy.md`. **Always re-read it if you're un
 ## Hard scope rules
 
 ### Always
-- Keep facts and curated stories **fully offline**. JSON, images, audio bundled in the app.
+- Keep **curated stories** fully offline. JSON, images, audio bundled in the app. **Facts are no longer offline** (amended 2026-10-18) — they are server-driven; an offline cache is a planned later increment.
 - Generated stories require network — but **fail gracefully** when offline (show friendly "we need wifi for this" screen with the curated stories highlighted instead).
 - Generated stories are stored server-side in **Postgres (Neon)** as a shared gallery, with cover (and optionally per-page) images uploaded to **Vercel Blob**. Every device reads the same shared gallery — there is no per-device story cache.
 - Route all OpenAI calls through the **single serverless function** `/api/generate-story`. Never embed `OPENAI_API_KEY` in client code or commit it to git. Two additional read-only endpoints, `/api/stories` (list) and `/api/stories/[id]` (single story), serve the shared gallery from Postgres.
@@ -45,7 +45,7 @@ Full product strategy is in `docs/strategy.md`. **Always re-read it if you're un
 - Never add a settings page with more than language reset.
 - Never add infinite scroll, badges, streaks, points, leaderboards, or any gamification.
 - Never assume the parent is present. The child operates the app alone.
-- Never auto-translate curated content between English and Telugu. Each language has its own hand-crafted JSON. (Generated stories are an exception — the OpenAI prompt specifies the language directly.)
+- Never auto-translate **hand-authored curated** content between English and Telugu. Each language has its own hand-crafted JSON. (Generated content is the exception: a generated story names its language in the prompt, and a generated **fact** returns every language from one call — necessarily a translation relationship, which is what lets all languages share one set of images.)
 
 ## Tech stack (locked)
 
@@ -62,6 +62,8 @@ Full product strategy is in `docs/strategy.md`. **Always re-read it if you're un
   - `src/routes/api/stories/[id]/+server.ts` — GET, returns one full generated story (the JSONB blob) by id.
   - `src/routes/api/verify-code/+server.ts` — POST `{code}`, returns `{ok}` (200) or 401. UX-only helper so the create screen can validate the family passcode at unlock time; the real enforcement is inside `generate-story`.
   - `src/routes/api/themes/+server.ts` — GET, the **active** theme list as `{id, label_en, label_te}` for the kid create screen and the stories filter chips. `goal_hint` is deliberately withheld — it is prompt-internal. Admin CRUD is form actions on `/admin/themes` (`?/save`, `?/create`, `?/remove`), like `/admin/prompts` — there is no `/api/admin/themes`.
+  - `src/routes/api/facts/+server.ts` — GET `?language=`, the published fact list **flattened to that language**. `src/routes/api/facts/[id]/+server.ts` — GET one fact the same way. Both public and read-only, like `/api/stories`.
+  - `src/routes/api/admin/facts/+server.ts` — POST, generate a fact from a brief (one text call for every language, then the planned images). `src/routes/api/admin/facts/[id]/+server.ts` — POST publish/unpublish, DELETE (row + Blob images).
 - **Database**: Postgres via **Neon** (`@neondatabase/serverless`), a `stories` table storing the full `GeneratedStory` as a JSONB column plus a few promoted columns (`id`, `language`, `title`, `cover_url`, `age_tag`, `created_at`) for cheap listing/filtering/counting, plus a `prompt_templates` table and a `themes` table holding operator overrides. This is anonymous shared storage for the gallery — not a user database (no auth, no accounts).
 - **Image storage**: **Vercel Blob** (`@vercel/blob`) holds cover images and, when enabled, per-page images as public JPEG URLs.
 - **AI**: OpenAI `gpt-4o-mini` for story text (cheap, fast, good enough). OpenAI `gpt-image-1` for cover + optional per-page images. Use `gpt-4o` only if `mini` quality is visibly bad in testing.
@@ -80,6 +82,10 @@ Full product strategy is in `docs/strategy.md`. **Always re-read it if you're un
 - **Stories filters (approved 2026-10-17, revised same day):** `/stories` has three filters — age band (`2-4`/`5-6`/`7-8`), theme (the active list), and not-read-yet — single-select, tap again to clear, combined with AND. They live **behind a filter icon in the header**, not as an always-visible chip row: the first cut cost 30–40% of the screen before a child saw a single cover. Tapping the icon opens a **full-screen overlay** with the three sections, a **Clear** button and a **Show stories** button; choices are held as a draft and nothing changes behind the sheet until Show stories is pressed, and dismissing with X discards them. A **coral dot on the icon** is the only signal that the grid is narrowed — without it a short grid reads as missing stories. Filter state lives in **URL query params** (`/stories?age=7-8&theme=sharing&unread=1`), session-only: nothing in localStorage, so it survives reading a story and coming back but resets on a fresh entry from home. Filtering is **client-side** over the already-loaded list so chip taps need no spinner. A story whose `theme_id` matches no active theme (i.e. an archived one) stays in the grid but is unreachable by a chip — that is what archiving means. Legacy `age_tag: '5-8'` rows match **both** the `5-6` and `7-8` chips. Saved filter preferences and multi-user profiles are a later phase.
 - **2-4 prompt (approved 2026-09-29):** the `2-4` story template is built around character consistency — a character bible, one moment per illustration, and a rule that every `image_prompt` names every character taking part and fully re-describes all of them **except the hero**. The hero is deliberately not re-described there because the image template already supplies its fixed `{{hero_descriptor}}`, and two descriptions in one call contradict each other.
 - **Preview as a child (approved 2026-09-28):** `/admin/stories/[id]/preview` renders the story through `StoryReader` — the *same* component the child's `/stories/[id]` route uses — with a **Mobile / Desktop** toggle (phone-width frame vs full width). It loads via `getStoryAdmin`, so drafts preview too, and Done rewinds instead of marking progress. Sharing one component is the point: a second copy of the viewer would drift and the preview would stop telling the truth. This is an admin tool and does **not** count against the 6-screen kid UX rule.
+- **Admin-driven facts (approved 2026-10-18):** the Why? section is **server-driven**. An operator writes a brief at `/admin/facts/create`, picks the languages, how many screens (**1–10**, so a "how things work" explainer can run long) and how much to illustrate; **one `gpt-4o-mini` call returns every language at once** and the planned `gpt-image-1` images are generated and uploaded to Blob. Facts insert as `draft` and are published from `/admin/facts`.
+  **One row holds every language.** The section *structure* — each section's type and the prompt behind its picture — lives **outside** `content`, so every language shares it by construction and **one set of images is shared across all languages** (a picture of ants doesn't change between English and Telugu). Adding a third language is a key in `content`, not a migration.
+  **Storage is bilingual; delivery is not.** `/api/facts` flattens a record to the requested language, so the kid-facing `Fact` type, `FactCard`, `SectionRenderer` and both `/facts` routes are unchanged. A fact publishes with **at least one** language and is simply absent from the lists of languages it lacks.
+  **Image spend scales with length**, so the create screen shows an estimate before generating: cover only (~₹4), cover + two steps (~₹12), or every step (~₹4 × (1+n)). Fact prompts are hardcoded in `src/lib/server/factPrompt.ts` with a non-editable safety floor; making them editable is a later increment. Per-fact editing, an offline cache, and giving stories the same multilingual shape are all later increments. **Re-run `npm run db:init`**, then `node --env-file=.env scripts/import-facts.mjs` once to bring the bundled fact across.
 - **Re-tagging a story (approved 2026-10-17):** `/admin/stories/[id]` has a **Tags** section that changes an existing story's `theme_id` and `age_tag` — the two fields the `/stories` filter chips read. Validated server-side by `retag.ts` against the **active** themes and the three real age bands, so a story can be moved *off* a retired theme but never onto one, and the legacy `'5-8'` value cannot be re-applied. `retagStory` writes the promoted `age_tag` column and both JSONB fields together, the way `setStoryStatus` does. A story whose current theme is archived shows it as an unselectable placeholder so the operator must pick a replacement. This rewrites **no text and no pictures** — the age band drove the prompt at generation time, so a re-tagged story still reads the way it was written. No model call, no cost.
 - **Per-page editing (approved 2026-09-27):** `/admin/stories/[id]` lets an operator fix a generated story after the fact — edit any page's **text** (a plain save, no model call, no cost) and edit any page's or the cover's **image prompt** and regenerate just that picture (~₹4 each; the replaced image is deleted from Blob). This is why `GeneratedStory` now carries `cover_prompt` and per-page `image_prompt` — the **rendered body** of the prompt, without the locked floor, which is re-applied once on each regeneration. Both fields are optional, so pre-existing stories still load (with empty prompt boxes). Title, moral and reflection question are not editable yet.
 - **Supporting-character consistency:** the story model also returns a `supporting_descriptor` and marks which pages that character appears on (`has_supporting`). Its description is added to those page prompts only — consistent where it belongs, absent from scenes the text never puts it in. The image templates take an optional `{{supporting_descriptor}}`; `renderTemplate` drops a whole line whose placeholder is empty, so a story without a side character loses the sentence cleanly.
@@ -95,7 +101,7 @@ curiokids/
       +layout.svelte
       +page.svelte                  # home (3 cards: Stories, Why?, Create)
       language/+page.svelte         # language picker
-      facts/+page.svelte             # fact grid
+      facts/+page.svelte             # fact grid (loads from /api/facts)
       facts/[id]/+page.svelte        # fact viewer
       stories/+page.svelte           # curated + generated stories grid
       stories/[id]/+page.svelte      # story viewer
@@ -130,15 +136,20 @@ curiokids/
         assembleStory.ts             # pure GeneratedStory builder
         openaiClient.ts              # server-only OpenAI wrapper
         storyPrompt.ts               # prompt builder (incl. per-page image prompts)
+        factParse.ts                 # pure — validate generated fact JSON
+        factFlatten.ts               # pure — fact record -> one language
+        factImages.ts                # pure — illustration plan + cost estimate
+        factPrompt.ts                # fact prompt + locked safety floor
         themes.ts                    # resolve code defaults + DB overrides; theme queries
         themeRules.ts                # pure merge/slug/sanitise/validate for themes
       types.ts                       # Fact, Story, GeneratedStory, StorySummary, Character, Theme
   scripts/
-    init-db.mjs                      # Postgres schema creation (stories + prompt_templates + themes)
+    init-db.mjs                      # Postgres schema creation (stories + prompt_templates + themes + facts)
+    import-facts.mjs                 # one-time import of the bundled facts (idempotent)
   static/
     content/
       facts/
-        en/fact-001-ants.json
+        en/fact-001-ants.json        # imported into the facts table; no longer read
         te/fact-001-ants.json
       stories/
         en/story-001-bunny.json
