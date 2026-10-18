@@ -46,4 +46,17 @@ await sql`
 	)
 `;
 
-console.log('✅ stories + prompt_templates + themes tables ready');
+await sql`
+	CREATE TABLE IF NOT EXISTS facts (
+		id          text PRIMARY KEY,
+		created_at  timestamptz NOT NULL DEFAULT now(),
+		topic       text NOT NULL,
+		status      text NOT NULL DEFAULT 'draft',
+		cover_url   text NOT NULL DEFAULT '',
+		fact        jsonb NOT NULL
+	)
+`;
+await sql`CREATE INDEX IF NOT EXISTS facts_status_idx ON facts (status)`;
+await sql`CREATE INDEX IF NOT EXISTS facts_created_idx ON facts (created_at DESC)`;
+
+console.log('✅ stories + prompt_templates + themes + facts tables ready');

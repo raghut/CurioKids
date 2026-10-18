@@ -1,6 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import { env } from '$env/dynamic/private';
-import type { GeneratedStory, StorySummary, AdminStorySummary, AgeBand, PromptKind, PromptOverride, Theme } from '$lib/types';
+import type { GeneratedStory, StorySummary, AdminStorySummary, AgeBand, PromptKind, PromptOverride, Theme, FactRecord } from '$lib/types';
 
 function sql() {
 	if (!env.DATABASE_URL) throw new Error('DATABASE_URL not configured');
@@ -197,4 +197,60 @@ export async function countStoriesUsingTheme(id: string): Promise<number> {
 	const q = sql();
 	const rows = await q`SELECT count(*)::int AS n FROM stories WHERE story->>'theme_id' = ${id}`;
 	return (rows[0]?.n as number) ?? 0;
+}
+
+// --- Facts -----------------------------------------------------------------------
+// One row per fact, holding every language. There is deliberately NO language column:
+// language is a filter applied when flattening, not a property of the row.
+
+export async function insertFact(fact: FactRecord): Promise<void> {
+	const q = sql();
+	await q`
+		INSERT INTO facts (id, topic, status, cover_url, fact)
+		VALUES (${fact.id}, ${fact.topic}, ${fact.status}, ${fact.cover_image_url}, ${JSON.stringify(fact)})
+	`;
+}
+
+/** Published records, newest first. The caller flattens to a language. */
+export async function listFactRecords(): Promise<FactRecord[]> {
+	const q = sql();
+	const rows = await q`SELECT fact FROM facts WHERE status = 'published' ORDER BY created_at DESC`;
+	return rows.map((r) => r.fact as FactRecord);
+}
+
+/** One published record, or null. Drafts are treated as not-found for kids. */
+export async function getFactRecord(id: string): Promise<FactRecord | null> {
+	const q = sql();
+	const rows = await q`SELECT fact FROM facts WHERE id = ${id} AND status = 'published'`;
+	return rows.length ? (rows[0].fact as FactRecord) : null;
+}
+
+/** Any status, for admin. */
+export async function getFactRecordAdmin(id: string): Promise<FactRecord | null> {
+	const q = sql();
+	const rows = await q`SELECT fact FROM facts WHERE id = ${id}`;
+	return rows.length ? (rows[0].fact as FactRecord) : null;
+}
+
+/** Every fact, any status, newest first. */
+export async function listFactsAdmin(): Promise<FactRecord[]> {
+	const q = sql();
+	const rows = await q`SELECT fact FROM facts ORDER BY created_at DESC`;
+	return rows.map((r) => r.fact as FactRecord);
+}
+
+export async function setFactStatus(id: string, status: 'draft' | 'published'): Promise<void> {
+	const q = sql();
+	await q`
+		UPDATE facts
+		SET status = ${status},
+		    fact = jsonb_set(fact, '{status}', to_jsonb(${status}::text))
+		WHERE id = ${id}
+	`;
+}
+
+/** Hard-delete a fact row (Blob cleanup is the caller's job). */
+export async function deleteFact(id: string): Promise<void> {
+	const q = sql();
+	await q`DELETE FROM facts WHERE id = ${id}`;
 }
