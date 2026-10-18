@@ -1,5 +1,5 @@
 import type { ChatMessage } from './storyPrompt';
-import type { Language } from '$lib/types';
+import type { FactContent, FactStructureSection, Language } from '$lib/types';
 import { MAX_SECTIONS } from './factParse';
 
 const LANGUAGE_NAMES: Record<Language, string> = { en: 'English', te: 'Telugu' };
@@ -85,4 +85,48 @@ export function buildFactImagePrompt(body: string): string {
 		`Soft watercolour children's book illustration. Warm, calm, gentle colours.`,
 		`No text, no letters, no words anywhere in the image.`
 	].join(' ');
+}
+
+/**
+ * Ask for ONE missing language, given a language the fact already has.
+ *
+ * The structure is fixed and supplied, not re-derived: every language must keep the
+ * same number of sections in the same order, because one shared `section_images`
+ * array is indexed by position.
+ */
+export function buildFactTranslateMessages(
+	source: FactContent,
+	structure: FactStructureSection[],
+	from: Language,
+	to: Language
+): ChatMessage[] {
+	const system = [
+		`You translate short children's nature explainers for readers aged 5 to 8.`,
+		`You write natural ${LANGUAGE_NAMES[to]} - not word-for-word - keeping the same facts, the same order and the same number of sections.`,
+		`You always respond with a single valid JSON object and nothing else.`
+	].join(' ');
+
+	const shape = structure
+		.map((s, i) => `  ${i}: ${s.type === 'fun_facts' ? '{"items": [...]}' : '{"text": "..."}'}`)
+		.join('\n');
+
+	const user = [
+		`Translate this ${LANGUAGE_NAMES[from]} explainer into ${LANGUAGE_NAMES[to]}.`,
+		``,
+		`Return exactly: {"title","subtitle","sections","reflection_question","real_world_mission"}`,
+		`"sections" must have exactly ${structure.length} entries, in this shape:`,
+		shape,
+		``,
+		`LANGUAGE RULES: each sentence max 12 words. Simple words. Active voice. Read-aloud friendly.`,
+		``,
+		`SOURCE (${LANGUAGE_NAMES[from]}):`,
+		JSON.stringify(source),
+		``,
+		LOCKED_FLOOR
+	].join('\n');
+
+	return [
+		{ role: 'system', content: system },
+		{ role: 'user', content: user }
+	];
 }
