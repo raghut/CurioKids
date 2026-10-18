@@ -109,7 +109,12 @@
 											</div>
 										{/if}
 										<div class="min-w-0">
-											<p class="truncate font-semibold text-slate-800">{f.title}</p>
+											<a
+												href="/admin/facts/{f.id}"
+												class="truncate font-semibold text-slate-800 hover:underline"
+											>
+												{f.title}
+											</a>
 											<p class="truncate text-xs text-slate-500">{f.topic}</p>
 										</div>
 									</div>
@@ -187,7 +192,9 @@
 								</div>
 							{/if}
 							<div class="min-w-0 flex-1">
-								<p class="truncate font-semibold text-slate-800">{f.title}</p>
+								<a href="/admin/facts/{f.id}" class="truncate font-semibold text-slate-800 hover:underline">
+									{f.title}
+								</a>
 								<p class="text-xs text-slate-500">
 									{f.topic} ·
 									{#if f.languages.length}
