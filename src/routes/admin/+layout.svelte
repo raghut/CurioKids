@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../layout.css';
-	import { LayoutGrid, LogOut, Menu, X, Plus, SlidersHorizontal, Tags } from 'lucide-svelte';
+	import { LayoutGrid, LogOut, Menu, X, Plus, SlidersHorizontal, Tags, Sprout } from 'lucide-svelte';
 	let { children, data } = $props();
 	let drawerOpen = $state(false);
 
@@ -90,6 +90,13 @@
 			onclick={() => (drawerOpen = false)}
 		>
 			<Tags size={18} strokeWidth={1.5} /> Themes
+		</a>
+		<a
+			href="/admin/facts"
+			class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+			onclick={() => (drawerOpen = false)}
+		>
+			<Sprout size={18} strokeWidth={1.5} /> Facts
 		</a>
 		<form method="POST" action="/admin/login?/logout" class="mt-auto">
 			<button
