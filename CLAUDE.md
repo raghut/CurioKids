@@ -105,7 +105,7 @@ curiokids/
       facts/[id]/+page.svelte        # fact viewer
       stories/+page.svelte           # curated + generated stories grid
       stories/[id]/+page.svelte      # story viewer
-      create/+page.svelte            # story creator: character + theme + name
+      create/+page.svelte            # story creator — route live, entry point hidden (see SHOW_CREATE)
       create/generating/+page.svelte # loading screen while OpenAI responds
       api/
         generate-story/+server.ts    # generates + persists a story to Postgres/Blob
@@ -282,7 +282,7 @@ type Theme = {
 ## UX rules
 
 - **Language picker shows once** on first launch, then never again unless user resets from settings.
-- **Home screen** has exactly 3 cards: Stories, Why? (Facts), Create. Nothing else.
+- **Home screen** has exactly 2 cards: Stories and Why? (Facts). Nothing else. The **Create card is hidden** (2026-10-18) behind `SHOW_CREATE` in `src/routes/+page.svelte` — the route and the whole generation pipeline are intact, so re-enabling is one line. It was 3 cards before, and will be again when Create comes back.
 - **Content list** is a vertical scrolling grid (2 columns on mobile, 3 on tablet). Each tile shows cover + title + ✓ if completed.
 - **Stories grid** shows curated + generated stories together. Generated ones have a tiny "✨" badge.
 - **Story creator** is one screen: 6 character cards on top, the active theme cards in middle (fetched from `/api/themes`), optional name input at bottom, big "Make my story" button. No multi-step wizard. Keep active themes to ~6 or the button falls below the fold.
