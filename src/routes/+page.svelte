@@ -15,10 +15,17 @@
 </script>
 
 <div class="min-h-screen bg-white p-6 flex flex-col">
-	<header class="mb-8">
+	<header class="mb-8 flex items-center justify-between gap-3">
 		<h1 class="text-3xl font-[family-name:var(--font-fraunces)] font-bold text-coral">
 			CurioKids
 		</h1>
+		<button
+			onclick={() => language.reset()}
+			class="grid min-h-[64px] min-w-[64px] place-items-center rounded-full transition-colors hover:bg-gray-100"
+			aria-label="Change language"
+		>
+			<Settings size={26} strokeWidth={1.5} class="text-gray-400" />
+		</button>
 	</header>
 
 	<div class="flex-1 flex flex-col gap-5 max-w-md mx-auto w-full">
@@ -51,14 +58,4 @@
 			</a>
 		{/if}
 	</div>
-
-	<footer class="mt-6 flex justify-end">
-		<button
-			onclick={() => language.reset()}
-			class="p-3 rounded-full hover:bg-gray-100 transition-colors"
-			aria-label="Change language"
-		>
-			<Settings size={24} strokeWidth={1.5} class="text-gray-400" />
-		</button>
-	</footer>
 </div>
