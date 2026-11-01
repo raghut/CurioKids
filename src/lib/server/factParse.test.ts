@@ -5,7 +5,7 @@ function payload(over: Record<string, unknown> = {}) {
 	return JSON.stringify({
 		topic: 'Ants',
 		cover_prompt: 'a line of friendly cartoon ants on a path, watercolour',
-		sections: [
+		structure: [
 			{ type: 'question', image_prompt: 'a child watching ants' },
 			{ type: 'discovery', image_prompt: 'ants following a scent trail' },
 			{ type: 'fun_facts' },
@@ -44,7 +44,7 @@ describe('parseFactJson', () => {
 
 	it('accepts the minimum of one section', () => {
 		const one = payload({
-			sections: [{ type: 'lesson' }],
+			structure: [{ type: 'lesson' }],
 			content: {
 				en: {
 					title: 'T',
@@ -59,7 +59,7 @@ describe('parseFactJson', () => {
 
 	it(`accepts the maximum of ${MAX_SECTIONS} sections`, () => {
 		const many = payload({
-			sections: Array.from({ length: MAX_SECTIONS }, () => ({ type: 'discovery' })),
+			structure: Array.from({ length: MAX_SECTIONS }, () => ({ type: 'discovery' })),
 			content: {
 				en: {
 					title: 'T',
@@ -74,13 +74,13 @@ describe('parseFactJson', () => {
 
 	it('rejects zero sections', () => {
 		expect(() =>
-			parseFactJson(payload({ sections: [], content: { en: { title: 'T', sections: [], reflection_question: 'Q', real_world_mission: 'M' } } }))
+			parseFactJson(payload({ structure: [], content: { en: { title: 'T', sections: [], reflection_question: 'Q', real_world_mission: 'M' } } }))
 		).toThrow(/between 1 and/i);
 	});
 
 	it(`rejects more than ${MAX_SECTIONS} sections`, () => {
 		const tooMany = payload({
-			sections: Array.from({ length: MAX_SECTIONS + 1 }, () => ({ type: 'discovery' })),
+			structure: Array.from({ length: MAX_SECTIONS + 1 }, () => ({ type: 'discovery' })),
 			content: {
 				en: {
 					title: 'T',
@@ -94,7 +94,7 @@ describe('parseFactJson', () => {
 	});
 
 	it('rejects an unknown section type', () => {
-		expect(() => parseFactJson(payload({ sections: [{ type: 'riddle' }] }))).toThrow(/section type/i);
+		expect(() => parseFactJson(payload({ structure: [{ type: 'riddle' }] }))).toThrow(/section type/i);
 	});
 
 	// The shared section_images array is indexed by structure position, so a language
@@ -141,7 +141,7 @@ describe('parseFactJson', () => {
 
 	it('drops an image_prompt on a section type that cannot have a picture', () => {
 		const f = parseFactJson(payload({
-			sections: [
+			structure: [
 				{ type: 'question', image_prompt: 'keep me' },
 				{ type: 'discovery', image_prompt: 'keep me too' },
 				{ type: 'fun_facts', image_prompt: 'drop me' },

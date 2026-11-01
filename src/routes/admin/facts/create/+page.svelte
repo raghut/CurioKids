@@ -4,14 +4,18 @@
 	import type { Language } from '$lib/types';
 
 	// SvelteKit forbids importing $lib/server modules into client code (confirmed by a
-	// failing build), so this mirrors $lib/server/factImages.ts's RUPEES_PER_IMAGE rather
-	// than importing it.
+	// failing build), so these mirror $lib/server/factImages.ts's RUPEES_PER_IMAGE and
+	// $lib/server/factParse.ts's MIN_SECTIONS rather than importing them.
 	const RUPEES_PER_IMAGE = 4;
+	// Fewer screens than this cannot be built from one question, at least one discovery,
+	// one fun_facts and one lesson, so the server rejects it and the estimate below would
+	// quote for a shorter fact than the model could actually produce.
+	const MIN_SCREENS = 4;
 
 	let brief = $state('');
 	let topic = $state('');
 	let languages = $state<Language[]>(['en', 'te']);
-	let screens = $state(4);
+	let screens = $state(MIN_SCREENS);
 	let illustration = $state<'cover' | 'cover_plus' | 'every'>('cover_plus');
 
 	let generating = $state(false);
@@ -29,7 +33,13 @@
 	);
 	const rupees = $derived((1 + pictureCount) * RUPEES_PER_IMAGE);
 
-	const canGenerate = $derived(brief.trim().length > 0 && topic.trim().length > 0 && languages.length > 0);
+	const canGenerate = $derived(
+		brief.trim().length > 0 &&
+			topic.trim().length > 0 &&
+			languages.length > 0 &&
+			screens >= MIN_SCREENS &&
+			screens <= 10
+	);
 
 	const inputClass =
 		'w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-sky-blue focus:ring-2 focus:ring-sky-blue/30';
@@ -111,7 +121,10 @@
 
 		<label class="flex flex-col gap-1.5">
 			<span class="text-sm font-bold text-slate-700">Screens</span>
-			<input type="number" min="1" max="10" bind:value={screens} class="w-32 {inputClass}" />
+			<input type="number" min={MIN_SCREENS} max="10" bind:value={screens} class="w-32 {inputClass}" />
+			<!-- The floor is stated, not just enforced: a rejected 2 with no explanation reads
+			     as a bug, and the operator cannot see the question/discovery/facts/lesson shape. -->
+			<span class="text-xs text-slate-500">{MIN_SCREENS} to 10 — a question, the steps, fun facts, a lesson</span>
 		</label>
 
 		<div class="flex flex-col gap-2">

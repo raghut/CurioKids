@@ -3,6 +3,17 @@ import type { FactContent, FactStructureSection, Language } from '$lib/types';
 /** A fact can run to a ten-screen "how things work" explainer. */
 export const MAX_SECTIONS = 10;
 
+/**
+ * The shortest fact the prompt's own shape allows: one question, at least one
+ * discovery, one fun_facts, one lesson. Asking for fewer screens than this used to
+ * produce a brief the model could not satisfy, so it picked its own length and the
+ * create screen's rupee estimate quoted for a shorter fact than it actually paid for.
+ *
+ * parseFactJson deliberately stays more permissive than this (see below): this is the
+ * floor on what an operator may REQUEST, not on what the parser will accept back.
+ */
+export const MIN_SECTIONS = 4;
+
 const SECTION_TYPES = ['question', 'discovery', 'fun_facts', 'lesson'] as const;
 type SectionType = (typeof SECTION_TYPES)[number];
 
@@ -36,9 +47,12 @@ export function parseFactJson(raw: string): ParsedFact {
 	const topic = String(p.topic ?? '').trim();
 	if (!topic) throw new Error('Fact JSON is missing a topic');
 
-	const rawSections = p.sections;
+	// Read "structure", NOT "sections": each language's words also live under a
+	// "sections" key, and when both arrays shared one name the model reliably folded
+	// the structure into the languages and sent no top-level array at all.
+	const rawSections = p.structure;
 	if (!Array.isArray(rawSections) || rawSections.length < 1 || rawSections.length > MAX_SECTIONS) {
-		throw new Error(`Fact JSON must have between 1 and ${MAX_SECTIONS} sections`);
+		throw new Error(`Fact JSON must have between 1 and ${MAX_SECTIONS} entries in "structure"`);
 	}
 
 	const structure: FactStructureSection[] = rawSections.map((s, i) => {
