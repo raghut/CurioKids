@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildFactMessages } from './factPrompt';
+import { buildFactMessages, type FactBrief } from './factPrompt';
 import { parseFactJson, MIN_SECTIONS } from './factParse';
 
 const brief = {
@@ -9,7 +9,7 @@ const brief = {
 	sectionTarget: 4
 };
 
-function userPrompt(over: Partial<typeof brief> = {}) {
+function userPrompt(over: Partial<FactBrief> = {}) {
 	const msgs = buildFactMessages({ ...brief, ...over, languages: [...(over.languages ?? brief.languages)] });
 	return msgs.find((m) => m.role === 'user')!.content;
 }
@@ -72,6 +72,32 @@ describe('buildFactMessages output contract', () => {
 			expect(user).toContain(`EXACTLY ${MIN_SECTIONS} entries`);
 			expect(user.match(/\{"type": "discovery"/g)).toHaveLength(1);
 			expect(user).toContain('1 discovery entry');
+		});
+	});
+
+	// No wording of this prompt produced trustworthy Telugu on its own: both models
+	// transliterated ("\u0c38\u0c4d\u0c28\u0c47\u0c32\u0c4d" for snail) or invented words ("\u0c1c\u0c3e\u0c32\u0c15\u0c4b\u0c23\u0c02" for a web).
+	// Handed the operator's words, both used them: 6 of 6 clean against 1 of 6 without.
+	describe('Telugu words', () => {
+		it('adds the wording rules only when Telugu is asked for', () => {
+			expect(userPrompt()).toContain('WORDS (Telugu)');
+			expect(userPrompt({ languages: ['en'] })).not.toContain('WORDS (Telugu)');
+		});
+
+		it('passes the operator\'s terms through verbatim', () => {
+			const user = userPrompt({ glossary: [{ en: 'snail', te: '\u0c28\u0c24\u0c4d\u0c24' }, { en: 'shell', te: '\u0c2a\u0c46\u0c02\u0c15\u0c41' }] });
+			expect(user).toContain('GLOSSARY (Telugu)');
+			expect(user).toContain('snail = \u0c28\u0c24\u0c4d\u0c24');
+			expect(user).toContain('shell = \u0c2a\u0c46\u0c02\u0c15\u0c41');
+		});
+
+		it('leaves the glossary block out entirely when no terms are given', () => {
+			expect(userPrompt()).not.toContain('GLOSSARY');
+		});
+
+		it('never carries a glossary into an English-only fact', () => {
+			const user = userPrompt({ languages: ['en'], glossary: [{ en: 'snail', te: '\u0c28\u0c24\u0c4d\u0c24' }] });
+			expect(user).not.toContain('GLOSSARY');
 		});
 	});
 

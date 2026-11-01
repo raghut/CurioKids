@@ -1,6 +1,7 @@
 import type { ChatMessage } from './storyPrompt';
 import type { FactContent, FactStructureSection, Language } from '$lib/types';
 import { MIN_SECTIONS } from './factParse';
+import type { GlossaryTerm } from './glossary';
 
 const LANGUAGE_NAMES: Record<Language, string> = { en: 'English', te: 'Telugu' };
 
@@ -17,6 +18,38 @@ const LOCKED_FLOOR = [
 	`OUTPUT: Reply with a single valid JSON object and nothing else.`
 ].join(' ');
 
+/**
+ * Telugu wording rules, plus the operator's glossary when there is one.
+ *
+ * The rules alone barely moved the needle (1 of 6 test facts clean, the same as no rules
+ * at all) — both gpt-4o-mini and gpt-4o still transliterated and invented words. They earn
+ * their place by holding the register steady once the glossary has fixed the key nouns,
+ * which together scored 6 of 6. Shared with the translate prompt, which writes Telugu too.
+ */
+function teWordRules(languages: Language[], glossary: GlossaryTerm[]): string[] {
+	if (!languages.includes('te')) return [];
+	return [
+		``,
+		`WORDS (Telugu) — this matters more than style:`,
+		`Name every thing by the ordinary word a Telugu-speaking family says at home.`,
+		`NEVER spell an English word in Telugu letters. "స్నేల్", "షెల్", "వెబ్" are all wrong.`,
+		`NEVER invent a word. If you are not certain of the Telugu word for something, say it`,
+		`a simpler way using words you are sure of, or describe it in a few plain words.`,
+		`Prefer the everyday spoken word over a literary or Sanskrit one: తేనె, not మధు.`,
+		`A six-year-old must recognise every noun you use.`,
+		`Re-read your Telugu before answering and replace any word a child would not hear at home.`,
+		...(glossary.length
+			? [
+					``,
+					`GLOSSARY (Telugu) — the correct word for each thing, given by a Telugu speaker.`,
+					`Use these exact words wherever the thing is mentioned. Do not substitute them,`,
+					`do not translate them again, do not spell the English word in Telugu letters.`,
+					...glossary.map((t) => `  ${t.en} = ${t.te}`)
+				]
+			: [])
+	];
+}
+
 export type FactBrief = {
 	brief: string;
 	topic: string;
@@ -29,6 +62,11 @@ export type FactBrief = {
 	 * (asked 8, returned 5), which made the create screen's cost estimate wrong.
 	 */
 	sectionTarget: number;
+	/**
+	 * The operator's Telugu words for this fact. Empty is allowed and means the model
+	 * guesses its own vocabulary, which it does badly — see glossary.ts for the numbers.
+	 */
+	glossary?: GlossaryTerm[];
 };
 
 /**
@@ -48,6 +86,8 @@ export function buildFactMessages(b: FactBrief): ChatMessage[] {
 	// past validateFactBrief's floor.
 	const discoveries = Math.max(1, b.sectionTarget - (MIN_SECTIONS - 1));
 	const picture = '<short English picture description>';
+
+	const teWords = teWordRules(b.languages, b.glossary ?? []);
 	const shapeExample = [
 		`  [{"type": "question", "image_prompt": ${picture}},`,
 		...Array.from(
@@ -106,9 +146,10 @@ export function buildFactMessages(b: FactBrief): ChatMessage[] {
 		`  "reflection_question" (one open question, max 15 words),`,
 		`  "real_world_mission" (one thing to go and do outside, max 20 words).`,
 		``,
+		...teWords,
 		`LANGUAGE RULES: each sentence max 12 words. Simple words. Active voice. Read-aloud friendly.`,
 		`Each "discovery" step is 1 to 3 sentences.`,
-		`Write each language naturally — do not translate word for word, but keep the same facts and order.`,
+		`Phrasing may differ between languages. The facts, the order and the NAME of every thing must not.`,
 		``,
 		LOCKED_FLOOR
 	].join('\n');
@@ -158,6 +199,7 @@ export function buildFactTranslateMessages(
 		`"sections" must have exactly ${structure.length} entries, in this shape:`,
 		shape,
 		``,
+		...teWordRules([to], []),
 		`LANGUAGE RULES: each sentence max 12 words. Simple words. Active voice. Read-aloud friendly.`,
 		``,
 		`SOURCE (${LANGUAGE_NAMES[from]}):`,

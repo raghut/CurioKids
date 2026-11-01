@@ -197,6 +197,21 @@ describe('validateFactBrief', () => {
 		expect(validateFactBrief({ ...base, section_target: MAX_SECTIONS }).ok).toBe(true);
 	});
 
+	it('parses the optional Telugu glossary and defaults it to empty', () => {
+		const withTerms = validateFactBrief({ ...base, glossary: 'snail = నత్త' });
+		expect(withTerms.ok && withTerms.glossary).toEqual([{ en: 'snail', te: 'నత్త' }]);
+
+		const without = validateFactBrief(base);
+		expect(without.ok && without.glossary).toEqual([]);
+	});
+
+	// The box is optional, so junk in it must never block a generation.
+	it('accepts a brief whose glossary is unparseable', () => {
+		const r = validateFactBrief({ ...base, glossary: 'no pairs here at all' });
+		expect(r.ok).toBe(true);
+		expect(r.ok && r.glossary).toEqual([]);
+	});
+
 	it('rejects a null body', () => {
 		expect(validateFactBrief(null).ok).toBe(false);
 	});
