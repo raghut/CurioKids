@@ -6,7 +6,7 @@
 	// SvelteKit forbids importing $lib/server modules into client code (confirmed by a
 	// failing build), so these mirror $lib/server/factImages.ts's RUPEES_PER_IMAGE and
 	// $lib/server/factParse.ts's MIN_SECTIONS rather than importing them.
-	const RUPEES_PER_IMAGE = 4;
+	const RUPEES_PER_IMAGE = 1.5;
 	// Fewer screens than this cannot be built from one question, at least one discovery,
 	// one fun_facts and one lesson, so the server rejects it and the estimate below would
 	// quote for a shorter fact than the model could actually produce.

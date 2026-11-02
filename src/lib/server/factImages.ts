@@ -1,7 +1,14 @@
 import type { FactStructureSection } from '$lib/types';
 
 /** Rough per-image cost, used only to warn the operator before they spend it. */
-export const RUPEES_PER_IMAGE = 4;
+/**
+ * One generated picture, in rupees, rounded up.
+ *
+ * gpt-image-2.5-flare billed 439 output tokens for a 1024x1024 medium JPEG at $30/1M,
+ * about $0.013. Rounded up so the estimate the operator sees is never lower than the
+ * bill. Was 4 while the app used gpt-image-1, which cost roughly three times as much.
+ */
+export const RUPEES_PER_IMAGE = 1.5;
 
 export const ILLUSTRATION_LEVELS = ['cover', 'cover_plus', 'every'] as const;
 export type IllustrationLevel = (typeof ILLUSTRATION_LEVELS)[number];

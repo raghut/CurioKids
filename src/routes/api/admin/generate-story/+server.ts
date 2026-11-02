@@ -83,19 +83,26 @@ export const POST: RequestHandler = async ({ request }) => {
 		// model says it actually appears on — so it looks the same wherever it shows up
 		// without wandering into scenes the text never puts it in.
 		const supporting = text.supporting_descriptor?.trim() ?? '';
-		const imagePrompts = [
-			buildAdminCoverPrompt(templates.image_cover, heroDescriptor, text.scene, supporting),
-			...(withPageImages
-				? text.pages.map((pg) =>
-						buildAdminPageImagePrompt(
-							templates.image_page,
-							heroDescriptor,
-							pg.image_prompt,
-							pg.has_supporting ? supporting : ''
-						)
-					)
-				: [])
-		];
+		// Page prompts are built for EVERY band, not only the ones illustrated now. The
+		// prompt is the recipe, and /admin/stories/[id] lets an operator regenerate a single
+		// picture from it later — storing it only when a picture happened to be generated
+		// left every 5-6 and 7-8 story with empty prompt boxes and no way to add art.
+		const pagePrompts = text.pages.map((pg) =>
+			buildAdminPageImagePrompt(
+				templates.image_page,
+				heroDescriptor,
+				pg.image_prompt,
+				pg.has_supporting ? supporting : ''
+			)
+		);
+		const coverPrompt = buildAdminCoverPrompt(
+			templates.image_cover,
+			heroDescriptor,
+			text.scene,
+			supporting
+		);
+		// ...but only the cover, plus the pages this band illustrates, are rendered now.
+		const imagePrompts = [coverPrompt, ...(withPageImages ? pagePrompts : [])];
 
 		// Generate in parallel; a failed image becomes "" for that slot rather than
 		// failing the whole story.
@@ -124,8 +131,8 @@ export const POST: RequestHandler = async ({ request }) => {
 			pageUrls,
 			// Store the editable BODY, not the floored text — the floor is re-applied on
 			// every regeneration, so storing it would double it.
-			coverPrompt: imagePrompts[0].body,
-			pagePrompts: withPageImages ? imagePrompts.slice(1).map((p) => p.body) : [],
+			coverPrompt: coverPrompt.body,
+			pagePrompts: pagePrompts.map((p) => p.body),
 			createdAt: new Date().toISOString(),
 			status: 'draft',
 			age_tag: v.ageBand
