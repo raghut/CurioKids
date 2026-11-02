@@ -40,7 +40,8 @@ export const POST: RequestHandler = async ({ request }) => {
 					brief: v.brief,
 					topic: v.topic,
 					languages: v.languages,
-					sectionTarget: v.sectionTarget
+					sectionTarget: v.sectionTarget,
+					glossary: v.glossary
 				})
 			)
 		);

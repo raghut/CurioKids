@@ -110,9 +110,21 @@ export async function generateStoryText(
 }
 
 /**
- * Generate one image with gpt-image-1 and return the raw JPEG bytes (so the
- * caller can upload to blob storage). We request JPEG at moderate compression
- * to keep stored files small.
+ * The image model, in one place — every picture in the app comes through here.
+ *
+ * Was `gpt-image-1` until it was retired: the generations endpoint began answering
+ * `400 The model 'gpt-image-1' does not exist`, and because a failed image is caught
+ * per-slot and stored as "", facts and stories kept being created with no pictures and
+ * no error for over a month. Measured 2026-11-02 against this key, all of
+ * gpt-image-2.5-flare, gpt-image-2 and gpt-image-1.5 accept the request below
+ * unchanged; flare was the fastest (13.5s vs 42s) and the cheapest
+ * (439 output tokens at $30/1M ~= $0.013, about a third of what gpt-image-1 cost).
+ */
+const IMAGE_MODEL = 'gpt-image-2.5-flare';
+
+/**
+ * Generate one image and return the raw JPEG bytes (so the caller can upload to blob
+ * storage). We request JPEG at moderate compression to keep stored files small.
  */
 export async function generateImage(prompt: string): Promise<Buffer> {
 	const res = await fetch(`${OPENAI_BASE}/images/generations`, {
@@ -122,7 +134,7 @@ export async function generateImage(prompt: string): Promise<Buffer> {
 			Authorization: `Bearer ${apiKey()}`
 		},
 		body: JSON.stringify({
-			model: 'gpt-image-1',
+			model: IMAGE_MODEL,
 			prompt,
 			n: 1,
 			size: '1024x1024',

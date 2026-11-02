@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { validateGenerateRequest } from './validate';
+import { MIN_SECTIONS, MAX_SECTIONS } from './factParse';
 import { themes } from '$lib/data/themes';
 
 describe('validateGenerateRequest', () => {
@@ -181,10 +182,34 @@ describe('validateFactBrief', () => {
 		expect(validateFactBrief({ ...base, languages: [] }).ok).toBe(false);
 	});
 
-	it('rejects a section target outside 1..10', () => {
+	// The floor is 4, not 1: a shorter fact cannot be built from one question, at least one
+	// discovery, one fun_facts and one lesson, and asking for fewer let the model choose its
+	// own length — which made the create screen's rupee estimate quote for the wrong fact.
+	it(`rejects a section target outside ${MIN_SECTIONS}..${MAX_SECTIONS}`, () => {
 		expect(validateFactBrief({ ...base, section_target: 0 }).ok).toBe(false);
-		expect(validateFactBrief({ ...base, section_target: 11 }).ok).toBe(false);
+		expect(validateFactBrief({ ...base, section_target: MIN_SECTIONS - 1 }).ok).toBe(false);
+		expect(validateFactBrief({ ...base, section_target: MAX_SECTIONS + 1 }).ok).toBe(false);
 		expect(validateFactBrief({ ...base, section_target: 'four' }).ok).toBe(false);
+	});
+
+	it(`accepts the ${MIN_SECTIONS}..${MAX_SECTIONS} ends`, () => {
+		expect(validateFactBrief({ ...base, section_target: MIN_SECTIONS }).ok).toBe(true);
+		expect(validateFactBrief({ ...base, section_target: MAX_SECTIONS }).ok).toBe(true);
+	});
+
+	it('parses the optional Telugu glossary and defaults it to empty', () => {
+		const withTerms = validateFactBrief({ ...base, glossary: 'snail = నత్త' });
+		expect(withTerms.ok && withTerms.glossary).toEqual([{ en: 'snail', te: 'నత్త' }]);
+
+		const without = validateFactBrief(base);
+		expect(without.ok && without.glossary).toEqual([]);
+	});
+
+	// The box is optional, so junk in it must never block a generation.
+	it('accepts a brief whose glossary is unparseable', () => {
+		const r = validateFactBrief({ ...base, glossary: 'no pairs here at all' });
+		expect(r.ok).toBe(true);
+		expect(r.ok && r.glossary).toEqual([]);
 	});
 
 	it('rejects a null body', () => {

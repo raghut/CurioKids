@@ -265,7 +265,7 @@
 	{/each}
 
 	<p class="mb-10 text-xs text-slate-400">
-		Text saves are free. Each regenerated picture is a fresh image generation — roughly ₹4 — and
+		Text saves are free. Each regenerated picture is a fresh image generation — roughly ₹1.5 — and
 		replaces the old one.
 	</p>
 </div>

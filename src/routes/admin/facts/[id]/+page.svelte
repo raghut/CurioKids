@@ -183,7 +183,7 @@
 		'w-full rounded-lg border border-slate-300 p-3 text-sm outline-none focus:border-sky-blue focus:ring-2 focus:ring-sky-blue/30';
 	const promptClass = inputClass + ' font-mono text-xs leading-relaxed';
 	const btn = 'inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-bold disabled:opacity-50';
-	const sharedNote = '~₹4. Shared by every language — this changes it everywhere.';
+	const sharedNote = '~₹1.5. Shared by every language — this changes it everywhere.';
 </script>
 
 <svelte:head><title>CurioKids Admin — {fact.topic}</title></svelte:head>
@@ -394,7 +394,7 @@
 	</section>
 
 	<p class="mb-10 text-xs text-slate-400">
-		Word saves are free. Each regenerated picture is a fresh image generation — roughly ₹4 — and
+		Word saves are free. Each regenerated picture is a fresh image generation — roughly ₹1.5 — and
 		replaces the old one everywhere it's used, across every language.
 	</p>
 </div>

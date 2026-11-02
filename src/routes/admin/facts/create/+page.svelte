@@ -4,15 +4,20 @@
 	import type { Language } from '$lib/types';
 
 	// SvelteKit forbids importing $lib/server modules into client code (confirmed by a
-	// failing build), so this mirrors $lib/server/factImages.ts's RUPEES_PER_IMAGE rather
-	// than importing it.
-	const RUPEES_PER_IMAGE = 4;
+	// failing build), so these mirror $lib/server/factImages.ts's RUPEES_PER_IMAGE and
+	// $lib/server/factParse.ts's MIN_SECTIONS rather than importing them.
+	const RUPEES_PER_IMAGE = 1.5;
+	// Fewer screens than this cannot be built from one question, at least one discovery,
+	// one fun_facts and one lesson, so the server rejects it and the estimate below would
+	// quote for a shorter fact than the model could actually produce.
+	const MIN_SCREENS = 4;
 
 	let brief = $state('');
 	let topic = $state('');
 	let languages = $state<Language[]>(['en', 'te']);
-	let screens = $state(4);
+	let screens = $state(MIN_SCREENS);
 	let illustration = $state<'cover' | 'cover_plus' | 'every'>('cover_plus');
+	let glossary = $state('');
 
 	let generating = $state(false);
 	let errorMsg = $state('');
@@ -29,7 +34,13 @@
 	);
 	const rupees = $derived((1 + pictureCount) * RUPEES_PER_IMAGE);
 
-	const canGenerate = $derived(brief.trim().length > 0 && topic.trim().length > 0 && languages.length > 0);
+	const canGenerate = $derived(
+		brief.trim().length > 0 &&
+			topic.trim().length > 0 &&
+			languages.length > 0 &&
+			screens >= MIN_SCREENS &&
+			screens <= 10
+	);
 
 	const inputClass =
 		'w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-sky-blue focus:ring-2 focus:ring-sky-blue/30';
@@ -51,7 +62,8 @@
 					topic,
 					languages,
 					illustration,
-					section_target: screens
+					section_target: screens,
+					glossary
 				})
 			});
 			const data = await res.json();
@@ -109,9 +121,35 @@
 			</div>
 		</div>
 
+		{#if languages.includes('te')}
+			<label class="flex flex-col gap-1.5">
+				<span class="text-sm font-bold text-slate-700">Telugu words <span class="font-normal text-slate-500">(optional)</span></span>
+				<textarea
+					bind:value={glossary}
+					rows="3"
+					placeholder={'snail = \u0c28\u0c24\u0c4d\u0c24\nshell = \u0c2a\u0c46\u0c02\u0c15\u0c41'}
+					class={inputClass}
+				></textarea>
+				<!-- Measured, not guessed: without these the model transliterates ("\u0c38\u0c4d\u0c28\u0c47\u0c32\u0c4d") or
+				     invents words, and only 1 of 6 test facts came back clean. With them, 6 of 6. -->
+				<span class="text-xs text-slate-500">
+					One per line. The model uses these exact words instead of guessing.
+				</span>
+			</label>
+
+			<p class="rounded-lg bg-butter-yellow/40 px-3 py-2 text-xs text-slate-700">
+				Telugu is machine-written. Words you don't list above are the model's guess, and it
+				gets nature words wrong often enough to matter — read the Telugu side by side on the
+				fact's edit page before you publish it.
+			</p>
+		{/if}
+
 		<label class="flex flex-col gap-1.5">
 			<span class="text-sm font-bold text-slate-700">Screens</span>
-			<input type="number" min="1" max="10" bind:value={screens} class="w-32 {inputClass}" />
+			<input type="number" min={MIN_SCREENS} max="10" bind:value={screens} class="w-32 {inputClass}" />
+			<!-- The floor is stated, not just enforced: a rejected 2 with no explanation reads
+			     as a bug, and the operator cannot see the question/discovery/facts/lesson shape. -->
+			<span class="text-xs text-slate-500">{MIN_SCREENS} to 10 — a question, the steps, fun facts, a lesson</span>
 		</label>
 
 		<div class="flex flex-col gap-2">

@@ -1,7 +1,8 @@
 import { characters } from '$lib/data/characters';
 import type { AgeBand, Character, Language, Theme, Tone } from '$lib/types';
 import { ILLUSTRATION_LEVELS, type IllustrationLevel } from './factImages';
-import { MAX_SECTIONS } from './factParse';
+import { MAX_SECTIONS, MIN_SECTIONS } from './factParse';
+import { parseGlossary, type GlossaryTerm } from './glossary';
 
 type Ok = {
 	ok: true;
@@ -159,6 +160,7 @@ export type FactBriefOk = {
 	languages: Language[];
 	illustration: IllustrationLevel;
 	sectionTarget: number;
+	glossary: GlossaryTerm[];
 };
 
 const BRIEF_MAX = 300;
@@ -187,8 +189,8 @@ export function validateFactBrief(body: unknown): FactBriefOk | Err {
 	if (!ILLUSTRATION_LEVELS.includes(illustration)) return err('Pick how much to illustrate.');
 
 	const sectionTarget = Number(b.section_target);
-	if (!Number.isInteger(sectionTarget) || sectionTarget < 1 || sectionTarget > MAX_SECTIONS) {
-		return err(`Pick between 1 and ${MAX_SECTIONS} screens.`);
+	if (!Number.isInteger(sectionTarget) || sectionTarget < MIN_SECTIONS || sectionTarget > MAX_SECTIONS) {
+		return err(`Pick between ${MIN_SECTIONS} and ${MAX_SECTIONS} screens.`);
 	}
 
 	return {
@@ -197,6 +199,9 @@ export function validateFactBrief(body: unknown): FactBriefOk | Err {
 		topic,
 		languages: langs as Language[],
 		illustration,
-		sectionTarget
+		sectionTarget,
+		// Never rejected: an unparseable line is dropped, because a typo in an optional
+		// box should not cost the operator a generation.
+		glossary: parseGlossary(b.glossary)
 	};
 }
