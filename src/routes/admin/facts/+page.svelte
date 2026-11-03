@@ -2,7 +2,7 @@
 	import type { AdminFactSummary } from '$lib/types';
 	import StatusChip from '$lib/components/admin/StatusChip.svelte';
 	import { invalidateAll } from '$app/navigation';
-	import { Trash2, Send, Eye, EyeOff } from 'lucide-svelte';
+	import { Trash2, Send, Eye, EyeOff, Pencil } from 'lucide-svelte';
 
 	let { data } = $props();
 
@@ -150,6 +150,14 @@
 										<div class="flex justify-end gap-1">
 											<a
 												class="grid h-9 w-9 place-items-center rounded-lg text-slate-500 hover:bg-slate-100"
+												title="Edit words and pictures"
+												aria-label="Edit words and pictures"
+												href="/admin/facts/{f.id}"
+											>
+												<Pencil size={17} strokeWidth={1.5} />
+											</a>
+											<a
+												class="grid h-9 w-9 place-items-center rounded-lg text-slate-500 hover:bg-slate-100"
 												title="Preview"
 												aria-label="Preview"
 												href="/admin/facts/{f.id}/preview"
@@ -232,6 +240,12 @@
 							{:else}
 								<a
 									class="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-lg bg-slate-100 text-sm font-semibold text-slate-600"
+									href="/admin/facts/{f.id}"
+								>
+									<Pencil size={16} strokeWidth={1.5} /> Edit
+								</a>
+								<a
+									class="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-lg bg-slate-100 text-sm font-semibold text-slate-600"
 									href="/admin/facts/{f.id}/preview"
 								>
 									<Eye size={16} strokeWidth={1.5} /> Preview
@@ -246,11 +260,14 @@
 										<Send size={16} strokeWidth={1.5} /> Publish
 									{/if}
 								</button>
+								<!-- Icon-only: four labelled actions do not fit a phone row. -->
 								<button
 									class="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-lg bg-coral/15 text-sm font-semibold text-coral"
+									title="Delete"
+									aria-label="Delete"
 									onclick={() => askDelete(f.id)}
 								>
-									<Trash2 size={16} strokeWidth={1.5} /> Delete
+									<Trash2 size={16} strokeWidth={1.5} />
 								</button>
 							{/if}
 						</div>
