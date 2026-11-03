@@ -2,7 +2,7 @@
 	import type { AdminFactSummary } from '$lib/types';
 	import StatusChip from '$lib/components/admin/StatusChip.svelte';
 	import { invalidateAll } from '$app/navigation';
-	import { Trash2, Send, EyeOff } from 'lucide-svelte';
+	import { Trash2, Send, Eye, EyeOff } from 'lucide-svelte';
 
 	let { data } = $props();
 
@@ -148,6 +148,14 @@
 										</div>
 									{:else}
 										<div class="flex justify-end gap-1">
+											<a
+												class="grid h-9 w-9 place-items-center rounded-lg text-slate-500 hover:bg-slate-100"
+												title="Preview"
+												aria-label="Preview"
+												href="/admin/facts/{f.id}/preview"
+											>
+												<Eye size={17} strokeWidth={1.5} />
+											</a>
 											<button
 												class="grid h-9 w-9 place-items-center rounded-lg text-slate-500 hover:bg-slate-100"
 												title={f.status === 'published' ? 'Unpublish' : 'Publish'}
@@ -222,6 +230,12 @@
 									Cancel
 								</button>
 							{:else}
+								<a
+									class="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-lg bg-slate-100 text-sm font-semibold text-slate-600"
+									href="/admin/facts/{f.id}/preview"
+								>
+									<Eye size={16} strokeWidth={1.5} /> Preview
+								</a>
 								<button
 									class="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-lg bg-sky-blue/20 text-sm font-semibold text-slate-700"
 									onclick={() => toggle(f)}

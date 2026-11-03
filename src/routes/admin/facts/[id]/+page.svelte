@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { untrack } from 'svelte';
-	import { ArrowLeft, RefreshCw, Save, Languages } from 'lucide-svelte';
+	import { ArrowLeft, RefreshCw, Save, Languages, Eye } from 'lucide-svelte';
 	import StatusChip from '$lib/components/admin/StatusChip.svelte';
 	import type { PageData } from './$types';
 	import type { FactContentSection, FactRecord, Language } from '$lib/types';
@@ -196,6 +196,12 @@
 	<div class="mb-1 flex flex-wrap items-center gap-3">
 		<h1 class="font-[family-name:var(--font-fraunces)] text-2xl font-bold text-slate-800">{fact.topic}</h1>
 		<StatusChip status={fact.status} />
+		<a
+			href="/admin/facts/{fact.id}/preview"
+			class="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-600 hover:bg-slate-200"
+		>
+			<Eye size={15} strokeWidth={1.5} /> Preview as a child
+		</a>
 	</div>
 	<p class="mb-6 text-sm text-slate-500">
 		{#if presentLanguages.length}
