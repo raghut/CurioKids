@@ -49,6 +49,7 @@
 			realWorldMission={fact.real_world_mission}
 			language={$language ?? 'en'}
 			showClose={false}
+			scene={fact.scene}
 			onDone={done}
 		/>
 	{:else if notFound}

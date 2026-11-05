@@ -1,0 +1,73 @@
+{
+	"id": "fact-water-cycle",
+	"topic": "water cycle",
+	"scene": {
+		"id": "water-cycle",
+		"section_layers": [
+			["rain-cloud", "rain"],
+			["sunbeams"],
+			["sunbeams", "vapor"],
+			["vapor", "cloud"],
+			["rain-cloud", "rain"],
+			["cloud", "stream"],
+			["sunbeams", "vapor", "cloud", "stream"],
+			["sunbeams", "vapor", "cloud", "stream"]
+		]
+	},
+	"structure": [
+		{ "type": "question" },
+		{ "type": "discovery" },
+		{ "type": "discovery" },
+		{ "type": "discovery" },
+		{ "type": "discovery" },
+		{ "type": "discovery" },
+		{ "type": "fun_facts" },
+		{ "type": "lesson" }
+	],
+	"content": {
+		"en": {
+			"title": "Where does rain come from?",
+			"subtitle": "Follow a raindrop's big trip",
+			"sections": [
+				{ "text": "Have you ever wondered where rain comes from? Let's follow the water!" },
+				{ "text": "The sun shines on the sea. Its heat makes the water warm." },
+				{ "text": "Warm water turns into tiny bits called vapor. They are too small to see. They float up into the sky." },
+				{ "text": "High up, the air is cold. The vapor cools down and the tiny bits join together. They make a cloud!" },
+				{ "text": "The cloud keeps filling up. It gets heavy and grey. Then the water falls down as rain." },
+				{ "text": "Rain runs down the hills into streams and rivers. They carry the water back to the sea." },
+				{
+					"items": [
+						"The same water goes round and round, again and again.",
+						"The water you drink today was once inside a cloud!",
+						"A puddle dries up on a sunny day because the sun turns it into vapor."
+					]
+				},
+				{ "text": "The sun, the sky and the sea work together to bring us rain. This is called the water cycle." }
+			],
+			"reflection_question": "Where do you think a puddle goes when it dries up?",
+			"real_world_mission": "Put a little water in a plate and keep it in the sun. Look again after lunch. Where did the water go?"
+		},
+		"te": {
+			"title": "వర్షం ఎక్కడి నుంచి వస్తుంది?",
+			"subtitle": "ఒక వాన చినుకు పెద్ద ప్రయాణం",
+			"sections": [
+				{ "text": "వర్షం ఎక్కడి నుంచి వస్తుందో ఎప్పుడైనా ఆలోచించావా? రా, నీటి వెంట వెళ్దాం!" },
+				{ "text": "సూర్యుడు సముద్రం మీద ప్రకాశిస్తాడు. ఆ వేడికి నీరు వెచ్చగా అవుతుంది." },
+				{ "text": "వెచ్చని నీరు చిన్న చిన్న ఆవిరి కణాలుగా మారుతుంది. అవి కంటికి కనిపించవు. అవి పైకి ఆకాశంలోకి తేలిపోతాయి." },
+				{ "text": "పైన గాలి చల్లగా ఉంటుంది. ఆవిరి చల్లబడి, ఆ చిన్న కణాలు ఒకటిగా కలుస్తాయి. అవి మేఘంగా మారతాయి!" },
+				{ "text": "మేఘం నిండుతూనే ఉంటుంది. అది బరువుగా, బూడిద రంగులోకి మారుతుంది. అప్పుడు నీరు వర్షంగా కిందకు పడుతుంది." },
+				{ "text": "వర్షపు నీరు కొండల మీది నుంచి వాగుల్లోకి, నదుల్లోకి పారుతుంది. అవి ఆ నీటిని మళ్ళీ సముద్రానికి తీసుకెళ్తాయి." },
+				{
+					"items": [
+						"అదే నీరు మళ్ళీ మళ్ళీ ఇలా తిరుగుతూనే ఉంటుంది.",
+						"నువ్వు ఈ రోజు తాగే నీరు ఒకప్పుడు మేఘంలో ఉండేది!",
+						"ఎండ రోజున నీటి గుంట ఆరిపోతుంది, ఎందుకంటే సూర్యుడు దాన్ని ఆవిరిగా మారుస్తాడు."
+					]
+				},
+				{ "text": "సూర్యుడు, ఆకాశం, సముద్రం కలిసి మనకు వర్షాన్ని ఇస్తాయి. దీన్నే జల చక్రం అంటారు." }
+			],
+			"reflection_question": "నీటి గుంట ఆరిపోయినప్పుడు ఆ నీరు ఎక్కడికి వెళ్తుందని నువ్వు అనుకుంటున్నావు?",
+			"real_world_mission": "ఒక పళ్ళెంలో కొంచెం నీరు పోసి ఎండలో పెట్టు. మధ్యాహ్నం భోజనం తర్వాత మళ్ళీ చూడు. నీరు ఎక్కడికి వెళ్ళింది?"
+		}
+	}
+}

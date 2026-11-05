@@ -19,6 +19,20 @@ export type Fact = {
 	sections: FactSection[];
 	reflection_question: string;
 	real_world_mission: string;
+	/** Optional animated scene. See FactScene. Absent = the fact uses still images. */
+	scene?: FactScene;
+};
+
+/**
+ * An animated SVG scene that stays on screen while the child steps through a fact.
+ * `id` names a reviewed Svelte component in src/lib/scenes/ — scenes are code in the
+ * repo, never markup stored in the database. `section_layers[i]` lists which of that
+ * scene's layers are visible on section i; the closing screen reuses the last entry.
+ * Language-neutral, like section_images: English and Telugu share one scene.
+ */
+export type FactScene = {
+	id: string;
+	section_layers: string[][];
 };
 
 export type Story = {
@@ -173,6 +187,8 @@ export type FactRecord = {
 	structure: FactStructureSection[];
 	/** Language code -> that language's words. At least one key; may be partially filled. */
 	content: Partial<Record<Language, FactContent>>;
+	/** Optional animated scene, index-aligned with `structure` like section_images. */
+	scene?: FactScene;
 	created_at: string;
 };
 

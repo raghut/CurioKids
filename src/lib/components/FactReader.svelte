@@ -1,8 +1,9 @@
 <script lang="ts">
 	import SectionRenderer from '$lib/components/SectionRenderer.svelte';
+	import FactScene from '$lib/components/FactScene.svelte';
 	import { swipe } from '$lib/actions/swipe';
 	import { X, ChevronLeft, ChevronRight } from 'lucide-svelte';
-	import type { FactSection, Language } from '$lib/types';
+	import type { FactScene as Scene, FactSection, Language } from '$lib/types';
 
 	/**
 	 * The child's "Why?" experience: one section at a time, then a closing screen with the
@@ -19,6 +20,7 @@
 		closeHref = '/facts',
 		showClose = true,
 		doneLabel = 'Done!',
+		scene,
 		onDone
 	}: {
 		title: string;
@@ -30,6 +32,8 @@
 		/** Off when the host route draws its own header. */
 		showClose?: boolean;
 		doneLabel?: string;
+		/** Optional animated scene; replaces per-section pictures when present. */
+		scene?: Scene;
 		onDone?: () => void;
 	} = $props();
 
@@ -39,6 +43,17 @@
 	const stepCount = $derived(sections.length + 1);
 	const onClosing = $derived(stepIndex === sections.length);
 	const section = $derived(!onClosing ? sections[stepIndex] : null);
+
+	// The scene stays mounted across steps, so its layers fade instead of the whole
+	// picture blinking. The closing screen keeps the last section's layers.
+	const sceneLayers = $derived(
+		scene ? (scene.section_layers[Math.min(stepIndex, sections.length - 1)] ?? []) : []
+	);
+
+	// A fun-facts list and the closing screen are the two tallest steps; with a full-size
+	// scene both pushed the arrows off a 390x844 phone. The list gets a half-size scene;
+	// the closing screen (two boxes and Done) has no room for one at all.
+	const compactScene = $derived(section?.type === 'fun_facts');
 
 	const te = $derived(language === 'te');
 	const lead = $derived(te ? 'leading-[1.6]' : 'leading-relaxed');
@@ -70,6 +85,16 @@
 
 	<h2 class="text-3xl font-bold mb-4" lang={te ? 'te' : undefined}>{title}</h2>
 
+	{#if scene && !onClosing}
+		<div
+			class="mx-auto mb-4 aspect-[680/360] overflow-hidden rounded-2xl transition-[width] duration-700 {compactScene
+				? 'w-1/2'
+				: 'w-full'}"
+		>
+			<FactScene sceneId={scene.id} layers={sceneLayers} />
+		</div>
+	{/if}
+
 	<div class="flex-1 flex flex-col justify-center" use:swipe={{ onLeft: next, onRight: prev }}>
 		{#if onClosing}
 			<div class="flex flex-col gap-4">
@@ -83,7 +108,12 @@
 				</div>
 			</div>
 		{:else if section}
-			<div class="bg-butter/20 rounded-2xl p-6 min-h-[220px] flex flex-col justify-center">
+			<!-- Shorter with a scene above it, so the arrows stay on a phone screen. -->
+			<div
+				class="bg-butter/20 rounded-2xl p-6 {scene
+					? 'min-h-[160px]'
+					: 'min-h-[220px]'} flex flex-col justify-center"
+			>
 				<SectionRenderer {section} {language} />
 			</div>
 		{/if}

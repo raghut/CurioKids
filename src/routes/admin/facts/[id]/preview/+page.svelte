@@ -126,6 +126,7 @@
 							language={lang}
 							closeHref="/admin/facts/{data.id}"
 							doneLabel="Done!"
+							scene={fact.scene}
 							{onDone}
 						/>
 					{/key}
