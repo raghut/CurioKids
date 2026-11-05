@@ -1,0 +1,127 @@
+{
+	"id": "fact-birds-fly",
+	"topic": "how birds fly",
+	"scene": {
+		"id": "bird",
+		"section_layers": [
+			[
+				"flap"
+			],
+			[
+				"flap",
+				"push"
+			],
+			[
+				"flap",
+				"push",
+				"lift"
+			],
+			[
+				"feather"
+			],
+			[
+				"glide"
+			],
+			[
+				"flap",
+				"glide"
+			],
+			[
+				"flap",
+				"push",
+				"lift"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How do birds fly?",
+			"subtitle": "Wings, air and light bones",
+			"sections": [
+				{
+					"text": "Birds zoom through the sky, but we cannot fly by flapping our arms. What makes birds special?"
+				},
+				{
+					"text": "When a bird flaps its wings down, it pushes the air down hard."
+				},
+				{
+					"text": "The air pushes back and lifts the bird up. That is how it rises into the sky!"
+				},
+				{
+					"text": "Birds are very light. Their bones are hollow, and their feathers are light but strong."
+				},
+				{
+					"text": "A bird's wing is curved on top. Air slides over it and helps hold the bird up, so it can glide without flapping."
+				},
+				{
+					"items": [
+						"A hummingbird flaps its wings so fast that they hum!",
+						"Birds steer with their tails.",
+						"Ostriches and penguins are birds that cannot fly."
+					]
+				},
+				{
+					"text": "Birds fly by pushing air down with strong wings. Light bodies and curved wings help them stay up."
+				}
+			],
+			"reflection_question": "If you had wings, where would you fly first?",
+			"real_world_mission": "Watch the crows or pigeons near your home. Are they flapping or gliding? Try to spot both!"
+		},
+		"te": {
+			"title": "పక్షులు ఎలా ఎగురుతాయి?",
+			"subtitle": "రెక్కలు, గాలి, తేలికైన ఎముకలు",
+			"sections": [
+				{
+					"text": "పక్షులు ఆకాశంలో ఎగురుతాయి, కానీ మనం చేతులు ఆడిస్తే ఎగరలేం. పక్షుల్లో ప్రత్యేకత ఏమిటి?"
+				},
+				{
+					"text": "పక్షి రెక్కలను కిందికి కొట్టినప్పుడు, అది గాలిని బలంగా కిందికి తోస్తుంది."
+				},
+				{
+					"text": "గాలి తిరిగి పక్షిని పైకి తోస్తుంది. అలా అది ఆకాశంలోకి లేస్తుంది!"
+				},
+				{
+					"text": "పక్షులు చాలా తేలికగా ఉంటాయి. వాటి ఎముకల లోపల ఖాళీ ఉంటుంది, ఈకలు తేలికగా ఉన్నా బలంగా ఉంటాయి."
+				},
+				{
+					"text": "పక్షి రెక్క పైభాగం వంపుగా ఉంటుంది. గాలి దాని మీదుగా జారుతూ పక్షిని పైకి పట్టుకుంటుంది. అందుకే రెక్కలు ఆడించకుండానే అది జారుతూ ఎగరగలదు."
+				},
+				{
+					"items": [
+						"హమ్మింగ్‌బర్డ్ రెక్కలను ఎంత వేగంగా ఆడిస్తుందంటే, అవి గుయ్ మని శబ్దం చేస్తాయి!",
+						"దిశ మార్చుకోవడానికి పక్షులు తోకను వాడతాయి.",
+						"నిప్పుకోడి, పెంగ్విన్ కూడా పక్షులే, కానీ అవి ఎగరలేవు."
+					]
+				},
+				{
+					"text": "పక్షులు బలమైన రెక్కలతో గాలిని కిందికి తోసి ఎగురుతాయి. తేలికైన శరీరం, వంపు రెక్కలు వాటిని పైన ఉంచుతాయి."
+				}
+			],
+			"reflection_question": "నీకు రెక్కలు ఉంటే, ముందు ఎక్కడికి ఎగురుతావు?",
+			"real_world_mission": "నీ ఇంటి దగ్గర కాకులను లేదా పావురాలను గమనించు. అవి రెక్కలు ఆడిస్తున్నాయా, జారుతున్నాయా? రెండూ కనిపెట్టు!"
+		}
+	}
+}

@@ -1,0 +1,132 @@
+{
+	"id": "fact-wind",
+	"topic": "what makes the wind",
+	"scene": {
+		"id": "wind",
+		"section_layers": [
+			[
+				"kite",
+				"breeze"
+			],
+			[
+				"warm"
+			],
+			[
+				"warm",
+				"rise"
+			],
+			[
+				"warm",
+				"rise",
+				"breeze"
+			],
+			[
+				"rise",
+				"breeze",
+				"loop"
+			],
+			[
+				"breeze",
+				"loop",
+				"kite"
+			],
+			[
+				"warm",
+				"breeze",
+				"loop",
+				"kite"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "What makes the wind blow?",
+			"subtitle": "The sun gets the air moving",
+			"sections": [
+				{
+					"text": "You cannot see the wind, but you can feel it and watch it fly a kite. Where does wind come from?"
+				},
+				{
+					"text": "The sun warms the land. The land warms the air just above it."
+				},
+				{
+					"text": "Warm air is lighter, so it floats up, like a hot-air balloon."
+				},
+				{
+					"text": "Cooler air from the sea rushes in to fill the empty space. That moving air is the wind!"
+				},
+				{
+					"text": "High up, the air cools and moves back over the sea. Then it sinks and comes back. Round and round it goes!"
+				},
+				{
+					"items": [
+						"Near the sea, the breeze blows from the sea in the day and from the land at night.",
+						"Windmills use the wind to make electricity.",
+						"The strongest winds blow during storms."
+					]
+				},
+				{
+					"text": "Wind is air on the move. The sun warms some places more than others, and air rushes around to even things out."
+				}
+			],
+			"reflection_question": "How can you tell which way the wind is blowing?",
+			"real_world_mission": "Tie a ribbon to a stick and hold it up outside. Which way does it point? Try again in the evening!"
+		},
+		"te": {
+			"title": "గాలి ఎందుకు వీస్తుంది?",
+			"subtitle": "సూర్యుడు గాలిని కదిలిస్తాడు",
+			"sections": [
+				{
+					"text": "గాలిని మనం చూడలేం, కానీ అది తగలడం తెలుస్తుంది, గాలిపటం ఎగరడం చూడగలం. గాలి ఎక్కడి నుంచి వస్తుంది?"
+				},
+				{
+					"text": "సూర్యుడు నేలను వేడి చేస్తాడు. నేల తన పైనున్న గాలిని వేడి చేస్తుంది."
+				},
+				{
+					"text": "వేడి గాలి తేలికగా ఉంటుంది, అందుకే అది వేడి గాలి బెలూన్ లాగా పైకి తేలుతుంది."
+				},
+				{
+					"text": "ఖాళీ అయిన చోటును నింపడానికి సముద్రం నుంచి చల్లని గాలి వేగంగా వస్తుంది. కదిలే ఆ గాలినే మనం వీచే గాలి అంటాం!"
+				},
+				{
+					"text": "పైన గాలి చల్లబడి మళ్ళీ సముద్రం వైపు వెళ్తుంది. తర్వాత కిందికి దిగి తిరిగి వస్తుంది. అలా గుండ్రంగా తిరుగుతూనే ఉంటుంది!"
+				},
+				{
+					"items": [
+						"సముద్రం దగ్గర, పగలు సముద్రం నుంచి, రాత్రి నేల నుంచి పిల్లగాలి వీస్తుంది.",
+						"గాలిమరలు గాలితో కరెంటు తయారు చేస్తాయి.",
+						"తుఫానుల సమయంలో అన్నిటికంటే బలమైన గాలులు వీస్తాయి."
+					]
+				},
+				{
+					"text": "గాలి వీయడం అంటే గాలి కదలడమే. సూర్యుడు కొన్ని చోట్లను ఎక్కువగా వేడి చేస్తాడు, అప్పుడు గాలి అటూ ఇటూ కదులుతుంది."
+				}
+			],
+			"reflection_question": "గాలి ఏ వైపు వీస్తోందో నువ్వు ఎలా తెలుసుకుంటావు?",
+			"real_world_mission": "ఒక కర్రకు రిబ్బను కట్టి బయట పైకి పట్టుకో. అది ఏ వైపు చూపిస్తోంది? సాయంత్రం మళ్ళీ ప్రయత్నించు!"
+		}
+	}
+}

@@ -9,6 +9,16 @@ import ButterflyScene from './ButterflyScene.svelte';
 import BeesScene from './BeesScene.svelte';
 import MoonScene from './MoonScene.svelte';
 import ShadowScene from './ShadowScene.svelte';
+import SkyScene from './SkyScene.svelte';
+import FishScene from './FishScene.svelte';
+import BirdScene from './BirdScene.svelte';
+import TeethScene from './TeethScene.svelte';
+import DigestionScene from './DigestionScene.svelte';
+import SpiderScene from './SpiderScene.svelte';
+import BoatScene from './BoatScene.svelte';
+import ThunderScene from './ThunderScene.svelte';
+import VolcanoScene from './VolcanoScene.svelte';
+import WindScene from './WindScene.svelte';
 import CarrotShareScene from './CarrotShareScene.svelte';
 
 type SceneProps = { layers?: string[]; still?: boolean; cover?: boolean };
@@ -28,5 +38,15 @@ export const SCENES: Record<string, Component<SceneProps>> = {
 	bees: BeesScene,
 	moon: MoonScene,
 	shadow: ShadowScene,
+	sky: SkyScene,
+	fish: FishScene,
+	bird: BirdScene,
+	teeth: TeethScene,
+	digestion: DigestionScene,
+	spider: SpiderScene,
+	boat: BoatScene,
+	thunder: ThunderScene,
+	volcano: VolcanoScene,
+	wind: WindScene,
 	'carrot-share': CarrotShareScene
 };

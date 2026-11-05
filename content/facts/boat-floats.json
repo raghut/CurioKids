@@ -1,0 +1,130 @@
+{
+	"id": "fact-boat-floats",
+	"topic": "why boats float",
+	"scene": {
+		"id": "boat",
+		"section_layers": [
+			[
+				"ball",
+				"boat"
+			],
+			[
+				"ball"
+			],
+			[
+				"ball",
+				"boat"
+			],
+			[
+				"boat",
+				"push-aside"
+			],
+			[
+				"boat",
+				"push-up"
+			],
+			[
+				"boat",
+				"push-up",
+				"ship"
+			],
+			[
+				"ball",
+				"boat",
+				"push-up",
+				"ship"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "Why does a boat float?",
+			"subtitle": "It's all about the shape",
+			"sections": [
+				{
+					"text": "A tiny stone sinks in water, but a huge ship floats. How can that be?"
+				},
+				{
+					"text": "Roll some clay into a ball and drop it into water. Plop! It sinks to the bottom."
+				},
+				{
+					"text": "Now shape the same clay into a wide, hollow boat. Put it in the water. It floats!"
+				},
+				{
+					"text": "The wide boat pushes lots of water out of the way. The small ball pushes only a little."
+				},
+				{
+					"text": "Water pushes back up on anything that pushes it aside. If that push is strong enough, the thing floats!"
+				},
+				{
+					"items": [
+						"Giant ships are made of heavy iron, but their wide, hollow shape helps them float.",
+						"If you load a boat with too much, it can sink.",
+						"It is easier to float in salty sea water than in a river."
+					]
+				},
+				{
+					"text": "Shape matters! Something wide and hollow pushes aside lots of water, and the water pushes it up."
+				}
+			],
+			"reflection_question": "Which things in your home do you think would float?",
+			"real_world_mission": "Make a boat from foil and float it in a bucket. Add coins one by one. How many until it sinks?"
+		},
+		"te": {
+			"title": "పడవ ఎందుకు తేలుతుంది?",
+			"subtitle": "అంతా ఆకారంలోనే ఉంది",
+			"sections": [
+				{
+					"text": "చిన్న రాయి నీళ్ళలో మునిగిపోతుంది, కానీ పెద్ద ఓడ తేలుతుంది. అది ఎలా?"
+				},
+				{
+					"text": "కొంచెం బంకమట్టిని బంతిలా చుట్టి నీళ్ళలో వేయి. డుబుక్! అది అడుగుకు మునిగిపోతుంది."
+				},
+				{
+					"text": "ఇప్పుడు అదే బంకమట్టితో వెడల్పైన, లోపల ఖాళీ ఉన్న పడవ చేసి నీళ్ళలో పెట్టు. అది తేలుతుంది!"
+				},
+				{
+					"text": "వెడల్పైన పడవ చాలా నీళ్ళను పక్కకు తోస్తుంది. చిన్న బంతి కొంచెం నీళ్ళను మాత్రమే తోస్తుంది."
+				},
+				{
+					"text": "తనను పక్కకు తోసే దేనినైనా నీళ్ళు తిరిగి పైకి తోస్తాయి. ఆ తోపు సరిపడా బలంగా ఉంటే, అది తేలుతుంది!"
+				},
+				{
+					"items": [
+						"పెద్ద ఓడలు బరువైన ఇనుముతో చేసినవే, కానీ వెడల్పైన, ఖాళీ ఆకారం వాటిని తేలేలా చేస్తుంది.",
+						"పడవలో మరీ ఎక్కువ బరువు పెడితే, అది మునిగిపోవచ్చు.",
+						"నది నీళ్ళ కంటే ఉప్పు సముద్రపు నీళ్ళలో తేలడం సులభం."
+					]
+				},
+				{
+					"text": "ఆకారం ముఖ్యం! వెడల్పుగా, ఖాళీగా ఉన్నది చాలా నీళ్ళను పక్కకు తోస్తుంది, నీళ్ళు దాన్ని పైకి తోస్తాయి."
+				}
+			],
+			"reflection_question": "నీ ఇంట్లో ఏ వస్తువులు తేలుతాయని నువ్వు అనుకుంటున్నావు?",
+			"real_world_mission": "అల్యూమినియం రేకుతో పడవ చేసి బకెట్ నీళ్ళలో తేల్చు. ఒక్కొక్కటిగా నాణేలు పెట్టు. ఎన్ని నాణేలకు అది మునిగింది?"
+		}
+	}
+}

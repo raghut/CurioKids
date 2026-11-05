@@ -73,6 +73,56 @@ export const SCENE_CATALOG: Readonly<Record<string, SceneInfo>> = {
 		layers: ['morning', 'noon', 'evening', 'rays'],
 		cover: ['morning', 'rays']
 	},
+	sky: {
+		label: 'Why the sky is blue',
+		layers: ['sunlight', 'colors', 'scatter', 'blue-sky', 'sunset'],
+		cover: ['sunlight', 'scatter', 'blue-sky']
+	},
+	fish: {
+		label: 'How fish breathe',
+		layers: ['water-in', 'gills', 'oxygen', 'water-out', 'bubbles'],
+		cover: ['water-in', 'gills', 'water-out', 'bubbles']
+	},
+	bird: {
+		label: 'How birds fly',
+		layers: ['flap', 'push', 'lift', 'glide', 'feather'],
+		cover: ['flap', 'push', 'glide']
+	},
+	teeth: {
+		label: 'Milk teeth',
+		layers: ['milk', 'bud', 'rising', 'wobbly', 'peek', 'grown'],
+		cover: ['wobbly', 'rising']
+	},
+	digestion: {
+		label: 'Where food goes',
+		layers: ['mouth', 'pipe', 'stomach', 'intestine', 'energy'],
+		cover: ['mouth', 'pipe', 'stomach', 'intestine']
+	},
+	spider: {
+		label: 'Spider web',
+		layers: ['bridge', 'frame', 'spokes', 'spiral', 'spider', 'silk'],
+		cover: ['bridge', 'frame', 'spokes', 'spiral', 'spider']
+	},
+	boat: {
+		label: 'Why boats float',
+		layers: ['ball', 'boat', 'push-up', 'push-aside', 'ship'],
+		cover: ['ball', 'boat', 'push-up', 'ship']
+	},
+	thunder: {
+		label: 'Lightning and thunder',
+		layers: ['storm', 'lightning', 'light', 'sound', 'count', 'safe'],
+		cover: ['storm', 'lightning', 'sound', 'safe']
+	},
+	volcano: {
+		label: 'Volcano',
+		layers: ['heat', 'magma', 'rise', 'erupt', 'flow', 'cool'],
+		cover: ['magma', 'rise', 'erupt', 'flow']
+	},
+	wind: {
+		label: 'What makes the wind',
+		layers: ['warm', 'rise', 'breeze', 'loop', 'kite'],
+		cover: ['warm', 'breeze', 'loop', 'kite']
+	},
 	// --- Story scenes: stepped by page instead of by section ---
 	'carrot-share': {
 		label: 'Mishti shares a carrot (story)',

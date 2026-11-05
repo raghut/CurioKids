@@ -1,0 +1,129 @@
+{
+	"id": "fact-fish-breathe",
+	"topic": "how fish breathe",
+	"scene": {
+		"id": "fish",
+		"section_layers": [
+			[
+				"bubbles"
+			],
+			[
+				"oxygen"
+			],
+			[
+				"water-in"
+			],
+			[
+				"water-in",
+				"gills",
+				"oxygen"
+			],
+			[
+				"gills",
+				"water-out"
+			],
+			[
+				"water-in",
+				"gills",
+				"water-out",
+				"bubbles"
+			],
+			[
+				"water-in",
+				"gills",
+				"water-out"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How do fish breathe underwater?",
+			"subtitle": "The secret of gills",
+			"sections": [
+				{
+					"text": "We breathe air with our noses. But fish live underwater. How do they breathe?"
+				},
+				{
+					"text": "Water has tiny bits of air mixed inside it. Fish need this air to live."
+				},
+				{
+					"text": "A fish opens its mouth and gulps in water."
+				},
+				{
+					"text": "The water flows over the gills on the sides of its head. The gills catch the air from the water."
+				},
+				{
+					"text": "Then the water goes out through a flap behind the gills. In, over and out, again and again!"
+				},
+				{
+					"items": [
+						"Whales and dolphins live in water, but they are not fish. They come up to breathe air!",
+						"Fish open and close their mouths all the time. That is them breathing.",
+						"Fish need clean water with enough air in it."
+					]
+				},
+				{
+					"text": "Fish breathe with gills. Gills take the air out of the water, so fish can live underwater."
+				}
+			],
+			"reflection_question": "If you could breathe underwater like a fish, where would you swim?",
+			"real_world_mission": "Watch a fish in a tank or pond. How many times does it open its mouth while you count to ten?"
+		},
+		"te": {
+			"title": "చేపలు నీళ్ళలో ఎలా శ్వాస తీసుకుంటాయి?",
+			"subtitle": "మొప్పల రహస్యం",
+			"sections": [
+				{
+					"text": "మనం ముక్కుతో గాలి పీలుస్తాం. కానీ చేపలు నీళ్ళలో ఉంటాయి. అవి ఎలా శ్వాస తీసుకుంటాయి?"
+				},
+				{
+					"text": "నీళ్ళలో గాలి చిన్న చిన్న కణాలుగా కలిసి ఉంటుంది. చేపలు బతకడానికి ఈ గాలి కావాలి."
+				},
+				{
+					"text": "చేప నోరు తెరిచి నీళ్ళను లోపలికి తీసుకుంటుంది."
+				},
+				{
+					"text": "ఆ నీళ్ళు తల పక్కన ఉండే మొప్పల మీదుగా ప్రవహిస్తాయి. మొప్పలు నీళ్ళలోని గాలిని పట్టుకుంటాయి."
+				},
+				{
+					"text": "తర్వాత ఆ నీళ్ళు మొప్పల వెనక ఉన్న మూత ద్వారా బయటికి వెళ్తాయి. లోపలికి, మొప్పల మీదుగా, బయటికి, మళ్ళీ మళ్ళీ!"
+				},
+				{
+					"items": [
+						"తిమింగలాలు, డాల్ఫిన్లు నీళ్ళలో ఉంటాయి, కానీ అవి చేపలు కావు. అవి గాలి పీల్చడానికి పైకి వస్తాయి!",
+						"చేపలు ఎప్పుడూ నోరు తెరిచి మూస్తూ ఉంటాయి. అదే వాటి శ్వాస.",
+						"చేపలకు గాలి బాగా ఉన్న శుభ్రమైన నీళ్ళు కావాలి."
+					]
+				},
+				{
+					"text": "చేపలు మొప్పలతో శ్వాస తీసుకుంటాయి. మొప్పలు నీళ్ళలోని గాలిని తీసుకుంటాయి, అందుకే చేపలు నీళ్ళలో బతకగలవు."
+				}
+			],
+			"reflection_question": "నువ్వు చేపలా నీళ్ళలో శ్వాస తీసుకోగలిగితే, ఎక్కడ ఈదుతావు?",
+			"real_world_mission": "తొట్టిలో లేదా చెరువులో ఒక చేపను గమనించు. నువ్వు పది లెక్కపెట్టే లోపు అది ఎన్నిసార్లు నోరు తెరుస్తుంది?"
+		}
+	}
+}
