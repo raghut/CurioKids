@@ -101,6 +101,7 @@
 				moral={story.moral}
 				language={$language ?? 'en'}
 				showClose={false}
+				scene={story.source === 'generated' ? (story as GeneratedStory).scene : undefined}
 				onDone={done}
 			/>
 		</div>

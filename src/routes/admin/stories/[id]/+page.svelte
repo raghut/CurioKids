@@ -188,6 +188,16 @@
 		{/if}
 	</section>
 
+	{#if story.scene}
+	<!-- Scene stories draw their pictures from code, so there is nothing to regenerate. -->
+	<section class="mb-6 rounded-2xl bg-white p-5 ring-1 ring-slate-200">
+		<h2 class="mb-1 font-bold text-slate-800">Pictures</h2>
+		<p class="text-sm text-slate-500">
+			This story uses the animated scene <code>{story.scene.id}</code>. Its pictures are code in
+			<code>src/lib/scenes/</code>, so they change with a deploy, not here. Page text is still editable below.
+		</p>
+	</section>
+	{:else}
 	<!-- Cover -->
 	<section class="mb-6 rounded-2xl bg-white p-5 ring-1 ring-slate-200">
 		<h2 class="mb-3 font-bold text-slate-800">Cover</h2>
@@ -220,13 +230,16 @@
 			{busy[COVER] === 'image' ? 'Making the picture…' : 'Regenerate cover'}
 		</button>
 	</section>
+	{/if}
 
 	<!-- Pages -->
 	{#each story.pages as p, i (i)}
 		<section class="mb-6 rounded-2xl bg-white p-5 ring-1 ring-slate-200">
 			<h2 class="mb-3 font-bold text-slate-800">Page {i + 1}</h2>
 
-			{#if p.image_url}
+			{#if story.scene}
+				<!-- pictures come from the scene -->
+			{:else if p.image_url}
 				<img src={p.image_url} alt="" class="mb-3 w-full rounded-xl object-cover" />
 			{:else}
 				<p class="mb-3 rounded-lg bg-slate-50 px-3 py-6 text-center text-sm text-slate-400">
@@ -244,6 +257,7 @@
 				{busy[i] === 'text' ? 'Saving…' : 'Save text'}
 			</button>
 
+			{#if !story.scene}
 			<label class="mt-4 flex flex-col gap-1.5">
 				<span class="text-xs font-bold text-slate-600">Picture prompt</span>
 				<textarea bind:value={pagePrompts[i]} rows="4" class={promptClass}
@@ -261,6 +275,7 @@
 				<RefreshCw size={15} strokeWidth={1.5} />
 				{busy[i] === 'image' ? 'Making the picture…' : 'Regenerate picture'}
 			</button>
+			{/if}
 		</section>
 	{/each}
 

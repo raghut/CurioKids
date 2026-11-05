@@ -1,0 +1,30 @@
+{
+  "id": "story-carrot-share",
+  "character_id": "rabbit",
+  "theme_id": "sharing",
+  "age_tag": "5-6",
+  "scene": {
+    "id": "carrot-share",
+    "page_layers": [
+      ["day", "pull"],
+      ["day", "carrot", "sound"],
+      ["day", "carrot", "tortoise"],
+      ["day", "share", "tortoise", "hearts"],
+      ["sunset", "share", "tortoise", "hearts"]
+    ]
+  },
+  "content": {
+    "en": {
+      "title": "Mishti and the Big Carrot",
+      "pages": [
+        { "text": "Mishti the rabbit hopped into her garden one sunny morning. She saw green leaves poking out of the soil. She pulled and pulled with all her might. Out came the biggest, brightest orange carrot she had ever seen!" },
+        { "text": "Mishti hugged her carrot tight. \"This is all mine,\" she whispered. She carried it to her favourite rock under the tree. She opened her mouth for the very first crunch. Then she heard a small, sad sound nearby." },
+        { "text": "Dheera the tortoise was walking slowly past the tree. His tummy was rumbling loudly. \"I walked all night to find food,\" he said softly. \"But the bushes are empty today.\" Mishti looked at Dheera. Then she looked at her carrot." },
+        { "text": "Mishti took a deep breath. She broke the carrot into two pieces. She gave the bigger piece to Dheera. Dheera's eyes grew bright and happy. \"Thank you, Mishti!\" he said. They sat together on the rock and crunched side by side." },
+        { "text": "The sun began to set over the garden. Mishti's half of the carrot was smaller. But her heart felt bigger than ever. \"Sharing made it taste sweeter,\" she said. Dheera smiled a slow, happy smile. Now they were good friends." }
+      ],
+      "moral": "Sharing what we love makes everyone happier, including us.",
+      "reflection_question": "What is something special you could share with a friend?"
+    }
+  }
+}
