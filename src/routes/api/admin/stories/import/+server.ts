@@ -1,6 +1,8 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { parseStoryImport } from '$lib/server/storyImport';
+import { parseStoryImport, uuidFromName } from '$lib/server/storyImport';
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 import { existingStoryIds, insertStory } from '$lib/server/db';
 import { resolveThemes } from '$lib/server/themes';
 
@@ -28,12 +30,18 @@ export const POST: RequestHandler = async ({ request }) => {
 		});
 		if (!r.ok) return json({ error: 'invalid_input', message: r.message }, { status: 400 });
 
+		// A file's readable id ("story-carrot-share-en") becomes a stable uuid, because
+		// stories.id is a uuid column. Random ids are already uuids.
+		for (const s of r.stories) {
+			if (!UUID.test(s.id)) s.id = await uuidFromName(s.id);
+		}
+
 		// Refuse rather than overwrite, and refuse the whole file if any language clashes,
 		// so a re-import never leaves English replaced and Telugu stale.
 		const clash = await existingStoryIds(r.stories.map((s) => s.id));
 		if (clash.length) {
 			return json(
-				{ error: 'conflict', message: `A story with the id "${clash[0]}" already exists.` },
+				{ error: 'conflict', message: 'This story was already imported. Delete it first to import it again.' },
 				{ status: 409 }
 			);
 		}

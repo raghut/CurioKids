@@ -19,7 +19,7 @@ export async function insertStory(story: GeneratedStory): Promise<void> {
 /** Ids from this list that already exist (any status) — the import's no-overwrite guard. */
 export async function existingStoryIds(ids: string[]): Promise<string[]> {
 	const q = sql();
-	const rows = await q`SELECT id FROM stories WHERE id = ANY(${ids})`;
+	const rows = await q`SELECT id FROM stories WHERE id = ANY(${ids}::uuid[])`;
 	return rows.map((r) => r.id as string);
 }
 

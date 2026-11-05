@@ -27,7 +27,8 @@ There is **no OpenAI call and no Blob upload**. The import:
 Preview the story, then publish it from `/admin` as usual. Each language is published
 separately.
 
-An import never overwrites. If any language's id already exists, the whole file is refused.
+An import never overwrites. The same file always gives the same story ids, so importing it twice
+is refused. If any language already exists, the whole file is refused.
 To replace a story, delete it first.
 
 ## The JSON
@@ -36,7 +37,7 @@ See `content/stories/carrot-share.json` for a complete example.
 
 ```jsonc
 {
-  "id": "story-carrot-share",      // optional. Each language's row gets "-en" / "-te" added.
+  "id": "story-carrot-share",      // optional. Each language gets a fixed uuid made from "<id>-en" / "<id>-te".
   "character_id": "rabbit",        // rabbit | peacock | elephant | monkey | tortoise | parrot
   "theme_id": "sharing",           // an ACTIVE theme id (see /admin/themes)
   "age_tag": "5-6",                // 2-4 | 5-6 | 7-8, which the filter chips read
