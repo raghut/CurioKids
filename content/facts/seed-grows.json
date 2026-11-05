@@ -1,0 +1,139 @@
+{
+	"id": "fact-seed-grows",
+	"topic": "seed to plant",
+	"scene": {
+		"id": "seed",
+		"section_layers": [
+			[
+				"leaves"
+			],
+			[],
+			[
+				"water"
+			],
+			[
+				"water",
+				"root"
+			],
+			[
+				"root",
+				"shoot"
+			],
+			[
+				"root",
+				"leaves",
+				"sunlight"
+			],
+			[
+				"root",
+				"flower",
+				"sunlight"
+			],
+			[
+				"root",
+				"flower",
+				"sunlight"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does a seed grow into a plant?",
+			"subtitle": "A baby plant wakes up",
+			"sections": [
+				{
+					"text": "A big plant can grow from a tiny seed. How does that happen?"
+				},
+				{
+					"text": "Inside every seed there is a tiny baby plant, and a little food to help it start growing."
+				},
+				{
+					"text": "When the seed is in the soil and gets water and warmth, the baby plant wakes up."
+				},
+				{
+					"text": "First, a root grows down into the soil. The root holds the plant tight and drinks water."
+				},
+				{
+					"text": "Next, a little shoot pushes up through the soil, reaching for the light."
+				},
+				{
+					"text": "Green leaves open up. Leaves use sunlight, air and water to make food for the plant."
+				},
+				{
+					"items": [
+						"A root always grows down and a shoot always grows up, even if the seed is planted upside down!",
+						"Some seeds are as tiny as dust. A coconut is a giant seed!",
+						"Many plants grow flowers, and flowers make new seeds."
+					]
+				},
+				{
+					"text": "A seed needs water, warmth and sunlight to grow. With a little care, a tiny seed becomes a big plant."
+				}
+			],
+			"reflection_question": "What do you think would happen to a seed kept in a dry, dark box?",
+			"real_world_mission": "Put a few moong beans on wet cotton in a small bowl. Keep the cotton wet and check every day. When do you see a root?"
+		},
+		"te": {
+			"title": "విత్తనం మొక్కగా ఎలా పెరుగుతుంది?",
+			"subtitle": "ఒక చిన్నారి మొక్క నిద్ర లేస్తుంది",
+			"sections": [
+				{
+					"text": "చిన్న విత్తనం నుంచి పెద్ద మొక్క పెరుగుతుంది. అది ఎలా జరుగుతుంది?"
+				},
+				{
+					"text": "ప్రతి విత్తనం లోపల ఒక చిన్నారి మొక్క ఉంటుంది. అది పెరగడం మొదలుపెట్టడానికి కొంచెం ఆహారం కూడా ఉంటుంది."
+				},
+				{
+					"text": "విత్తనం మట్టిలో ఉండి, దానికి నీళ్ళు, వెచ్చదనం దొరికినప్పుడు, ఆ చిన్నారి మొక్క నిద్ర లేస్తుంది."
+				},
+				{
+					"text": "ముందు, ఒక వేరు మట్టిలోకి కిందకు పెరుగుతుంది. వేరు మొక్కను గట్టిగా పట్టుకుని, నీళ్ళు తాగుతుంది."
+				},
+				{
+					"text": "తర్వాత, ఒక చిన్న మొలక వెలుతురు కోసం మట్టిని తోసుకుంటూ పైకి వస్తుంది."
+				},
+				{
+					"text": "పచ్చని ఆకులు విచ్చుకుంటాయి. ఆకులు సూర్యకాంతి, గాలి, నీళ్ళతో మొక్కకు ఆహారం తయారు చేస్తాయి."
+				},
+				{
+					"items": [
+						"విత్తనాన్ని తలకిందులుగా నాటినా, వేరు ఎప్పుడూ కిందికే, మొలక ఎప్పుడూ పైకే పెరుగుతాయి!",
+						"కొన్ని విత్తనాలు దుమ్ములా చాలా చిన్నవి. కొబ్బరికాయ ఒక పెద్ద విత్తనం!",
+						"చాలా మొక్కలకు పువ్వులు పూస్తాయి, ఆ పువ్వులు కొత్త విత్తనాలను తయారు చేస్తాయి."
+					]
+				},
+				{
+					"text": "విత్తనం పెరగడానికి నీళ్ళు, వెచ్చదనం, సూర్యకాంతి కావాలి. కొంచెం జాగ్రత్తగా చూసుకుంటే, చిన్న విత్తనం పెద్ద మొక్క అవుతుంది."
+				}
+			],
+			"reflection_question": "పొడిగా, చీకటిగా ఉన్న పెట్టెలో పెట్టిన విత్తనానికి ఏమవుతుందని నువ్వు అనుకుంటున్నావు?",
+			"real_world_mission": "ఒక చిన్న గిన్నెలో తడి దూది మీద కొన్ని పెసలు పెట్టు. దూదిని తడిగా ఉంచి, ప్రతి రోజు చూడు. వేరు ఎప్పుడు కనిపిస్తుంది?"
+		}
+	}
+}

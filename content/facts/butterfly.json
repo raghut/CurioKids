@@ -1,0 +1,130 @@
+{
+	"id": "fact-butterfly",
+	"topic": "caterpillar to butterfly",
+	"scene": {
+		"id": "butterfly",
+		"section_layers": [
+			[
+				"butterfly",
+				"caterpillar"
+			],
+			[
+				"egg"
+			],
+			[
+				"caterpillar"
+			],
+			[
+				"chrysalis"
+			],
+			[
+				"butterfly"
+			],
+			[
+				"egg",
+				"caterpillar",
+				"chrysalis",
+				"butterfly",
+				"cycle"
+			],
+			[
+				"egg",
+				"caterpillar",
+				"chrysalis",
+				"butterfly",
+				"cycle"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does a caterpillar become a butterfly?",
+			"subtitle": "Four steps, one amazing change",
+			"sections": [
+				{
+					"text": "A wriggly caterpillar and a beautiful butterfly look so different. Did you know they are the same animal?"
+				},
+				{
+					"text": "A mother butterfly lays tiny eggs on a leaf. The leaf will be the baby's first food."
+				},
+				{
+					"text": "A little caterpillar hatches from an egg. It eats leaves all day, and grows bigger and bigger."
+				},
+				{
+					"text": "When it is big enough, the caterpillar hangs from a branch, and its skin turns into a hard case. This is called a chrysalis."
+				},
+				{
+					"text": "Inside, its body changes completely. One day the case opens, and out comes a butterfly that flies away!"
+				},
+				{
+					"items": [
+						"A caterpillar grows so fast that it changes its skin many times.",
+						"This big change is called metamorphosis.",
+						"The new butterfly lays eggs, and the circle starts again."
+					]
+				},
+				{
+					"text": "A butterfly's life has four steps: egg, caterpillar, chrysalis and butterfly. Big changes can happen slowly and quietly."
+				}
+			],
+			"reflection_question": "If you could change into any animal, what would you want to become?",
+			"real_world_mission": "Look under leaves in a garden for tiny eggs or caterpillars. Do not touch them, just watch!"
+		},
+		"te": {
+			"title": "గొంగళి పురుగు సీతాకోకచిలుకగా ఎలా మారుతుంది?",
+			"subtitle": "నాలుగు దశలు, ఒక అద్భుతమైన మార్పు",
+			"sections": [
+				{
+					"text": "పాకే గొంగళి పురుగు, అందమైన సీతాకోకచిలుక చాలా వేరుగా కనిపిస్తాయి. అవి రెండూ ఒకే ప్రాణి అని నీకు తెలుసా?"
+				},
+				{
+					"text": "అమ్మ సీతాకోకచిలుక ఒక ఆకు మీద చిన్న చిన్న గుడ్లు పెడుతుంది. ఆ ఆకే బిడ్డకు మొదటి ఆహారం."
+				},
+				{
+					"text": "గుడ్డు నుంచి ఒక చిన్న గొంగళి పురుగు బయటికి వస్తుంది. అది రోజంతా ఆకులు తింటూ, పెద్దగా పెద్దగా పెరుగుతుంది."
+				},
+				{
+					"text": "బాగా పెద్దయ్యాక, గొంగళి పురుగు ఒక కొమ్మకు వేలాడుతుంది, దాని చర్మం ఒక గట్టి గూడుగా మారుతుంది. దీన్ని ప్యూపా అంటారు."
+				},
+				{
+					"text": "గూడు లోపల దాని శరీరం పూర్తిగా మారుతుంది. ఒక రోజు గూడు తెరుచుకుని, సీతాకోకచిలుక బయటికి వచ్చి ఎగిరిపోతుంది!"
+				},
+				{
+					"items": [
+						"గొంగళి పురుగు వేగంగా పెరుగుతూ, చాలాసార్లు చర్మం వదిలేస్తుంది.",
+						"ఈ పెద్ద మార్పును రూపాంతరం అంటారు.",
+						"కొత్త సీతాకోకచిలుక గుడ్లు పెడుతుంది, చక్రం మళ్ళీ మొదలవుతుంది."
+					]
+				},
+				{
+					"text": "సీతాకోకచిలుక జీవితంలో నాలుగు దశలు ఉంటాయి: గుడ్డు, గొంగళి పురుగు, ప్యూపా, సీతాకోకచిలుక. పెద్ద మార్పులు మెల్లగా, నిశ్శబ్దంగా జరగవచ్చు."
+				}
+			],
+			"reflection_question": "నువ్వు ఏదైనా జంతువుగా మారగలిగితే, ఏది అవ్వాలనుకుంటావు?",
+			"real_world_mission": "తోటలో ఆకుల కింద చిన్న గుడ్లు లేదా గొంగళి పురుగుల కోసం వెతుకు. వాటిని ముట్టుకోకు, ఊరికే చూడు!"
+		}
+	}
+}

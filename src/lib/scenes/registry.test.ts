@@ -9,7 +9,7 @@ const svelteSources = import.meta.glob<string>('./*.svelte', { query: '?raw', im
 describe('scene registry', () => {
 	// 'water-cycle': WaterCycleScene  ->  { 'water-cycle': 'WaterCycleScene' }
 	const entries = Object.fromEntries(
-		[...src.matchAll(/^\t'([a-z0-9-]+)':\s*(\w+)/gm)].map((m) => [m[1], m[2]])
+		[...src.matchAll(/^\t'?([a-z0-9-]+)'?:\s*(\w+)/gm)].map((m) => [m[1], m[2]])
 	);
 	// import WaterCycleScene from './WaterCycleScene.svelte'  ->  component -> file
 	const files = Object.fromEntries(
@@ -18,6 +18,13 @@ describe('scene registry', () => {
 
 	it('registers exactly the scenes the catalog lists', () => {
 		expect(Object.keys(entries).sort()).toEqual(Object.keys(SCENE_CATALOG).sort());
+	});
+
+	it('builds every cover only from layers the scene has', () => {
+		for (const [id, info] of Object.entries(SCENE_CATALOG)) {
+			expect(info.cover.length, id).toBeGreaterThan(0);
+			for (const layer of info.cover) expect(info.layers, `${id} cover`).toContain(layer);
+		}
 	});
 
 	it('draws every catalog layer in its component', () => {

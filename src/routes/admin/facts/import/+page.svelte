@@ -5,13 +5,45 @@
 	let raw = $state('');
 	let saving = $state(false);
 	let errorMsg = $state('');
+	/** One row per file when several are chosen at once. */
+	let results = $state<Array<{ name: string; ok: boolean; message: string; id?: string }>>([]);
 
 	async function readFile(e: Event) {
-		const file = (e.currentTarget as HTMLInputElement).files?.[0];
-		if (file) {
-			raw = await file.text();
-			errorMsg = '';
+		const files = [...((e.currentTarget as HTMLInputElement).files ?? [])];
+		errorMsg = '';
+		results = [];
+		if (files.length === 1) {
+			raw = await files[0].text();
+		} else if (files.length > 1) {
+			await importMany(files);
 		}
+	}
+
+	/**
+	 * Several files: import each one in turn and list what happened, instead of jumping to
+	 * a preview. One bad file does not stop the others — each is its own draft.
+	 */
+	async function importMany(files: File[]) {
+		saving = true;
+		for (const file of files) {
+			try {
+				const res = await fetch('/api/admin/facts/import', {
+					method: 'POST',
+					headers: { 'content-type': 'application/json' },
+					body: await file.text()
+				});
+				const data = await res.json();
+				results = [
+					...results,
+					res.ok
+						? { name: file.name, ok: true, message: 'Imported as a draft', id: data.fact.id }
+						: { name: file.name, ok: false, message: data?.message ?? 'Could not import.' }
+				];
+			} catch {
+				results = [...results, { name: file.name, ok: false, message: 'Could not reach the server.' }];
+			}
+		}
+		saving = false;
 	}
 
 	async function save() {
@@ -71,10 +103,31 @@
 			></textarea>
 		</label>
 
-		<label class="flex items-center gap-3 text-sm text-slate-600">
-			<span class="font-bold text-slate-700">Or choose a file</span>
-			<input type="file" accept=".json,application/json" onchange={readFile} class="text-sm" />
+		<label class="flex flex-wrap items-center gap-3 text-sm text-slate-600">
+			<span class="font-bold text-slate-700">Or choose files</span>
+			<input type="file" multiple accept=".json,application/json" onchange={readFile} class="text-sm" />
+			<span class="w-full text-xs text-slate-500">
+				One file fills the box above. Several files are imported straight away, each as its own draft.
+			</span>
 		</label>
+
+		{#if results.length}
+			<ul class="flex flex-col gap-1 rounded-xl bg-white p-3 text-sm ring-1 ring-slate-200" aria-live="polite">
+				{#each results as r (r.name)}
+					<li class="flex flex-wrap items-baseline gap-2">
+						<span class="font-semibold {r.ok ? 'text-emerald-700' : 'text-coral'}">{r.ok ? '✓' : '✗'}</span>
+						<span class="font-mono text-xs text-slate-700">{r.name}</span>
+						<span class="text-slate-500">{r.message}</span>
+						{#if r.id}
+							<a href="/admin/facts/{r.id}/preview" class="text-xs font-semibold text-slate-600 underline">Preview</a>
+						{/if}
+					</li>
+				{/each}
+			</ul>
+			{#if !saving}
+				<a href="/admin/facts" class="text-sm font-semibold text-slate-600 underline">Go to all facts to publish them</a>
+			{/if}
+		{/if}
 
 		{#if errorMsg}<p class="text-sm text-coral" role="alert">{errorMsg}</p>{/if}
 

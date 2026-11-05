@@ -71,6 +71,35 @@ describe('parseFactImport', () => {
 	});
 });
 
+// Every bundled fact must pass the exact checks /admin/facts/import runs, in both
+// languages, with one layer list per section — so a broken file fails here, not on upload.
+const allFacts = import.meta.glob<string>('../../../content/facts/*.json', {
+	query: '?raw',
+	import: 'default',
+	eager: true
+});
+
+describe('every bundled fact file', () => {
+	const entries = Object.entries(allFacts);
+
+	it('finds the fact files', () => {
+		expect(entries.length).toBeGreaterThanOrEqual(10);
+	});
+
+	it.each(entries)('%s imports cleanly in English and Telugu with a scene', (_path, raw) => {
+		const r = parseFactImport(raw, opts);
+		if (!r.ok) throw new Error(r.message);
+		expect(Object.keys(r.fact.content).sort()).toEqual(['en', 'te']);
+		expect(r.fact.scene?.section_layers).toHaveLength(r.fact.structure.length);
+		expect(r.fact.id).toMatch(/^fact-/);
+	});
+
+	it('uses a different id for every fact', () => {
+		const ids = entries.map(([, raw]) => JSON.parse(raw).id);
+		expect(new Set(ids).size).toBe(ids.length);
+	});
+});
+
 describe('the bundled water-cycle fact', () => {
 	const raw = waterCycleRaw;
 

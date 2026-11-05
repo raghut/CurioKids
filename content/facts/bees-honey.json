@@ -1,0 +1,140 @@
+{
+	"id": "fact-bees-honey",
+	"topic": "bees making honey",
+	"scene": {
+		"id": "bees",
+		"section_layers": [
+			[
+				"fly",
+				"honey"
+			],
+			[
+				"nectar"
+			],
+			[
+				"nectar",
+				"pollen"
+			],
+			[
+				"fly"
+			],
+			[
+				"cells"
+			],
+			[
+				"cells",
+				"fan"
+			],
+			[
+				"fly",
+				"fan",
+				"honey"
+			],
+			[
+				"nectar",
+				"fly",
+				"honey"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How do bees make honey?",
+			"subtitle": "From flower to hive",
+			"sections": [
+				{
+					"text": "Honey is sweet and sticky. Did you know tiny bees make it from flowers?"
+				},
+				{
+					"text": "Bees fly from flower to flower. They drink a sweet juice from inside the flowers, called nectar."
+				},
+				{
+					"text": "Yellow pollen dust sticks to their fuzzy bodies. Carrying pollen from flower to flower helps the plants make seeds."
+				},
+				{
+					"text": "With their tummies full of nectar, the bees fly home to their hive."
+				},
+				{
+					"text": "Inside the hive, the bees put the nectar into tiny six-sided rooms made of wax."
+				},
+				{
+					"text": "The bees fan their wings very fast to dry the nectar. It becomes thick, golden honey. Then they close each room with a wax lid."
+				},
+				{
+					"items": [
+						"Bees have a special honey stomach just for carrying nectar.",
+						"On one trip, a bee can visit more than fifty flowers.",
+						"Bees save honey to eat when there are no flowers."
+					]
+				},
+				{
+					"text": "Bees work hard together to turn flower nectar into honey. They help flowers too, by carrying pollen."
+				}
+			],
+			"reflection_question": "Why do you think the rooms in a honeycomb have six sides?",
+			"real_world_mission": "Next time you see flowers, watch quietly from a distance. Can you spot a bee? Which flower does it visit?"
+		},
+		"te": {
+			"title": "తేనెటీగలు తేనెను ఎలా తయారు చేస్తాయి?",
+			"subtitle": "పువ్వు నుంచి తేనెపట్టు దాకా",
+			"sections": [
+				{
+					"text": "తేనె తియ్యగా, జిగటగా ఉంటుంది. చిన్న తేనెటీగలు దాన్ని పువ్వుల నుంచి తయారు చేస్తాయని నీకు తెలుసా?"
+				},
+				{
+					"text": "తేనెటీగలు ఒక పువ్వు నుంచి ఇంకో పువ్వుకు ఎగురుతాయి. పువ్వుల లోపల ఉండే మకరందం అనే తియ్యని రసాన్ని తాగుతాయి."
+				},
+				{
+					"text": "పసుపు పుప్పొడి వాటి మెత్తని శరీరానికి అంటుకుంటుంది. పుప్పొడిని ఒక పువ్వు నుంచి ఇంకో పువ్వుకు తీసుకెళ్ళడం వల్ల మొక్కలు విత్తనాలు తయారు చేయగలవు."
+				},
+				{
+					"text": "పొట్ట నిండా మకరందంతో, తేనెటీగలు తమ తేనెపట్టుకు ఎగిరి వెళ్తాయి."
+				},
+				{
+					"text": "తేనెపట్టు లోపల, తేనెటీగలు మకరందాన్ని మైనంతో చేసిన ఆరు వైపుల చిన్న చిన్న గదుల్లో పెడతాయి."
+				},
+				{
+					"text": "తేనెటీగలు మకరందాన్ని ఆరబెట్టడానికి రెక్కలను చాలా వేగంగా ఆడిస్తాయి. అది చిక్కని, బంగారు రంగు తేనెగా మారుతుంది. తర్వాత ప్రతి గదిని మైనం మూతతో మూసేస్తాయి."
+				},
+				{
+					"items": [
+						"మకరందాన్ని మోసుకెళ్ళడానికే తేనెటీగకు ఒక ప్రత్యేకమైన తేనె పొట్ట ఉంటుంది.",
+						"ఒక్కసారి బయటికి వెళ్ళినప్పుడు, తేనెటీగ యాభై కంటే ఎక్కువ పువ్వుల దగ్గరికి వెళ్ళగలదు.",
+						"పువ్వులు లేని రోజుల్లో తినడానికి తేనెటీగలు తేనెను దాచుకుంటాయి."
+					]
+				},
+				{
+					"text": "తేనెటీగలు కలిసి కష్టపడి పువ్వుల మకరందాన్ని తేనెగా మారుస్తాయి. పుప్పొడిని మోసుకెళ్ళి అవి పువ్వులకు కూడా సాయం చేస్తాయి."
+				}
+			],
+			"reflection_question": "తేనెపట్టు గదులకు ఆరు వైపులు ఎందుకు ఉంటాయని నువ్వు అనుకుంటున్నావు?",
+			"real_world_mission": "ఈసారి పువ్వులు చూసినప్పుడు, దూరం నుంచి నిశ్శబ్దంగా గమనించు. తేనెటీగను కనుక్కోగలవా? అది ఏ పువ్వు దగ్గరికి వెళ్తోంది?"
+		}
+	}
+}

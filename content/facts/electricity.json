@@ -1,0 +1,138 @@
+{
+	"id": "fact-electricity",
+	"topic": "electricity reaching home",
+	"scene": {
+		"id": "electricity",
+		"section_layers": [
+			[
+				"bulb"
+			],
+			[],
+			[
+				"flow-high"
+			],
+			[
+				"flow-high",
+				"transformer"
+			],
+			[
+				"flow-home"
+			],
+			[
+				"flow-home",
+				"bulb"
+			],
+			[
+				"flow-high",
+				"flow-home",
+				"bulb"
+			],
+			[
+				"flow-high",
+				"transformer",
+				"flow-home",
+				"bulb"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does electricity reach our home?",
+			"subtitle": "A long trip through wires",
+			"sections": [
+				{
+					"text": "You press a switch and the light comes on. But where does that electricity come from?"
+				},
+				{
+					"text": "Electricity is made in a big building called a power station. Inside, giant wheels spin very fast to make it."
+				},
+				{
+					"text": "The electricity travels a long way through thick wires. Tall metal towers hold the wires high up in the air."
+				},
+				{
+					"text": "Near your home, a box on a pole called a transformer makes the electricity gentler, so it is right for houses."
+				},
+				{
+					"text": "Then wires carry it into your home, hidden inside the walls, to every switch and socket."
+				},
+				{
+					"text": "When you press the switch, the electricity flows to the bulb, and the bulb lights up!"
+				},
+				{
+					"items": [
+						"Electricity travels through wires faster than you can blink.",
+						"The giant wheels can be turned by falling water, blowing wind, or steam.",
+						"Birds can sit on some wires, but people must never touch them."
+					]
+				},
+				{
+					"text": "Electricity takes a long trip to reach us. It is very useful, but it can hurt us. Never touch wires or put anything into a socket."
+				}
+			],
+			"reflection_question": "Which things in your home need electricity to work?",
+			"real_world_mission": "With a grown-up, count all the switches in one room of your home. Which one do you use the most?"
+		},
+		"te": {
+			"title": "కరెంటు మన ఇంటికి ఎలా వస్తుంది?",
+			"subtitle": "తీగల ద్వారా ఒక పెద్ద ప్రయాణం",
+			"sections": [
+				{
+					"text": "నువ్వు స్విచ్ నొక్కగానే లైటు వెలుగుతుంది. కానీ ఆ కరెంటు ఎక్కడి నుంచి వస్తుంది?"
+				},
+				{
+					"text": "కరెంటును విద్యుత్ కేంద్రం అనే ఒక పెద్ద భవనంలో తయారు చేస్తారు. దాని లోపల పెద్ద పెద్ద చక్రాలు చాలా వేగంగా తిరుగుతూ కరెంటును తయారు చేస్తాయి."
+				},
+				{
+					"text": "కరెంటు మందపాటి తీగల ద్వారా చాలా దూరం ప్రయాణిస్తుంది. ఎత్తైన ఇనుప స్తంభాలు ఆ తీగలను గాలిలో పైకి పట్టుకుంటాయి."
+				},
+				{
+					"text": "నీ ఇంటి దగ్గర, స్తంభం మీద ఉండే ట్రాన్స్‌ఫార్మర్ అనే పెట్టె కరెంటు బలాన్ని తగ్గించి, ఇళ్ళకు సరిపోయేలా చేస్తుంది."
+				},
+				{
+					"text": "తర్వాత తీగలు దాన్ని నీ ఇంట్లోకి, గోడల లోపల దాగి, ప్రతి స్విచ్‌కు, ప్రతి ప్లగ్ పాయింట్‌కు తీసుకెళ్తాయి."
+				},
+				{
+					"text": "నువ్వు స్విచ్ నొక్కినప్పుడు, కరెంటు బల్బుకు ప్రవహిస్తుంది, బల్బు వెలుగుతుంది!"
+				},
+				{
+					"items": [
+						"నువ్వు కను రెప్ప వేసే లోపే కరెంటు తీగల ద్వారా ప్రయాణిస్తుంది.",
+						"ఆ పెద్ద చక్రాలను పడే నీళ్ళు, వీచే గాలి, లేదా ఆవిరి తిప్పగలవు.",
+						"కొన్ని తీగల మీద పక్షులు కూర్చోగలవు, కానీ మనుషులు వాటిని ఎప్పుడూ ముట్టుకోకూడదు."
+					]
+				},
+				{
+					"text": "కరెంటు మన దగ్గరికి రావడానికి పెద్ద ప్రయాణం చేస్తుంది. అది చాలా ఉపయోగకరం, కానీ అది మనకు హాని చేయగలదు. తీగలను ఎప్పుడూ ముట్టుకోవద్దు, ప్లగ్ పాయింట్‌లో ఏదీ పెట్టవద్దు."
+				}
+			],
+			"reflection_question": "నీ ఇంట్లో ఏ ఏ వస్తువులు పని చేయడానికి కరెంటు కావాలి?",
+			"real_world_mission": "ఒక పెద్దవాళ్ళతో కలిసి, నీ ఇంట్లోని ఒక గదిలో ఉన్న స్విచ్‌లన్నీ లెక్కపెట్టు. నువ్వు ఎక్కువగా వాడేది ఏది?"
+		}
+	}
+}

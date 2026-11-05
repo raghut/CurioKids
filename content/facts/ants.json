@@ -1,0 +1,166 @@
+{
+	"id": "fact-ants",
+	"topic": "ants",
+	"scene": {
+		"id": "ant-trail",
+		"section_layers": [
+			[
+				"line",
+				"trail"
+			],
+			[
+				"scout"
+			],
+			[
+				"scout",
+				"trail"
+			],
+			[
+				"trail",
+				"smell"
+			],
+			[
+				"trail",
+				"line"
+			],
+			[
+				"carry",
+				"scout"
+			],
+			[
+				"carry",
+				"smell"
+			],
+			[
+				"team"
+			],
+			[
+				"line",
+				"trail"
+			],
+			[
+				"line",
+				"trail",
+				"team"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How do ants walk in a line and carry so much?",
+			"subtitle": "Tiny, clever and super strong",
+			"sections": [
+				{
+					"text": "Ants walk in long, neat lines and carry big loads home. How do such tiny creatures do it?"
+				},
+				{
+					"text": "First, one ant goes exploring all alone. The ant finds some food!"
+				},
+				{
+					"text": "On the way home, the ant leaves a special smell on the ground. It makes a path you cannot see."
+				},
+				{
+					"text": "Ants smell with the two feelers on their heads, called antennae. They tap the ground to find the smell."
+				},
+				{
+					"text": "Other ants follow the smell to the food. Each one adds more smell, so the path gets stronger. Soon there is a long line!"
+				},
+				{
+					"text": "Some ants can lift things up to fifty times heavier than themselves. If you could do that, you could lift a car!"
+				},
+				{
+					"text": "How? An ant's body is very small and light. For its tiny size, its muscles are very strong."
+				},
+				{
+					"text": "When food is too big for one ant, many ants work together. They pull and push it home as a team."
+				},
+				{
+					"items": [
+						"When the food is gone, the smell stops and the path slowly fades.",
+						"Ants sometimes walk backwards, pulling food too big to push.",
+						"Leafcutter ants carry leaf pieces like little green umbrellas."
+					]
+				},
+				{
+					"text": "Ants are small but strong, and they work as a team. Together they find food and carry it home."
+				}
+			],
+			"reflection_question": "If you were an ant, how would you tell your friends where the food is?",
+			"real_world_mission": "Put a tiny pinch of sugar near some ants. Watch and count: how long until a line forms?"
+		},
+		"te": {
+			"title": "చీమలు వరుసగా ఎలా నడుస్తాయి, అంత బరువు ఎలా మోస్తాయి?",
+			"subtitle": "చిన్నవి, తెలివైనవి, చాలా బలమైనవి",
+			"sections": [
+				{
+					"text": "చీమలు పొడవైన, చక్కని వరుసల్లో నడుస్తాయి, పెద్ద పెద్ద బరువులు ఇంటికి మోసుకెళ్తాయి. ఇంత చిన్న ప్రాణులు అది ఎలా చేస్తాయి?"
+				},
+				{
+					"text": "ముందు, ఒక చీమ ఒంటరిగా వెతకడానికి బయలుదేరుతుంది. ఆ చీమ ఆహారం కనుక్కుంటుంది!"
+				},
+				{
+					"text": "ఇంటికి తిరిగి వచ్చేటప్పుడు, ఆ చీమ నేల మీద ఒక ప్రత్యేకమైన వాసనను వదులుతుంది. అది కంటికి కనిపించని దారి అవుతుంది."
+				},
+				{
+					"text": "చీమలు తమ తల మీది రెండు మీసాలతో వాసన చూస్తాయి. అవి నేలను తడుముతూ ఆ వాసనను కనుక్కుంటాయి."
+				},
+				{
+					"text": "మిగతా చీమలు ఆ వాసన వెంట వెళ్తాయి. ప్రతి చీమ ఇంకా వాసన కలపడంతో దారి బలపడి, పొడవైన వరుస తయారవుతుంది!"
+				},
+				{
+					"text": "కొన్ని చీమలు తమ కంటే యాభై రెట్లు బరువైన వస్తువులను ఎత్తగలవు. నువ్వు అలా చేయగలిగితే, ఒక కారును ఎత్తగలవు!"
+				},
+				{
+					"text": "ఎలా? చీమ శరీరం చాలా చిన్నది, తేలికైనది. దాని చిన్న పరిమాణానికి, దాని కండరాలు చాలా బలమైనవి."
+				},
+				{
+					"text": "ఆహారం ఒక్క చీమకు చాలా పెద్దదైతే, చాలా చీమలు కలిసి పని చేస్తాయి. అవి జట్టుగా దాన్ని లాగుతూ, తోస్తూ ఇంటికి తీసుకెళ్తాయి."
+				},
+				{
+					"items": [
+						"ఆహారం అయిపోయాక వాసన ఆగిపోతుంది, దారి మెల్లగా మాయమవుతుంది.",
+						"పెద్ద ఆహారాన్ని లాగుతూ చీమలు కొన్నిసార్లు వెనక్కి నడుస్తాయి.",
+						"ఆకులు కత్తిరించే చీమలు ఆకు ముక్కలను చిన్న పచ్చని గొడుగుల్లా మోస్తాయి."
+					]
+				},
+				{
+					"text": "చీమలు చిన్నవే కానీ బలమైనవి, అవి జట్టుగా పని చేస్తాయి. కలిసి ఆహారం కనుక్కుని, ఇంటికి మోసుకెళ్తాయి."
+				}
+			],
+			"reflection_question": "నువ్వు ఒక చీమవైతే, ఆహారం ఎక్కడుందో నీ స్నేహితులకు ఎలా చెప్తావు?",
+			"real_world_mission": "చీమల దగ్గర కొంచెం చక్కెర పెట్టు. చూస్తూ లెక్కపెట్టు: వరుస తయారవడానికి ఎంత సేపు పడుతుంది?"
+		}
+	}
+}
