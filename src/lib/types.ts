@@ -73,6 +73,17 @@ export type GeneratedStory = {
 	reflection_question: string;
 	created_at: string;
 	status: 'draft' | 'published';
+	/** Optional animated scene. Absent = the story uses its image URLs (or none). */
+	scene?: StoryScene;
+};
+
+/**
+ * A story's animated SVG scene: the same reviewed components as FactScene, stepped by
+ * page instead of by section. `page_layers[i]` lists the layers visible on page i.
+ */
+export type StoryScene = {
+	id: string;
+	page_layers: string[][];
 };
 
 export type StorySummary = {
@@ -88,6 +99,8 @@ export type StorySummary = {
 	 * both simply match no chip.
 	 */
 	theme_id: string | null;
+	/** From the JSONB blob, so a scene story's tile can draw its scene. Null when absent. */
+	scene?: StoryScene | null;
 };
 
 export type AdminStorySummary = {

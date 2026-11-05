@@ -9,6 +9,7 @@ import ButterflyScene from './ButterflyScene.svelte';
 import BeesScene from './BeesScene.svelte';
 import MoonScene from './MoonScene.svelte';
 import ShadowScene from './ShadowScene.svelte';
+import CarrotShareScene from './CarrotShareScene.svelte';
 
 type SceneProps = { layers?: string[]; still?: boolean; cover?: boolean };
 
@@ -26,5 +27,6 @@ export const SCENES: Record<string, Component<SceneProps>> = {
 	butterfly: ButterflyScene,
 	bees: BeesScene,
 	moon: MoonScene,
-	shadow: ShadowScene
+	shadow: ShadowScene,
+	'carrot-share': CarrotShareScene
 };

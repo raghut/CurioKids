@@ -142,6 +142,7 @@
 				href="/stories/{gen.id}"
 				completed={$progress.includes(gen.id)}
 				badge="✨"
+				scene={gen.scene}
 			/>
 		{/each}
 	</div>
