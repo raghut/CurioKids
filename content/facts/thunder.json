@@ -1,0 +1,145 @@
+{
+	"id": "fact-thunder",
+	"topic": "thunder and lightning",
+	"scene": {
+		"id": "thunder",
+		"section_layers": [
+			[
+				"storm",
+				"lightning"
+			],
+			[
+				"storm"
+			],
+			[
+				"storm",
+				"lightning"
+			],
+			[
+				"storm",
+				"lightning",
+				"sound"
+			],
+			[
+				"storm",
+				"lightning",
+				"light"
+			],
+			[
+				"storm",
+				"lightning",
+				"sound",
+				"count"
+			],
+			[
+				"storm",
+				"safe"
+			],
+			[
+				"storm",
+				"lightning",
+				"safe"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "Why do we hear thunder after we see lightning?",
+			"subtitle": "Light wins the race",
+			"sections": [
+				{
+					"text": "In a storm, we see lightning first and hear thunder later. Why not both together?"
+				},
+				{
+					"text": "Inside big storm clouds, tiny bits of ice bump and rub together. This builds up electricity."
+				},
+				{
+					"text": "The electricity jumps out as a giant spark. That spark is lightning!"
+				},
+				{
+					"text": "Lightning heats the air so fast that the air bursts with a loud boom. That boom is thunder."
+				},
+				{
+					"text": "Light is the fastest thing there is. We see the lightning almost at once."
+				},
+				{
+					"text": "Sound is much slower, so thunder comes later. Count the seconds in between: three seconds is about one kilometre away."
+				},
+				{
+					"items": [
+						"Lightning is hotter than the surface of the sun!",
+						"Thunder cannot hurt you. It is only a sound.",
+						"In a thunderstorm, stay indoors and keep away from tall trees."
+					]
+				},
+				{
+					"text": "Lightning and thunder happen together, but light travels faster than sound. Stay safe indoors and count!"
+				}
+			],
+			"reflection_question": "How do you feel during a thunderstorm? What helps you feel calm?",
+			"real_world_mission": "Next time there is a storm, watch from a window with a grown-up. Count from the flash to the thunder."
+		},
+		"te": {
+			"title": "మెరుపు తర్వాత ఉరుము ఎందుకు వినిపిస్తుంది?",
+			"subtitle": "వెలుగు గెలిచే పరుగు పందెం",
+			"sections": [
+				{
+					"text": "తుఫానులో, ముందు మెరుపు కనిపిస్తుంది, తర్వాత ఉరుము వినిపిస్తుంది. రెండూ ఒకేసారి ఎందుకు రావు?"
+				},
+				{
+					"text": "పెద్ద తుఫాను మేఘాల లోపల, చిన్న మంచు ముక్కలు ఢీకొంటూ రాసుకుంటాయి. దాని వల్ల కరెంటు పోగవుతుంది."
+				},
+				{
+					"text": "ఆ కరెంటు ఒక పెద్ద నిప్పురవ్వలా బయటికి దూకుతుంది. ఆ రవ్వే మెరుపు!"
+				},
+				{
+					"text": "మెరుపు గాలిని ఎంత వేగంగా వేడి చేస్తుందంటే, గాలి పెద్ద శబ్దంతో పేలుతుంది. ఆ శబ్దమే ఉరుము."
+				},
+				{
+					"text": "అన్నిటికంటే వేగంగా ప్రయాణించేది వెలుగు. అందుకే మెరుపు వెంటనే కనిపిస్తుంది."
+				},
+				{
+					"text": "శబ్దం చాలా నెమ్మది, అందుకే ఉరుము తర్వాత వస్తుంది. మధ్యలో సెకన్లు లెక్కపెట్టు: మూడు సెకన్లు అంటే దాదాపు ఒక కిలోమీటరు దూరం."
+				},
+				{
+					"items": [
+						"మెరుపు సూర్యుడి ఉపరితలం కంటే వేడిగా ఉంటుంది!",
+						"ఉరుము నీకు హాని చేయదు. అది కేవలం శబ్దం.",
+						"ఉరుములు మెరుపులు ఉన్నప్పుడు ఇంట్లోనే ఉండు, ఎత్తైన చెట్లకు దూరంగా ఉండు."
+					]
+				},
+				{
+					"text": "మెరుపు, ఉరుము ఒకేసారి పుడతాయి, కానీ శబ్దం కంటే వెలుగు వేగంగా ప్రయాణిస్తుంది. ఇంట్లో సురక్షితంగా ఉంటూ లెక్కపెట్టు!"
+				}
+			],
+			"reflection_question": "ఉరుములు మెరుపులు వచ్చినప్పుడు నీకు ఎలా అనిపిస్తుంది? నిన్ను ఏది ప్రశాంతంగా ఉంచుతుంది?",
+			"real_world_mission": "తర్వాత తుఫాను వచ్చినప్పుడు, పెద్దవాళ్ళతో కలిసి కిటికీ నుంచి చూడు. మెరుపు నుంచి ఉరుము వరకు లెక్కపెట్టు."
+		}
+	}
+}

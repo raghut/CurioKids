@@ -1,0 +1,146 @@
+{
+	"id": "fact-volcano",
+	"topic": "volcano",
+	"scene": {
+		"id": "volcano",
+		"section_layers": [
+			[
+				"magma",
+				"rise",
+				"erupt",
+				"flow"
+			],
+			[
+				"heat"
+			],
+			[
+				"heat",
+				"magma"
+			],
+			[
+				"magma",
+				"rise"
+			],
+			[
+				"magma",
+				"rise",
+				"erupt"
+			],
+			[
+				"erupt",
+				"flow",
+				"cool"
+			],
+			[
+				"flow",
+				"cool"
+			],
+			[
+				"magma",
+				"rise",
+				"erupt",
+				"flow"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does a volcano erupt?",
+			"subtitle": "Melted rock from deep inside",
+			"sections": [
+				{
+					"text": "Some mountains puff out smoke and hot, glowing rock. They are called volcanoes. How do they erupt?"
+				},
+				{
+					"text": "Deep, deep under the ground, it is so hot that some rock melts into a thick, glowing liquid."
+				},
+				{
+					"text": "This melted rock is called magma. It collects in a big pool under the volcano."
+				},
+				{
+					"text": "The magma is pushed upwards. It squeezes up through a crack towards the top."
+				},
+				{
+					"text": "Whoosh! It bursts out of the top with hot ash and smoke. Melted rock outside is called lava."
+				},
+				{
+					"text": "Lava flows down the sides. As it cools, it turns into hard new rock, and plants grow again."
+				},
+				{
+					"items": [
+						"India has an active volcano on Barren Island, in the Andaman Sea.",
+						"Lava can be about ten times hotter than boiling water.",
+						"Some islands, like Hawaii, were made by volcanoes."
+					]
+				},
+				{
+					"text": "Volcanoes let hot melted rock escape from deep inside the Earth. Over time, they even make new land."
+				}
+			],
+			"reflection_question": "Would you like to see a volcano? From how far away?",
+			"real_world_mission": "With a grown-up, make a model volcano: put baking soda in a cup and pour in vinegar. Watch it fizz!"
+		},
+		"te": {
+			"title": "అగ్నిపర్వతం ఎలా పేలుతుంది?",
+			"subtitle": "లోపలి నుంచి కరిగిన రాయి",
+			"sections": [
+				{
+					"text": "కొన్ని పర్వతాలు పొగను, వేడిగా మెరిసే రాళ్ళను బయటికి చిమ్ముతాయి. వాటిని అగ్నిపర్వతాలు అంటారు. అవి ఎలా పేలతాయి?"
+				},
+				{
+					"text": "నేల కింద చాలా లోతులో ఎంత వేడిగా ఉంటుందంటే, కొన్ని రాళ్ళు కరిగి చిక్కని, మెరిసే ద్రవంగా మారతాయి."
+				},
+				{
+					"text": "కరిగిన ఈ రాతిని మాగ్మా అంటారు. అది అగ్నిపర్వతం కింద ఒక పెద్ద కొలనులా పోగవుతుంది."
+				},
+				{
+					"text": "మాగ్మా పైకి తోయబడుతుంది. అది ఒక పగులు గుండా పైకి దూసుకొస్తుంది."
+				},
+				{
+					"text": "హుష్! అది వేడి బూడిద, పొగతో పై నుంచి బయటికి చిమ్ముతుంది. బయటికి వచ్చిన కరిగిన రాతిని లావా అంటారు."
+				},
+				{
+					"text": "లావా పక్కల నుంచి కిందికి ప్రవహిస్తుంది. చల్లబడ్డాక అది గట్టి కొత్త రాయిగా మారుతుంది, మళ్ళీ మొక్కలు పెరుగుతాయి."
+				},
+				{
+					"items": [
+						"అండమాన్ సముద్రంలోని బ్యారెన్ ద్వీపంలో భారతదేశానికి ఒక చురుకైన అగ్నిపర్వతం ఉంది.",
+						"లావా మరిగే నీళ్ళ కంటే దాదాపు పది రెట్లు వేడిగా ఉండగలదు.",
+						"హవాయి లాంటి కొన్ని దీవులు అగ్నిపర్వతాల వల్లే ఏర్పడ్డాయి."
+					]
+				},
+				{
+					"text": "అగ్నిపర్వతాలు భూమి లోపలి కరిగిన రాతిని బయటికి వదులుతాయి. కాలక్రమేణా అవి కొత్త నేలను కూడా తయారు చేస్తాయి."
+				}
+			],
+			"reflection_question": "నువ్వు అగ్నిపర్వతాన్ని చూడాలనుకుంటావా? ఎంత దూరం నుంచి?",
+			"real_world_mission": "పెద్దవాళ్ళతో కలిసి నమూనా అగ్నిపర్వతం చేయి: కప్పులో వంట సోడా వేసి, వెనిగర్ పోయి. అది పొంగడం చూడు!"
+		}
+	}
+}

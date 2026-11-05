@@ -1,0 +1,136 @@
+{
+	"id": "fact-milk-teeth",
+	"topic": "milk teeth",
+	"scene": {
+		"id": "teeth",
+		"section_layers": [
+			[
+				"wobbly",
+				"rising"
+			],
+			[
+				"milk"
+			],
+			[
+				"milk",
+				"bud"
+			],
+			[
+				"wobbly",
+				"rising"
+			],
+			[
+				"peek"
+			],
+			[
+				"grown"
+			],
+			[
+				"grown"
+			],
+			[
+				"grown"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "Why do our milk teeth fall out?",
+			"subtitle": "A new tooth is on its way",
+			"sections": [
+				{
+					"text": "Have you had a wobbly tooth? Why do our first teeth fall out?"
+				},
+				{
+					"text": "Our first teeth are called milk teeth. Most children have twenty of them."
+				},
+				{
+					"text": "Hidden in the jaw, under each milk tooth, a new grown-up tooth is slowly getting ready."
+				},
+				{
+					"text": "The new tooth grows and pushes up. The root of the milk tooth slowly melts away, and the tooth gets wobbly."
+				},
+				{
+					"text": "One day the milk tooth falls out! There is a little gap, and the new tooth peeks through."
+				},
+				{
+					"text": "The grown-up tooth keeps growing until it is big and strong. It has to last your whole life!"
+				},
+				{
+					"items": [
+						"Grown-ups can have up to thirty-two teeth.",
+						"The outside of a tooth is the hardest part of your whole body.",
+						"Brushing twice a day keeps your new teeth strong."
+					]
+				},
+				{
+					"text": "Milk teeth make room for grown-up teeth. Take good care of the new ones, because they never come back!"
+				}
+			],
+			"reflection_question": "How many of your milk teeth have fallen out so far?",
+			"real_world_mission": "Look in a mirror and count your teeth. Can you spot a new grown-up tooth?"
+		},
+		"te": {
+			"title": "మన పాల పళ్ళు ఎందుకు ఊడిపోతాయి?",
+			"subtitle": "కొత్త పన్ను వస్తోంది",
+			"sections": [
+				{
+					"text": "నీకు ఎప్పుడైనా పన్ను కదిలిందా? మన మొదటి పళ్ళు ఎందుకు ఊడిపోతాయి?"
+				},
+				{
+					"text": "మన మొదటి పళ్ళను పాల పళ్ళు అంటారు. చాలా మంది పిల్లలకు ఇరవై పాల పళ్ళు ఉంటాయి."
+				},
+				{
+					"text": "ప్రతి పాల పన్ను కింద, దవడలో దాగి, ఒక కొత్త పెద్ద పన్ను మెల్లగా తయారవుతుంది."
+				},
+				{
+					"text": "కొత్త పన్ను పెరుగుతూ పైకి తోస్తుంది. పాల పన్ను వేరు మెల్లగా కరిగిపోతుంది, అప్పుడు పన్ను కదులుతుంది."
+				},
+				{
+					"text": "ఒక రోజు పాల పన్ను ఊడిపోతుంది! అక్కడ చిన్న ఖాళీ ఏర్పడుతుంది, కొత్త పన్ను తొంగి చూస్తుంది."
+				},
+				{
+					"text": "పెద్ద పన్ను బలంగా అయ్యే వరకు పెరుగుతూనే ఉంటుంది. అది జీవితాంతం ఉండాలి!"
+				},
+				{
+					"items": [
+						"పెద్దవాళ్ళకు ముప్పై రెండు పళ్ళ వరకు ఉండవచ్చు.",
+						"పన్ను పైపొర మన శరీరం మొత్తంలో అన్నిటికంటే గట్టి భాగం.",
+						"రోజుకు రెండుసార్లు పళ్ళు తోముకుంటే కొత్త పళ్ళు బలంగా ఉంటాయి."
+					]
+				},
+				{
+					"text": "పాల పళ్ళు పెద్ద పళ్ళకు చోటు ఇస్తాయి. కొత్త పళ్ళను జాగ్రత్తగా చూసుకో, ఎందుకంటే అవి మళ్ళీ రావు!"
+				}
+			],
+			"reflection_question": "ఇప్పటి వరకు నీ పాల పళ్ళు ఎన్ని ఊడిపోయాయి?",
+			"real_world_mission": "అద్దంలో చూసి నీ పళ్ళు లెక్కపెట్టు. కొత్త పెద్ద పన్ను ఏదైనా కనిపిస్తుందా?"
+		}
+	}
+}

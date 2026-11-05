@@ -1,0 +1,137 @@
+{
+	"id": "fact-food-journey",
+	"topic": "where food goes",
+	"scene": {
+		"id": "digestion",
+		"section_layers": [
+			[
+				"mouth"
+			],
+			[
+				"mouth"
+			],
+			[
+				"pipe"
+			],
+			[
+				"stomach"
+			],
+			[
+				"intestine"
+			],
+			[
+				"intestine",
+				"energy"
+			],
+			[
+				"energy"
+			],
+			[
+				"mouth",
+				"pipe",
+				"stomach",
+				"intestine"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "Where does our food go after we eat it?",
+			"subtitle": "A journey through your tummy",
+			"sections": [
+				{
+					"text": "You eat food every day. But where does it go after you swallow it?"
+				},
+				{
+					"text": "It starts in your mouth. Your teeth chew the food into small pieces, and spit makes it soft."
+				},
+				{
+					"text": "When you swallow, the food slides down a long tube called the food pipe."
+				},
+				{
+					"text": "In your stomach, special juices mix and squeeze the food until it becomes soft mush."
+				},
+				{
+					"text": "Next the mush moves into a very long, coiled tube. Here your body takes out all the good parts."
+				},
+				{
+					"text": "The good parts travel in your blood to your whole body. They give you energy to run, play and grow!"
+				},
+				{
+					"items": [
+						"The long, coiled tube is longer than a car!",
+						"Food takes many hours to finish its journey.",
+						"What your body cannot use leaves when you go to the toilet."
+					]
+				},
+				{
+					"text": "Your body turns food into energy, step by step. Chewing well is the first step!"
+				}
+			],
+			"reflection_question": "Which food gives you the most energy to play?",
+			"real_world_mission": "At your next meal, chew each bite slowly, ten times. Does the food taste different?"
+		},
+		"te": {
+			"title": "మనం తిన్న ఆహారం ఎక్కడికి వెళ్తుంది?",
+			"subtitle": "మన పొట్టలో ఒక ప్రయాణం",
+			"sections": [
+				{
+					"text": "నువ్వు రోజూ అన్నం తింటావు. కానీ మింగిన తర్వాత అది ఎక్కడికి వెళ్తుంది?"
+				},
+				{
+					"text": "ప్రయాణం నోటిలో మొదలవుతుంది. పళ్ళు ఆహారాన్ని చిన్న ముక్కలుగా నములుతాయి, లాలాజలం దాన్ని మెత్తగా చేస్తుంది."
+				},
+				{
+					"text": "నువ్వు మింగినప్పుడు, ఆహారం అన్నవాహిక అనే పొడవైన గొట్టం ద్వారా కిందికి జారుతుంది."
+				},
+				{
+					"text": "కడుపులో ప్రత్యేకమైన రసాలు ఆహారాన్ని కలిపి, పిసికి, మెత్తని ముద్దలా చేస్తాయి."
+				},
+				{
+					"text": "తర్వాత ఆ ముద్ద చాలా పొడవైన, చుట్టలు చుట్టుకున్న గొట్టంలోకి వెళ్తుంది. అక్కడ శరీరం మంచి భాగాలన్నీ తీసుకుంటుంది."
+				},
+				{
+					"text": "ఆ మంచి భాగాలు రక్తం ద్వారా శరీరమంతా చేరుతాయి. అవి పరుగెత్తడానికి, ఆడుకోవడానికి, పెరగడానికి శక్తినిస్తాయి!"
+				},
+				{
+					"items": [
+						"చుట్టలు చుట్టుకున్న ఆ పొడవైన గొట్టం ఒక కారు కంటే పొడవు!",
+						"ఆహారం తన ప్రయాణం పూర్తి చేయడానికి చాలా గంటలు పడుతుంది.",
+						"శరీరానికి పనికిరానిది, నువ్వు టాయిలెట్‌కు వెళ్ళినప్పుడు బయటికి పోతుంది."
+					]
+				},
+				{
+					"text": "శరీరం ఆహారాన్ని అంచెలంచెలుగా శక్తిగా మారుస్తుంది. బాగా నమలడమే మొదటి అడుగు!"
+				}
+			],
+			"reflection_question": "ఆడుకోవడానికి నీకు ఏ ఆహారం ఎక్కువ శక్తినిస్తుంది?",
+			"real_world_mission": "తర్వాతి భోజనంలో, ప్రతి ముద్దను మెల్లగా పదిసార్లు నమిలి చూడు. రుచి ఏమైనా మారిందా?"
+		}
+	}
+}

@@ -63,7 +63,7 @@ describe('parseFactImport', () => {
 	});
 
 	it('rejects an unknown scene, a wrong layer count and an unknown layer', () => {
-		expect(run(base({ scene: { id: 'volcano', section_layers: [[], [], []] } })).ok).toBe(false);
+		expect(run(base({ scene: { id: 'no-such-scene', section_layers: [[], [], []] } })).ok).toBe(false);
 		expect(run(base({ scene: { id: 'water-cycle', section_layers: [[], []] } })).ok).toBe(false);
 		const typo = run(base({ scene: { id: 'water-cycle', section_layers: [['rian'], [], []] } }));
 		expect(typo.ok).toBe(false);
@@ -83,7 +83,7 @@ describe('every bundled fact file', () => {
 	const entries = Object.entries(allFacts);
 
 	it('finds the fact files', () => {
-		expect(entries.length).toBeGreaterThanOrEqual(10);
+		expect(entries.length).toBeGreaterThanOrEqual(20);
 	});
 
 	it.each(entries)('%s imports cleanly in English and Telugu with a scene', (_path, raw) => {

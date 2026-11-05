@@ -1,0 +1,138 @@
+{
+	"id": "fact-sky-blue",
+	"topic": "why the sky is blue",
+	"scene": {
+		"id": "sky",
+		"section_layers": [
+			[
+				"blue-sky"
+			],
+			[
+				"sunlight",
+				"colors"
+			],
+			[
+				"sunlight"
+			],
+			[
+				"sunlight",
+				"scatter"
+			],
+			[
+				"scatter",
+				"blue-sky"
+			],
+			[
+				"sunset"
+			],
+			[
+				"blue-sky"
+			],
+			[
+				"sunlight",
+				"scatter",
+				"blue-sky"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "Why is the sky blue?",
+			"subtitle": "Sunlight plays bounce with the air",
+			"sections": [
+				{
+					"text": "Look up on a sunny day. The sky is blue! But why is it blue, and not green or pink?"
+				},
+				{
+					"text": "Sunlight looks white, but it is really all the colours of the rainbow mixed together."
+				},
+				{
+					"text": "The air around us is made of tiny, tiny bits. They are far too small to see."
+				},
+				{
+					"text": "When sunlight hits these tiny bits, the blue light bounces off them the most. It bounces all over the sky."
+				},
+				{
+					"text": "Blue light comes to our eyes from every part of the sky. So the whole sky looks blue!"
+				},
+				{
+					"text": "At sunset, sunlight travels a long way through the air. The blue bounces away, and orange and red are left."
+				},
+				{
+					"items": [
+						"On the Moon there is no air, so its sky is always black.",
+						"Clouds look white because they send back all the colours together.",
+						"Never look straight at the sun. It can hurt your eyes."
+					]
+				},
+				{
+					"text": "The sky is blue because tiny bits of air scatter blue sunlight all over the sky."
+				}
+			],
+			"reflection_question": "What colours have you seen in the sky at different times of the day?",
+			"real_world_mission": "Look at the sky at lunchtime and again at sunset with a grown-up. How are the colours different?"
+		},
+		"te": {
+			"title": "ఆకాశం నీలంగా ఎందుకు ఉంటుంది?",
+			"subtitle": "సూర్యకాంతి గాలితో ఆడే ఆట",
+			"sections": [
+				{
+					"text": "ఎండ రోజున పైకి చూడు. ఆకాశం నీలంగా ఉంటుంది! అది ఆకుపచ్చగానో, గులాబీ రంగులోనో కాకుండా నీలంగానే ఎందుకు ఉంటుంది?"
+				},
+				{
+					"text": "సూర్యకాంతి తెల్లగా కనిపిస్తుంది, కానీ అది నిజానికి ఇంద్రధనుస్సు రంగులన్నీ కలిసిన కాంతి."
+				},
+				{
+					"text": "మన చుట్టూ ఉన్న గాలి చాలా చాలా చిన్న కణాలతో తయారైంది. అవి కంటికి కనిపించనంత చిన్నవి."
+				},
+				{
+					"text": "సూర్యకాంతి ఆ చిన్న కణాలకు తగిలినప్పుడు, నీలం కాంతి ఎక్కువగా ఎగిరి పడుతుంది. అది ఆకాశమంతా చెల్లాచెదురవుతుంది."
+				},
+				{
+					"text": "ఆకాశంలోని ప్రతి వైపు నుంచి నీలం కాంతి మన కళ్ళకు చేరుతుంది. అందుకే ఆకాశం మొత్తం నీలంగా కనిపిస్తుంది!"
+				},
+				{
+					"text": "సూర్యాస్తమయం వేళ, సూర్యకాంతి గాలిలో చాలా దూరం ప్రయాణిస్తుంది. నీలం దారిలోనే చెదిరిపోయి, నారింజ, ఎరుపు మిగులుతాయి."
+				},
+				{
+					"items": [
+						"చంద్రుడి మీద గాలి లేదు, అందుకే అక్కడి ఆకాశం ఎప్పుడూ నల్లగా ఉంటుంది.",
+						"మేఘాలు అన్ని రంగులను కలిపి వెనక్కి పంపుతాయి, అందుకే తెల్లగా కనిపిస్తాయి.",
+						"సూర్యుడి వైపు ఎప్పుడూ నేరుగా చూడకు. అది కళ్ళకు హాని చేస్తుంది."
+					]
+				},
+				{
+					"text": "గాలిలోని చిన్న కణాలు నీలం సూర్యకాంతిని ఆకాశమంతా చెదరగొడతాయి. అందుకే ఆకాశం నీలంగా ఉంటుంది."
+				}
+			],
+			"reflection_question": "రోజులో వేర్వేరు సమయాల్లో ఆకాశంలో ఏ ఏ రంగులు చూశావు?",
+			"real_world_mission": "పెద్దవాళ్ళతో కలిసి మధ్యాహ్నం, మళ్ళీ సూర్యాస్తమయం వేళ ఆకాశాన్ని చూడు. రంగులు ఎలా మారాయి?"
+		}
+	}
+}

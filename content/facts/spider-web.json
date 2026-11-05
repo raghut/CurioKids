@@ -1,0 +1,146 @@
+{
+	"id": "fact-spider-web",
+	"topic": "spider web",
+	"scene": {
+		"id": "spider",
+		"section_layers": [
+			[
+				"spokes",
+				"spiral",
+				"spider"
+			],
+			[
+				"silk"
+			],
+			[
+				"bridge"
+			],
+			[
+				"bridge",
+				"frame"
+			],
+			[
+				"bridge",
+				"frame",
+				"spokes"
+			],
+			[
+				"bridge",
+				"frame",
+				"spokes",
+				"spiral",
+				"spider"
+			],
+			[
+				"spokes",
+				"spiral",
+				"spider"
+			],
+			[
+				"spokes",
+				"spiral",
+				"spider"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does a spider make its web?",
+			"subtitle": "A tiny builder at work",
+			"sections": [
+				{
+					"text": "Have you seen a spider web shining in the morning? How does a tiny spider build something so neat?"
+				},
+				{
+					"text": "A spider makes silk inside its body. The silk comes out of the back of the spider as a thin thread."
+				},
+				{
+					"text": "First, the spider lets a thread float on the wind. When it sticks to a branch, it makes a bridge."
+				},
+				{
+					"text": "Then the spider walks along its bridge and adds more threads to make a strong frame."
+				},
+				{
+					"text": "Next it adds lines from the middle to the frame, like the spokes of a bicycle wheel."
+				},
+				{
+					"text": "Last, it walks round and round, laying a sticky spiral. Then it waits for insects to get stuck!"
+				},
+				{
+					"items": [
+						"Spider silk is stronger than steel of the same thickness.",
+						"A spider does not get stuck because it walks on the lines that are not sticky.",
+						"Many spiders build a brand new web every day."
+					]
+				},
+				{
+					"text": "A spider builds its web step by step: bridge, frame, spokes and spiral. Patient work makes something amazing."
+				}
+			],
+			"reflection_question": "If you were a spider, where would you build your web?",
+			"real_world_mission": "Early in the morning, look for a web with dew drops on it. Look closely, but do not break it!"
+		},
+		"te": {
+			"title": "సాలీడు తన గూడు ఎలా కడుతుంది?",
+			"subtitle": "పని చేస్తున్న ఒక చిన్న మేస్త్రి",
+			"sections": [
+				{
+					"text": "ఉదయం మెరుస్తున్న సాలెగూడును చూశావా? ఇంత చిన్న సాలీడు అంత చక్కనిదాన్ని ఎలా కడుతుంది?"
+				},
+				{
+					"text": "సాలీడు తన శరీరం లోపల దారం తయారు చేస్తుంది. ఆ దారం సాలీడు వెనక భాగం నుంచి సన్నని పోగుగా బయటికి వస్తుంది."
+				},
+				{
+					"text": "ముందు, సాలీడు ఒక దారాన్ని గాలిలో వదులుతుంది. అది ఒక కొమ్మకు అంటుకోగానే, ఒక వంతెన తయారవుతుంది."
+				},
+				{
+					"text": "తర్వాత సాలీడు ఆ వంతెన మీద నడుస్తూ, ఇంకా దారాలు కలిపి బలమైన చట్రం తయారు చేస్తుంది."
+				},
+				{
+					"text": "తర్వాత మధ్య నుంచి చట్రం వరకు, సైకిల్ చక్రంలోని తీగల్లాగా దారాలు కడుతుంది."
+				},
+				{
+					"text": "చివరగా, అది గుండ్రంగా తిరుగుతూ జిగటగా ఉండే చుట్టలు కడుతుంది. తర్వాత పురుగులు అంటుకునే వరకు ఎదురు చూస్తుంది!"
+				},
+				{
+					"items": [
+						"అంతే మందం ఉన్న ఉక్కు కంటే సాలీడు దారం బలమైనది.",
+						"సాలీడు జిగట లేని దారాల మీదే నడుస్తుంది, అందుకే అది అంటుకోదు.",
+						"చాలా సాలీళ్ళు ప్రతి రోజూ కొత్త గూడు కడతాయి."
+					]
+				},
+				{
+					"text": "సాలీడు అంచెలంచెలుగా గూడు కడుతుంది: వంతెన, చట్రం, తీగలు, చుట్టలు. ఓపికగా చేసే పని అద్భుతంగా ఉంటుంది."
+				}
+			],
+			"reflection_question": "నువ్వు సాలీడువైతే, నీ గూడు ఎక్కడ కడతావు?",
+			"real_world_mission": "తెల్లవారుజామున మంచు బిందువులు ఉన్న సాలెగూడు కోసం వెతుకు. దగ్గరగా చూడు, కానీ దాన్ని తెంపకు!"
+		}
+	}
+}
