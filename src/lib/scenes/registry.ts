@@ -29,6 +29,7 @@ import EyeScene from './EyeScene.svelte';
 import EarScene from './EarScene.svelte';
 import SweatScene from './SweatScene.svelte';
 import SoapScene from './SoapScene.svelte';
+import CarrotShareScene from './CarrotShareScene.svelte';
 
 type SceneProps = { layers?: string[]; still?: boolean; cover?: boolean };
 
@@ -66,5 +67,6 @@ export const SCENES: Record<string, Component<SceneProps>> = {
 	eye: EyeScene,
 	ear: EarScene,
 	sweat: SweatScene,
-	soap: SoapScene
+	soap: SoapScene,
+	'carrot-share': CarrotShareScene
 };

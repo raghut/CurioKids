@@ -82,6 +82,7 @@
 					language={story.language}
 					closeHref="/admin/stories/{story.id}"
 					doneLabel="Done!"
+					scene={story.scene}
 					{onDone}
 				/>
 			</div>

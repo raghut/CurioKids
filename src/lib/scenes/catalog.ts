@@ -172,6 +172,12 @@ export const SCENE_CATALOG: Readonly<Record<string, SceneInfo>> = {
 		label: 'How soap cleans',
 		layers: ['germs', 'water-only', 'soap', 'grab', 'rinse', 'clean'],
 		cover: ['soap', 'grab']
+	},
+	// --- Story scenes: stepped by page instead of by section ---
+	'carrot-share': {
+		label: 'Mishti shares a carrot (story)',
+		layers: ['day', 'pull', 'carrot', 'sound', 'tortoise', 'share', 'sunset', 'hearts'],
+		cover: ['day', 'share', 'tortoise', 'hearts']
 	}
 };
 
