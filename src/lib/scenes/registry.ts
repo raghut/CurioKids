@@ -39,6 +39,7 @@ import RocketScene from './RocketScene.svelte';
 import StarsScene from './StarsScene.svelte';
 import SeasonsScene from './SeasonsScene.svelte';
 import SaltySeaScene from './SaltySeaScene.svelte';
+import CarrotShareScene from './CarrotShareScene.svelte';
 
 type SceneProps = { layers?: string[]; still?: boolean; cover?: boolean };
 
@@ -86,5 +87,6 @@ export const SCENES: Record<string, Component<SceneProps>> = {
 	rocket: RocketScene,
 	stars: StarsScene,
 	seasons: SeasonsScene,
-	'salty-sea': SaltySeaScene
+	'salty-sea': SaltySeaScene,
+	'carrot-share': CarrotShareScene
 };

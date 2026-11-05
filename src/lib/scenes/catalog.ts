@@ -222,6 +222,12 @@ export const SCENE_CATALOG: Readonly<Record<string, SceneInfo>> = {
 		label: 'Why the sea is salty',
 		layers: ['rain', 'river', 'salt', 'evaporate', 'pans'],
 		cover: ['rain', 'river', 'salt', 'evaporate']
+	},
+	// --- Story scenes: stepped by page instead of by section ---
+	'carrot-share': {
+		label: 'Mishti shares a carrot (story)',
+		layers: ['day', 'pull', 'carrot', 'sound', 'tortoise', 'share', 'sunset', 'hearts'],
+		cover: ['day', 'share', 'tortoise', 'hearts']
 	}
 };
 

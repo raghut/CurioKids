@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { X, ChevronLeft, ChevronRight } from 'lucide-svelte';
-	import type { Language } from '$lib/types';
+	import FactScene from '$lib/components/FactScene.svelte';
+	import type { Language, StoryScene } from '$lib/types';
 
 	/**
 	 * The child's reading experience: one page at a time, picture above text, prev/next.
@@ -16,6 +17,7 @@
 		closeHref = '/stories',
 		showClose = true,
 		doneLabel = 'Done!',
+		scene,
 		onDone
 	}: {
 		title: string;
@@ -26,6 +28,8 @@
 		/** Off when the host route draws its own header (the kid route pairs close with print). */
 		showClose?: boolean;
 		doneLabel?: string;
+		/** Optional animated scene; replaces per-page pictures when present. */
+		scene?: StoryScene;
 		onDone?: () => void;
 	} = $props();
 
@@ -33,6 +37,8 @@
 
 	const current = $derived(pages[pageIndex]);
 	const isLast = $derived(pageIndex === pages.length - 1);
+	// The scene stays mounted across pages, so its layers fade instead of the picture blinking.
+	const sceneLayers = $derived(scene ? (scene.page_layers[pageIndex] ?? []) : []);
 
 	export function reset() {
 		pageIndex = 0;
@@ -58,8 +64,13 @@
 	<h2 class="text-2xl font-bold mb-4" lang={language}>{title}</h2>
 
 	<div class="flex-1 flex flex-col justify-center">
-		<div class="bg-peach/20 rounded-2xl p-6 min-h-[200px] flex flex-col items-center justify-center gap-4">
-			{#if current?.image_url}
+		{#if scene}
+			<div class="mx-auto mb-4 aspect-[680/360] w-full overflow-hidden rounded-2xl">
+				<FactScene sceneId={scene.id} layers={sceneLayers} />
+			</div>
+		{/if}
+		<div class="bg-peach/20 rounded-2xl p-6 {scene ? 'min-h-[140px]' : 'min-h-[200px]'} flex flex-col items-center justify-center gap-4">
+			{#if !scene && current?.image_url}
 				<img src={current.image_url} alt="" class="w-full max-w-sm rounded-xl object-cover" />
 			{/if}
 			<p class="text-xl leading-relaxed text-center" lang={language}>{current?.text}</p>
