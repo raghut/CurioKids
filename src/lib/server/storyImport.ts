@@ -24,6 +24,20 @@ const LIMITS = { title: 80, page: 600, moral: 200, reflection: 200 } as const;
 export type StoryImportOk = { ok: true; stories: GeneratedStory[] };
 export type StoryImportErr = { ok: false; message: string };
 
+/**
+ * stories.id is a Postgres uuid, so a readable id like "story-carrot-share-en" cannot be
+ * stored as-is. Hash it into a name-based (v5-style) uuid instead: the same name always
+ * gives the same uuid, so re-importing a file still hits the no-overwrite guard.
+ */
+export async function uuidFromName(name: string): Promise<string> {
+	const bytes = new TextEncoder().encode(`curiokids-story:${name}`);
+	const h = new Uint8Array(await crypto.subtle.digest('SHA-1', bytes)).slice(0, 16);
+	h[6] = (h[6] & 0x0f) | 0x50;
+	h[8] = (h[8] & 0x3f) | 0x80;
+	const hex = [...h].map((b) => b.toString(16).padStart(2, '0')).join('');
+	return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
 function text(v: unknown): string {
 	return typeof v === 'string' ? v.trim() : '';
 }

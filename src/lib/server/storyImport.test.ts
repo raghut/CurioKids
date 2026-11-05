@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseStoryImport } from './storyImport';
+import { parseStoryImport, uuidFromName } from './storyImport';
 import { themes } from '$lib/data/themes';
 
 // Every story file in content/stories is checked with the same rules the import page
@@ -83,6 +83,13 @@ describe('parseStoryImport', () => {
 		expect(run(base({ scene: { id: 'carrot-share', page_layers: [[]] } })).ok).toBe(false);
 		const r = run(base({ scene: { id: 'carrot-share', page_layers: [['carot'], [], [], []] } }));
 		expect(!r.ok && r.message).toMatch(/carot/);
+	});
+
+	it('turns a readable id into the same valid uuid every time', async () => {
+		const a = await uuidFromName('story-x-en');
+		expect(a).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+		expect(await uuidFromName('story-x-en')).toBe(a);
+		expect(await uuidFromName('story-x-te')).not.toBe(a);
 	});
 
 	it('finds at least one story file', () => {
