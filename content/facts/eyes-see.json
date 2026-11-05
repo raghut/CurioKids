@@ -1,0 +1,143 @@
+{
+	"id": "fact-eyes-see",
+	"topic": "how we see",
+	"scene": {
+		"id": "eye",
+		"section_layers": [
+			[
+				"light",
+				"brain"
+			],
+			[
+				"light"
+			],
+			[
+				"light"
+			],
+			[
+				"light",
+				"lens"
+			],
+			[
+				"lens",
+				"image"
+			],
+			[
+				"image",
+				"brain"
+			],
+			[
+				"light",
+				"lens",
+				"image",
+				"brain"
+			],
+			[
+				"light",
+				"lens",
+				"image",
+				"brain"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How do our eyes see?",
+			"subtitle": "Light, eyes and brain together",
+			"sections": [
+				{
+					"text": "You can see colours, faces and shapes. But how does a picture get into your head?"
+				},
+				{
+					"text": "Light bounces off everything around you, like this flower. Some of that light goes into your eyes."
+				},
+				{
+					"text": "Light goes in through the black circle in the middle of your eye. It is a little opening called the pupil."
+				},
+				{
+					"text": "Behind it is a clear lens. It bends the light to make a sharp picture."
+				},
+				{
+					"text": "The picture lands at the back of your eye, upside down!"
+				},
+				{
+					"text": "Your eye sends a message to your brain. The brain turns the picture the right way up, and you see!"
+				},
+				{
+					"items": [
+						"Your pupil gets bigger in the dark to let in more light.",
+						"You blink many times every minute to keep your eyes clean and wet.",
+						"Never look straight at the sun. It can hurt your eyes."
+					]
+				},
+				{
+					"text": "We see when light goes into our eyes and our brain makes sense of the picture."
+				}
+			],
+			"reflection_question": "Why do you think we cannot see anything in a completely dark room?",
+			"real_world_mission": "Look in a mirror, then close your eyes for a moment and open them. Watch your pupils change size!"
+		},
+		"te": {
+			"title": "మన కళ్ళు ఎలా చూస్తాయి?",
+			"subtitle": "వెలుగు, కళ్ళు, మెదడు కలిసి",
+			"sections": [
+				{
+					"text": "నువ్వు రంగులు, ముఖాలు, ఆకారాలు చూడగలవు. కానీ ఆ బొమ్మ నీ తలలోకి ఎలా వెళ్తుంది?"
+				},
+				{
+					"text": "నీ చుట్టూ ఉన్న ప్రతి దాని మీద, ఈ పువ్వు మీదలా, వెలుగు తగిలి ఎగిరి పడుతుంది. ఆ వెలుగులో కొంత నీ కళ్ళలోకి వెళ్తుంది."
+				},
+				{
+					"text": "నీ కంటి మధ్యలో ఉన్న నల్లని వృత్తం గుండా వెలుగు లోపలికి వెళ్తుంది. ఆ చిన్న రంధ్రాన్ని కనుపాప అంటారు."
+				},
+				{
+					"text": "దాని వెనక ఒక పారదర్శకమైన కటకం ఉంటుంది. అది వెలుగును వంచి స్పష్టమైన బొమ్మను చేస్తుంది."
+				},
+				{
+					"text": "ఆ బొమ్మ కంటి వెనక భాగంలో, తలకిందులుగా పడుతుంది!"
+				},
+				{
+					"text": "కన్ను మెదడుకు ఒక సందేశం పంపుతుంది. మెదడు ఆ బొమ్మను సరిగ్గా తిప్పుతుంది, అప్పుడు నీకు కనిపిస్తుంది!"
+				},
+				{
+					"items": [
+						"చీకట్లో ఎక్కువ వెలుగు లోపలికి రావడానికి కనుపాప పెద్దదవుతుంది.",
+						"కళ్ళను శుభ్రంగా, తడిగా ఉంచడానికి ప్రతి నిమిషం చాలాసార్లు రెప్ప వేస్తావు.",
+						"సూర్యుడి వైపు ఎప్పుడూ నేరుగా చూడకు. అది కళ్ళకు హాని చేస్తుంది."
+					]
+				},
+				{
+					"text": "వెలుగు కళ్ళలోకి వెళ్ళి, మెదడు ఆ బొమ్మను అర్థం చేసుకున్నప్పుడు మనకు కనిపిస్తుంది."
+				}
+			],
+			"reflection_question": "పూర్తిగా చీకటిగా ఉన్న గదిలో మనకు ఏమీ ఎందుకు కనిపించదని నువ్వు అనుకుంటున్నావు?",
+			"real_world_mission": "అద్దంలో చూడు, కాసేపు కళ్ళు మూసి తెరువు. నీ కనుపాపలు పరిమాణం మారడం చూడు!"
+		}
+	}
+}

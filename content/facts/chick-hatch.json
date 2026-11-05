@@ -1,0 +1,135 @@
+{
+	"id": "fact-chick-hatch",
+	"topic": "chick hatching",
+	"scene": {
+		"id": "chick",
+		"section_layers": [
+			[
+				"chick"
+			],
+			[
+				"hen",
+				"egg"
+			],
+			[
+				"inside"
+			],
+			[
+				"growing"
+			],
+			[
+				"crack"
+			],
+			[
+				"chick"
+			],
+			[
+				"chick"
+			],
+			[
+				"hen",
+				"chick"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does a chick hatch from an egg?",
+			"subtitle": "21 days inside a shell",
+			"sections": [
+				{
+					"text": "A fluffy chick comes out of an egg. But how does it grow in there?"
+				},
+				{
+					"text": "The mother hen sits on her eggs to keep them warm. She gently turns them every day."
+				},
+				{
+					"text": "Inside the egg, a tiny chick starts to grow. The yellow yolk is its food."
+				},
+				{
+					"text": "Day by day, the chick grows bigger. Soon it fills the whole egg, curled up tight."
+				},
+				{
+					"text": "After about 21 days, the chick pecks at the shell with a tiny bump on its beak. Tap, tap, crack!"
+				},
+				{
+					"text": "Out comes a wet chick! Soon its feathers dry, and it becomes soft and fluffy."
+				},
+				{
+					"items": [
+						"A chick can walk and peck for food on the very first day.",
+						"Chicks cheep from inside the egg before they hatch.",
+						"The eggs we buy to eat will not turn into chicks."
+					]
+				},
+				{
+					"text": "A warm egg, food inside and time: that is how a chick grows and hatches."
+				}
+			],
+			"reflection_question": "How do you think the chick knows when it is time to come out?",
+			"real_world_mission": "Hold an egg gently with a grown-up. Feel how smooth and strong its shell is."
+		},
+		"te": {
+			"title": "గుడ్డు నుంచి కోడిపిల్ల ఎలా బయటికి వస్తుంది?",
+			"subtitle": "పెంకు లోపల 21 రోజులు",
+			"sections": [
+				{
+					"text": "మెత్తని కోడిపిల్ల గుడ్డు నుంచి బయటికి వస్తుంది. కానీ అది లోపల ఎలా పెరుగుతుంది?"
+				},
+				{
+					"text": "అమ్మ కోడి గుడ్ల మీద కూర్చుని వాటిని వెచ్చగా ఉంచుతుంది. ప్రతి రోజు వాటిని మెల్లగా తిప్పుతుంది."
+				},
+				{
+					"text": "గుడ్డు లోపల, ఒక చిన్న కోడిపిల్ల పెరగడం మొదలవుతుంది. పసుపు రంగు పచ్చసొనే దానికి ఆహారం."
+				},
+				{
+					"text": "రోజు రోజుకూ కోడిపిల్ల పెద్దదవుతుంది. కొన్నాళ్ళకు అది ముడుచుకుని గుడ్డు మొత్తం నిండిపోతుంది."
+				},
+				{
+					"text": "దాదాపు 21 రోజుల తర్వాత, కోడిపిల్ల ముక్కు మీది చిన్న ఉబ్బుతో పెంకును పొడుస్తుంది. టక్, టక్, పగులు!"
+				},
+				{
+					"text": "తడిగా ఉన్న కోడిపిల్ల బయటికి వస్తుంది! కొంచెం సేపట్లో దాని ఈకలు ఆరి, అది మెత్తగా, మెత్తగా అవుతుంది."
+				},
+				{
+					"items": [
+						"కోడిపిల్ల పుట్టిన రోజే నడవగలదు, గింజలు పొడుచుకుని తినగలదు.",
+						"గుడ్డు నుంచి బయటికి రాకముందే కోడిపిల్లలు లోపలి నుంచి కీచుమంటాయి.",
+						"మనం తినడానికి కొనే గుడ్ల నుంచి కోడిపిల్లలు రావు."
+					]
+				},
+				{
+					"text": "వెచ్చదనం, లోపల ఆహారం, కొంత సమయం: అలా కోడిపిల్ల పెరిగి బయటికి వస్తుంది."
+				}
+			],
+			"reflection_question": "బయటికి రావాల్సిన సమయం వచ్చిందని కోడిపిల్లకు ఎలా తెలుస్తుందని నువ్వు అనుకుంటున్నావు?",
+			"real_world_mission": "పెద్దవాళ్ళతో కలిసి గుడ్డును మెల్లగా పట్టుకో. పెంకు ఎంత నునుపుగా, గట్టిగా ఉందో తడిమి చూడు."
+		}
+	}
+}

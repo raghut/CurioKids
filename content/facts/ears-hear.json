@@ -1,0 +1,144 @@
+{
+	"id": "fact-ears-hear",
+	"topic": "how we hear",
+	"scene": {
+		"id": "ear",
+		"section_layers": [
+			[
+				"sound",
+				"brain"
+			],
+			[
+				"sound"
+			],
+			[
+				"sound",
+				"canal"
+			],
+			[
+				"canal",
+				"drum"
+			],
+			[
+				"drum",
+				"bones"
+			],
+			[
+				"snail",
+				"brain"
+			],
+			[
+				"sound",
+				"canal",
+				"drum",
+				"brain"
+			],
+			[
+				"sound",
+				"canal",
+				"drum",
+				"brain"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How do our ears hear?",
+			"subtitle": "Shaking air, tiny bones",
+			"sections": [
+				{
+					"text": "A bell rings far away, and you hear it. How does the sound get into your head?"
+				},
+				{
+					"text": "When a bell rings, it shakes the air around it. These shakes travel as sound waves."
+				},
+				{
+					"text": "Your outer ear catches the sound waves and sends them down a little tunnel."
+				},
+				{
+					"text": "At the end is a thin skin called the eardrum. The waves make it shake, like a drum."
+				},
+				{
+					"text": "Three tiny bones pass the shaking on. They are the smallest bones in your body!"
+				},
+				{
+					"text": "A snail-shaped part turns the shaking into a message. The message goes to your brain, and you hear!"
+				},
+				{
+					"items": [
+						"Very loud sounds can hurt your ears, so cover them near loud noise.",
+						"Never put anything inside your ear.",
+						"Two ears help you tell which way a sound is coming from."
+					]
+				},
+				{
+					"text": "Sound is shaking air. Our ears pass the shaking along until our brain hears it."
+				}
+			],
+			"reflection_question": "What is your favourite sound in the whole world?",
+			"real_world_mission": "Close your eyes and sit quietly for one minute. How many different sounds can you hear?"
+		},
+		"te": {
+			"title": "మన చెవులు ఎలా వింటాయి?",
+			"subtitle": "కదిలే గాలి, చిన్న ఎముకలు",
+			"sections": [
+				{
+					"text": "దూరంగా గంట మోగుతుంది, నీకు వినిపిస్తుంది. ఆ శబ్దం నీ తలలోకి ఎలా వెళ్తుంది?"
+				},
+				{
+					"text": "గంట మోగినప్పుడు, అది చుట్టూ ఉన్న గాలిని కదిలిస్తుంది. ఆ కదలికలు శబ్ద తరంగాలుగా ప్రయాణిస్తాయి."
+				},
+				{
+					"text": "నీ బయటి చెవి శబ్ద తరంగాలను పట్టుకుని, ఒక చిన్న సొరంగం గుండా లోపలికి పంపుతుంది."
+				},
+				{
+					"text": "దాని చివర కర్ణభేరి అనే పలుచని పొర ఉంటుంది. తరంగాలు దాన్ని డప్పులా కదిలిస్తాయి."
+				},
+				{
+					"text": "మూడు చిన్న ఎముకలు ఆ కదలికను ముందుకు పంపుతాయి. అవి నీ శరీరంలో అన్నిటికంటే చిన్న ఎముకలు!"
+				},
+				{
+					"text": "నత్త ఆకారంలో ఉండే ఒక భాగం ఆ కదలికను సందేశంగా మారుస్తుంది. ఆ సందేశం మెదడుకు వెళ్తుంది, అప్పుడు నీకు వినిపిస్తుంది!"
+				},
+				{
+					"items": [
+						"చాలా పెద్ద శబ్దాలు చెవులకు హాని చేస్తాయి, అందుకే అలాంటప్పుడు చెవులు మూసుకో.",
+						"చెవిలో ఎప్పుడూ ఏదీ పెట్టకు.",
+						"శబ్దం ఏ వైపు నుంచి వస్తోందో రెండు చెవులు కలిసి చెప్తాయి."
+					]
+				},
+				{
+					"text": "శబ్దం అంటే కదిలే గాలి. మెదడు వినేంత వరకు మన చెవులు ఆ కదలికను ముందుకు పంపుతాయి."
+				}
+			],
+			"reflection_question": "ప్రపంచం మొత్తంలో నీకు అన్నిటికంటే ఇష్టమైన శబ్దం ఏది?",
+			"real_world_mission": "కళ్ళు మూసుకుని ఒక నిమిషం నిశ్శబ్దంగా కూర్చో. ఎన్ని రకాల శబ్దాలు వినిపిస్తున్నాయి?"
+		}
+	}
+}

@@ -122,6 +122,56 @@ export const SCENE_CATALOG: Readonly<Record<string, SceneInfo>> = {
 		label: 'What makes the wind',
 		layers: ['warm', 'rise', 'breeze', 'loop', 'kite'],
 		cover: ['warm', 'breeze', 'loop', 'kite']
+	},
+	'plant-water': {
+		label: 'How plants drink',
+		layers: ['soil-water', 'roots', 'stem', 'leaves-out', 'glass'],
+		cover: ['soil-water', 'roots', 'stem', 'leaves-out']
+	},
+	frog: {
+		label: 'Frog life cycle',
+		layers: ['eggs', 'tadpole', 'legs', 'froglet', 'frog', 'cycle'],
+		cover: ['eggs', 'tadpole', 'legs', 'froglet', 'frog']
+	},
+	chick: {
+		label: 'Chick hatching',
+		layers: ['hen', 'egg', 'inside', 'growing', 'crack', 'chick'],
+		cover: ['chick']
+	},
+	earthworm: {
+		label: 'Earthworms',
+		layers: ['worm', 'tunnels', 'leaves', 'castings', 'roots-water'],
+		cover: ['worm', 'tunnels', 'leaves', 'castings']
+	},
+	elephant: {
+		label: 'Elephant trunk',
+		layers: ['trunk', 'smell', 'drink', 'spray', 'lift', 'trumpet'],
+		cover: ['spray']
+	},
+	heart: {
+		label: 'The heart',
+		layers: ['heart', 'pump', 'blood', 'lungs', 'pulse-wrist'],
+		cover: ['heart', 'pump', 'blood']
+	},
+	eye: {
+		label: 'How we see',
+		layers: ['light', 'lens', 'image', 'brain'],
+		cover: ['light', 'lens', 'image', 'brain']
+	},
+	ear: {
+		label: 'How we hear',
+		layers: ['sound', 'canal', 'drum', 'bones', 'snail', 'brain'],
+		cover: ['sound', 'canal', 'drum', 'brain']
+	},
+	sweat: {
+		label: 'Why we sweat',
+		layers: ['hot', 'gland', 'drops', 'evaporate', 'cool', 'water'],
+		cover: ['hot', 'drops', 'evaporate']
+	},
+	soap: {
+		label: 'How soap cleans',
+		layers: ['germs', 'water-only', 'soap', 'grab', 'rinse', 'clean'],
+		cover: ['soap', 'grab']
 	}
 };
 

@@ -1,0 +1,143 @@
+{
+	"id": "fact-why-sweat",
+	"topic": "why we sweat",
+	"scene": {
+		"id": "sweat",
+		"section_layers": [
+			[
+				"hot",
+				"drops"
+			],
+			[
+				"hot"
+			],
+			[
+				"hot",
+				"gland"
+			],
+			[
+				"gland",
+				"drops"
+			],
+			[
+				"drops",
+				"evaporate"
+			],
+			[
+				"evaporate",
+				"cool"
+			],
+			[
+				"drops",
+				"evaporate",
+				"water"
+			],
+			[
+				"hot",
+				"drops",
+				"evaporate",
+				"water"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "Why do we sweat?",
+			"subtitle": "Your body's own cooler",
+			"sections": [
+				{
+					"text": "After running in the sun, your skin gets wet with sweat. Why does that happen?"
+				},
+				{
+					"text": "Your body likes to stay just warm, not too hot. Sun and running can make it too hot."
+				},
+				{
+					"text": "Under your skin are millions of tiny sweat makers. When you get hot, they start working."
+				},
+				{
+					"text": "They push out sweat through tiny holes in your skin. Sweat is mostly water."
+				},
+				{
+					"text": "As sweat dries into the air, it takes heat away from your skin."
+				},
+				{
+					"text": "Your skin cools down, and so do you. Sweat is your body's own cooler!"
+				},
+				{
+					"items": [
+						"Sweat tastes a little salty.",
+						"Dogs do not sweat much. They pant with their tongues out to cool down.",
+						"A fan helps sweat dry faster, so you feel cooler."
+					]
+				},
+				{
+					"text": "Sweating keeps us cool. Drink plenty of water to put back what you sweat out."
+				}
+			],
+			"reflection_question": "When do you sweat the most?",
+			"real_world_mission": "Wet the back of one hand and blow on both hands. Which one feels cooler?"
+		},
+		"te": {
+			"title": "మనకు చెమట ఎందుకు పడుతుంది?",
+			"subtitle": "శరీరం సొంత కూలర్",
+			"sections": [
+				{
+					"text": "ఎండలో పరుగెత్తాక నీ చర్మం చెమటతో తడిసిపోతుంది. అలా ఎందుకు జరుగుతుంది?"
+				},
+				{
+					"text": "నీ శరీరం మరీ వేడిగా కాకుండా, వెచ్చగా ఉండటానికి ఇష్టపడుతుంది. ఎండ, పరుగు దాన్ని మరీ వేడి చేస్తాయి."
+				},
+				{
+					"text": "నీ చర్మం కింద లక్షల చిన్న చెమట గ్రంథులు ఉంటాయి. నీకు వేడిగా అనిపించగానే అవి పని మొదలుపెడతాయి."
+				},
+				{
+					"text": "అవి చర్మంలోని చిన్న రంధ్రాల ద్వారా చెమటను బయటికి పంపుతాయి. చెమటలో ఎక్కువగా నీళ్ళే ఉంటాయి."
+				},
+				{
+					"text": "చెమట గాలిలోకి ఆరిపోతున్నప్పుడు, అది చర్మం నుంచి వేడిని తీసుకెళ్తుంది."
+				},
+				{
+					"text": "నీ చర్మం చల్లబడుతుంది, నువ్వు కూడా. చెమట శరీరం సొంత కూలర్!"
+				},
+				{
+					"items": [
+						"చెమట కొంచెం ఉప్పగా ఉంటుంది.",
+						"కుక్కలకు ఎక్కువ చెమట పట్టదు. అవి నాలుక బయటపెట్టి ఆయాసపడుతూ చల్లబడతాయి.",
+						"ఫ్యాన్ గాలి చెమటను త్వరగా ఆరబెడుతుంది, అందుకే చల్లగా అనిపిస్తుంది."
+					]
+				},
+				{
+					"text": "చెమట మనల్ని చల్లగా ఉంచుతుంది. చెమటగా పోయిన నీటిని తిరిగి పొందడానికి బాగా నీళ్ళు తాగు."
+				}
+			],
+			"reflection_question": "నీకు ఎప్పుడు ఎక్కువగా చెమట పడుతుంది?",
+			"real_world_mission": "ఒక చేతి వెనక భాగాన్ని తడిపి, రెండు చేతుల మీద ఊదు. ఏ చేయి చల్లగా అనిపిస్తుంది?"
+		}
+	}
+}

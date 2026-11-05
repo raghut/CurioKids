@@ -1,0 +1,143 @@
+{
+	"id": "fact-plants-drink",
+	"topic": "how plants drink water",
+	"scene": {
+		"id": "plant-water",
+		"section_layers": [
+			[
+				"soil-water",
+				"roots",
+				"stem"
+			],
+			[
+				"soil-water"
+			],
+			[
+				"soil-water",
+				"roots"
+			],
+			[
+				"roots",
+				"stem"
+			],
+			[
+				"stem",
+				"leaves-out"
+			],
+			[
+				"glass"
+			],
+			[
+				"roots",
+				"stem",
+				"leaves-out"
+			],
+			[
+				"soil-water",
+				"roots",
+				"stem",
+				"leaves-out"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How do plants drink water?",
+			"subtitle": "From roots to leaves",
+			"sections": [
+				{
+					"text": "Plants have no mouth, but they need water every day. How do they drink?"
+				},
+				{
+					"text": "When it rains or we water a plant, the water soaks into the soil around its roots."
+				},
+				{
+					"text": "The roots have tiny hairs that soak up the water, like a sponge."
+				},
+				{
+					"text": "The water travels up the stem through tiny tubes, like drinking through a straw."
+				},
+				{
+					"text": "The water reaches every leaf. Some of it floats out into the air through tiny holes in the leaves."
+				},
+				{
+					"text": "Try this: put a white flower in coloured water. In a day, the petals change colour. You can see the water travel!"
+				},
+				{
+					"items": [
+						"Tall trees can pull water all the way up to their highest leaves.",
+						"A plant without water droops, and stands up again after a drink.",
+						"Water helps carry food to every part of the plant."
+					]
+				},
+				{
+					"text": "Plants drink with their roots. Water climbs up the stem to the leaves and helps the whole plant live."
+				}
+			],
+			"reflection_question": "What would happen to a plant if nobody watered it for many days?",
+			"real_world_mission": "Put a white flower or a leafy celery stick in a glass of water with food colour. Check it tomorrow!"
+		},
+		"te": {
+			"title": "మొక్కలు నీళ్ళు ఎలా తాగుతాయి?",
+			"subtitle": "వేర్ల నుంచి ఆకుల దాకా",
+			"sections": [
+				{
+					"text": "మొక్కలకు నోరు లేదు, కానీ వాటికి ప్రతి రోజు నీళ్ళు కావాలి. అవి ఎలా తాగుతాయి?"
+				},
+				{
+					"text": "వర్షం పడినప్పుడు లేదా మనం మొక్కకు నీళ్ళు పోసినప్పుడు, ఆ నీళ్ళు వేర్ల చుట్టూ ఉన్న మట్టిలోకి ఇంకుతాయి."
+				},
+				{
+					"text": "వేర్లకు ఉండే చిన్న చిన్న వెంట్రుకలు స్పాంజిలా ఆ నీళ్ళను పీల్చుకుంటాయి."
+				},
+				{
+					"text": "ఆ నీళ్ళు కాండంలోని చిన్న గొట్టాల ద్వారా పైకి వెళ్తాయి, మనం స్ట్రాతో తాగినట్లు."
+				},
+				{
+					"text": "నీళ్ళు ప్రతి ఆకుకు చేరతాయి. కొన్ని నీళ్ళు ఆకుల్లోని చిన్న రంధ్రాల ద్వారా ఆవిరై గాలిలోకి వెళ్తాయి."
+				},
+				{
+					"text": "ఇలా చేసి చూడు: తెల్లని పువ్వును రంగు నీళ్ళలో పెట్టు. ఒక రోజులో రేకుల రంగు మారుతుంది. నీళ్ళ ప్రయాణం కంటికే కనిపిస్తుంది!"
+				},
+				{
+					"items": [
+						"ఎత్తైన చెట్లు కూడా అన్నిటికంటే పైనున్న ఆకుల దాకా నీళ్ళను లాగగలవు.",
+						"నీళ్ళు లేకపోతే మొక్క వాలిపోతుంది, నీళ్ళు తాగాక మళ్ళీ నిటారుగా నిలబడుతుంది.",
+						"ఆహారాన్ని మొక్క అంతటికీ తీసుకెళ్ళడానికి నీళ్ళు సాయం చేస్తాయి."
+					]
+				},
+				{
+					"text": "మొక్కలు వేర్లతో నీళ్ళు తాగుతాయి. నీళ్ళు కాండం ద్వారా ఆకుల దాకా ఎక్కి, మొక్క అంతటినీ బతికిస్తాయి."
+				}
+			],
+			"reflection_question": "చాలా రోజులు ఎవరూ నీళ్ళు పోయకపోతే మొక్కకు ఏమవుతుంది?",
+			"real_world_mission": "ఒక తెల్లని పువ్వును రంగు కలిపిన నీళ్ళ గ్లాసులో పెట్టు. రేపు చూడు!"
+		}
+	}
+}

@@ -1,0 +1,145 @@
+{
+	"id": "fact-earthworms",
+	"topic": "earthworms",
+	"scene": {
+		"id": "earthworm",
+		"section_layers": [
+			[
+				"worm",
+				"tunnels"
+			],
+			[
+				"worm"
+			],
+			[
+				"worm",
+				"tunnels"
+			],
+			[
+				"worm",
+				"tunnels",
+				"leaves"
+			],
+			[
+				"worm",
+				"tunnels",
+				"castings"
+			],
+			[
+				"tunnels",
+				"roots-water"
+			],
+			[
+				"worm",
+				"tunnels",
+				"castings"
+			],
+			[
+				"worm",
+				"tunnels",
+				"castings",
+				"roots-water"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How do earthworms help the soil?",
+			"subtitle": "Tiny farmers under our feet",
+			"sections": [
+				{
+					"text": "Earthworms live under the ground. Farmers call them their friends. Why?"
+				},
+				{
+					"text": "An earthworm has no legs and no eyes. It moves by stretching and squeezing its long body."
+				},
+				{
+					"text": "It pushes through the soil and makes lots of tunnels."
+				},
+				{
+					"text": "Earthworms eat dead leaves and bits of soil. They pull leaves down into their tunnels."
+				},
+				{
+					"text": "What comes out of the worm is rich, dark soil. It is great food for plants."
+				},
+				{
+					"text": "The tunnels let air and rain water reach deep down. Plant roots grow easily through them."
+				},
+				{
+					"items": [
+						"Earthworms breathe through their skin.",
+						"After heavy rain, worms come up because their tunnels fill with water.",
+						"Some gardeners keep worms to turn kitchen scraps into soil."
+					]
+				},
+				{
+					"text": "Earthworms dig, mix and feed the soil. Healthy soil grows healthy plants."
+				}
+			],
+			"reflection_question": "Why do you think earthworms are called the farmer's friend?",
+			"real_world_mission": "After rain, look for earthworms in a garden with a grown-up. Watch gently, then put them back on the soil."
+		},
+		"te": {
+			"title": "వానపాములు మట్టికి ఎలా సాయం చేస్తాయి?",
+			"subtitle": "మన కాళ్ళ కింద చిన్న రైతులు",
+			"sections": [
+				{
+					"text": "వానపాములు నేల కింద ఉంటాయి. రైతులు వాటిని తమ స్నేహితులు అంటారు. ఎందుకు?"
+				},
+				{
+					"text": "వానపాముకు కాళ్ళు లేవు, కళ్ళు లేవు. అది తన పొడవైన శరీరాన్ని సాగదీస్తూ, ముడుచుకుంటూ కదులుతుంది."
+				},
+				{
+					"text": "అది మట్టిని తోసుకుంటూ వెళ్ళి చాలా సొరంగాలు తవ్వుతుంది."
+				},
+				{
+					"text": "వానపాములు ఎండిన ఆకులను, మట్టి ముక్కలను తింటాయి. అవి ఆకులను తమ సొరంగాల్లోకి లాక్కెళ్తాయి."
+				},
+				{
+					"text": "వానపాము నుంచి బయటికి వచ్చేది సారవంతమైన నల్లని మట్టి. అది మొక్కలకు చాలా మంచి ఆహారం."
+				},
+				{
+					"text": "ఆ సొరంగాల ద్వారా గాలి, వాన నీళ్ళు లోతుకు చేరతాయి. మొక్కల వేర్లు వాటి గుండా సులభంగా పెరుగుతాయి."
+				},
+				{
+					"items": [
+						"వానపాములు చర్మం ద్వారా శ్వాస తీసుకుంటాయి.",
+						"భారీ వర్షం తర్వాత, సొరంగాల్లో నీళ్ళు నిండటంతో వానపాములు పైకి వస్తాయి.",
+						"కొంతమంది తోటమాలులు వంటింటి చెత్తను మట్టిగా మార్చడానికి వానపాములను పెంచుతారు."
+					]
+				},
+				{
+					"text": "వానపాములు మట్టిని తవ్వి, కలిపి, సారవంతం చేస్తాయి. ఆరోగ్యమైన మట్టిలో ఆరోగ్యమైన మొక్కలు పెరుగుతాయి."
+				}
+			],
+			"reflection_question": "వానపాములను రైతు మిత్రుడు అని ఎందుకు అంటారని నువ్వు అనుకుంటున్నావు?",
+			"real_world_mission": "వర్షం తర్వాత, పెద్దవాళ్ళతో కలిసి తోటలో వానపాముల కోసం చూడు. మెల్లగా గమనించి, మళ్ళీ మట్టి మీద వదిలెయ్."
+		}
+	}
+}

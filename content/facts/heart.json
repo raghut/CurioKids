@@ -1,0 +1,141 @@
+{
+	"id": "fact-heart",
+	"topic": "the heart",
+	"scene": {
+		"id": "heart",
+		"section_layers": [
+			[
+				"heart"
+			],
+			[
+				"heart"
+			],
+			[
+				"heart",
+				"pump"
+			],
+			[
+				"heart",
+				"lungs"
+			],
+			[
+				"heart",
+				"pump",
+				"blood"
+			],
+			[
+				"pulse-wrist"
+			],
+			[
+				"heart",
+				"pump",
+				"blood"
+			],
+			[
+				"heart",
+				"pump",
+				"blood"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does our heart pump blood?",
+			"subtitle": "Lub-dub, all day long",
+			"sections": [
+				{
+					"text": "Put your hand on your chest. Can you feel something going thump, thump? That is your heart!"
+				},
+				{
+					"text": "Your heart is a strong muscle, about as big as your fist. It sits in your chest."
+				},
+				{
+					"text": "The heart squeezes and relaxes again and again. Each squeeze pushes blood out. That is a heartbeat!"
+				},
+				{
+					"text": "Blood goes to your lungs to pick up fresh air from your breath."
+				},
+				{
+					"text": "Then the heart pumps the blood all around your body, carrying air and food. Then it comes back again."
+				},
+				{
+					"text": "You can feel each beat on your wrist. That is called your pulse."
+				},
+				{
+					"items": [
+						"Your heart beats about a hundred thousand times every day.",
+						"Running and jumping make your heart beat faster.",
+						"A heartbeat sounds like lub-dub."
+					]
+				},
+				{
+					"text": "Your heart never stops working. Playing, running and eating well keep it strong."
+				}
+			],
+			"reflection_question": "When does your heart beat the fastest?",
+			"real_world_mission": "Feel your pulse on your wrist with a grown-up. Then jump twenty times and feel it again. What changed?"
+		},
+		"te": {
+			"title": "మన గుండె రక్తాన్ని ఎలా పంపుతుంది?",
+			"subtitle": "లబ్-డబ్, రోజంతా",
+			"sections": [
+				{
+					"text": "నీ చేతిని ఛాతీ మీద పెట్టు. ఏదో టక్ టక్ మని కొట్టుకోవడం తెలుస్తోందా? అదే నీ గుండె!"
+				},
+				{
+					"text": "నీ గుండె ఒక బలమైన కండరం, దాదాపు నీ పిడికిలంత పెద్దది. అది ఛాతీలో ఉంటుంది."
+				},
+				{
+					"text": "గుండె మళ్ళీ మళ్ళీ ముడుచుకుని, వదులవుతుంది. ప్రతిసారి ముడుచుకున్నప్పుడు రక్తాన్ని బయటికి తోస్తుంది. అదే గుండె చప్పుడు!"
+				},
+				{
+					"text": "రక్తం నువ్వు పీల్చిన తాజా గాలిని తీసుకోవడానికి ఊపిరితిత్తులకు వెళ్తుంది."
+				},
+				{
+					"text": "తర్వాత గుండె ఆ రక్తాన్ని గాలి, ఆహారంతో సహా శరీరమంతా పంపుతుంది. అది మళ్ళీ తిరిగి వస్తుంది."
+				},
+				{
+					"text": "ప్రతి చప్పుడును నువ్వు మణికట్టు దగ్గర తెలుసుకోవచ్చు. దాన్ని నాడి అంటారు."
+				},
+				{
+					"items": [
+						"నీ గుండె ప్రతి రోజు దాదాపు లక్ష సార్లు కొట్టుకుంటుంది.",
+						"పరుగెత్తినా, గెంతినా గుండె వేగంగా కొట్టుకుంటుంది.",
+						"గుండె చప్పుడు లబ్-డబ్ అని వినిపిస్తుంది."
+					]
+				},
+				{
+					"text": "నీ గుండె ఎప్పుడూ పని ఆపదు. ఆడుకోవడం, పరుగెత్తడం, మంచి ఆహారం తినడం దాన్ని బలంగా ఉంచుతాయి."
+				}
+			],
+			"reflection_question": "నీ గుండె ఎప్పుడు అన్నిటికంటే వేగంగా కొట్టుకుంటుంది?",
+			"real_world_mission": "పెద్దవాళ్ళతో కలిసి మణికట్టు దగ్గర నాడి చూడు. తర్వాత ఇరవై సార్లు గెంతి మళ్ళీ చూడు. ఏం మారింది?"
+		}
+	}
+}

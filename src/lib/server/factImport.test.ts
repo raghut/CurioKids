@@ -83,7 +83,7 @@ describe('every bundled fact file', () => {
 	const entries = Object.entries(allFacts);
 
 	it('finds the fact files', () => {
-		expect(entries.length).toBeGreaterThanOrEqual(20);
+		expect(entries.length).toBeGreaterThanOrEqual(30);
 	});
 
 	it.each(entries)('%s imports cleanly in English and Telugu with a scene', (_path, raw) => {
