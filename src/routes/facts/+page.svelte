@@ -33,7 +33,7 @@
 			<ArrowLeft size={28} strokeWidth={1.5} />
 		</a>
 		<h1 class="text-3xl font-bold" lang={te ? 'te' : undefined}>
-			{te ? 'ఎందుకు?' : 'Why?'}
+			{te ? 'ఎందుకు? ఎలా?' : 'Why & How?'}
 		</h1>
 	</header>
 
