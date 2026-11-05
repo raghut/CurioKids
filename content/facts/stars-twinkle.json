@@ -1,0 +1,145 @@
+{
+	"id": "fact-stars-twinkle",
+	"topic": "why stars twinkle",
+	"scene": {
+		"id": "stars",
+		"section_layers": [
+			[
+				"stars",
+				"twinkle"
+			],
+			[
+				"stars"
+			],
+			[
+				"stars",
+				"air"
+			],
+			[
+				"stars",
+				"air",
+				"bend"
+			],
+			[
+				"stars",
+				"air",
+				"twinkle"
+			],
+			[
+				"stars",
+				"twinkle",
+				"planet"
+			],
+			[
+				"stars",
+				"twinkle",
+				"planet"
+			],
+			[
+				"stars",
+				"air",
+				"twinkle"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "Why do stars twinkle?",
+			"subtitle": "Wobbly air, winking stars",
+			"sections": [
+				{
+					"text": "At night, stars seem to twinkle and wink at us. Why do they do that?"
+				},
+				{
+					"text": "Stars are giant, burning balls like our sun, but so far away that they look like tiny dots."
+				},
+				{
+					"text": "Around the Earth is a thick blanket of air. The air is always moving, like wobbly water."
+				},
+				{
+					"text": "A star's light travels a long way. When it passes through the moving air, it gets bent this way and that."
+				},
+				{
+					"text": "So the star looks a little brighter, then dimmer, again and again. That is twinkling!"
+				},
+				{
+					"text": "Planets are much closer to us, so their light stays steady. If it does not twinkle, it may be a planet!"
+				},
+				{
+					"items": [
+						"Astronauts in space see stars that do not twinkle at all.",
+						"Stars twinkle more near the horizon, where their light passes through more air.",
+						"Our sun is a star too, the closest one to us."
+					]
+				},
+				{
+					"text": "Stars do not really blink. The moving air around the Earth makes their light wobble."
+				}
+			],
+			"reflection_question": "Which do you think twinkles more, a star high up or one near the ground?",
+			"real_world_mission": "On a clear night, look at the sky with a grown-up. Can you find a bright light that does not twinkle?"
+		},
+		"te": {
+			"title": "నక్షత్రాలు ఎందుకు మెరుస్తాయి?",
+			"subtitle": "కదిలే గాలి, కన్ను కొట్టే నక్షత్రాలు",
+			"sections": [
+				{
+					"text": "రాత్రి నక్షత్రాలు మెరుస్తూ మనకు కన్ను కొడుతున్నట్లు ఉంటాయి. అవి ఎందుకు అలా చేస్తాయి?"
+				},
+				{
+					"text": "నక్షత్రాలు మన సూర్యుడి లాంటి పెద్ద మండే గోళాలు, కానీ ఎంత దూరంలో ఉన్నాయంటే చిన్న చుక్కల్లా కనిపిస్తాయి."
+				},
+				{
+					"text": "భూమి చుట్టూ మందపాటి గాలి దుప్పటి ఉంటుంది. ఆ గాలి కదిలే నీళ్ళలా ఎప్పుడూ కదులుతూనే ఉంటుంది."
+				},
+				{
+					"text": "నక్షత్రం వెలుగు చాలా దూరం ప్రయాణిస్తుంది. కదిలే గాలి గుండా వెళ్ళేటప్పుడు, అది అటూ ఇటూ వంగుతుంది."
+				},
+				{
+					"text": "అందుకే నక్షత్రం కొంచెం ప్రకాశవంతంగా, తర్వాత మసకగా, మళ్ళీ మళ్ళీ కనిపిస్తుంది. అదే మెరవడం!"
+				},
+				{
+					"text": "గ్రహాలు మనకు చాలా దగ్గర, అందుకే వాటి వెలుగు స్థిరంగా ఉంటుంది. మెరవకపోతే, అది గ్రహం కావచ్చు!"
+				},
+				{
+					"items": [
+						"అంతరిక్షంలో ఉండే వ్యోమగాములకు నక్షత్రాలు అసలు మెరవవు.",
+						"దిగంతం దగ్గర నక్షత్రాలు ఎక్కువగా మెరుస్తాయి, ఎందుకంటే వాటి వెలుగు ఎక్కువ గాలి గుండా వస్తుంది.",
+						"మన సూర్యుడు కూడా ఒక నక్షత్రమే, మనకు అన్నిటికంటే దగ్గరది."
+					]
+				},
+				{
+					"text": "నక్షత్రాలు నిజంగా రెప్ప వేయవు. భూమి చుట్టూ కదిలే గాలి వాటి వెలుగును ఊగిసలాడేలా చేస్తుంది."
+				}
+			],
+			"reflection_question": "ఎత్తులో ఉన్న నక్షత్రం, నేల దగ్గరిది, వీటిలో ఏది ఎక్కువగా మెరుస్తుంది?",
+			"real_world_mission": "నిర్మలమైన రాత్రి, పెద్దవాళ్ళతో కలిసి ఆకాశం చూడు. మెరవని ప్రకాశవంతమైన వెలుగును కనిపెట్టగలవా?"
+		}
+	}
+}

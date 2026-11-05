@@ -1,0 +1,146 @@
+{
+	"id": "fact-seasons",
+	"topic": "seasons",
+	"scene": {
+		"id": "seasons",
+		"section_layers": [
+			[
+				"orbit",
+				"summer",
+				"winter"
+			],
+			[
+				"orbit"
+			],
+			[
+				"orbit",
+				"tilt"
+			],
+			[
+				"tilt",
+				"summer"
+			],
+			[
+				"tilt",
+				"summer",
+				"monsoon"
+			],
+			[
+				"tilt",
+				"winter"
+			],
+			[
+				"orbit",
+				"tilt",
+				"summer",
+				"winter"
+			],
+			[
+				"orbit",
+				"tilt",
+				"summer",
+				"winter"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "Why do we have summer, monsoon and winter?",
+			"subtitle": "The leaning Earth",
+			"sections": [
+				{
+					"text": "Why is it hot in summer, rainy in the monsoon and cool in winter?"
+				},
+				{
+					"text": "The Earth travels all the way around the sun. One trip takes a whole year."
+				},
+				{
+					"text": "The Earth does not stand straight. It leans a little, and keeps leaning the same way all year."
+				},
+				{
+					"text": "When our part of the Earth leans towards the sun, sunlight shines more strongly on us. It is summer!"
+				},
+				{
+					"text": "In India, the hot summer land pulls in wet winds from the sea. They bring the monsoon rains."
+				},
+				{
+					"text": "Half a year later, our part leans away from the sun. Sunlight is weaker and days are shorter. It is winter."
+				},
+				{
+					"items": [
+						"When it is summer in India, it is winter in Australia!",
+						"Summer days are long and winter days are short.",
+						"Near the North Pole, there are days when the sun never sets."
+					]
+				},
+				{
+					"text": "Seasons come because the Earth leans as it travels around the sun."
+				}
+			],
+			"reflection_question": "Which season do you like best, and why?",
+			"real_world_mission": "Every month, draw what the weather is like where you live. After a year, you will have a seasons calendar!"
+		},
+		"te": {
+			"title": "ఎండాకాలం, వర్షాకాలం, చలికాలం ఎందుకు వస్తాయి?",
+			"subtitle": "వాలి ఉండే భూమి",
+			"sections": [
+				{
+					"text": "ఎండాకాలంలో వేడిగా, వర్షాకాలంలో వర్షంగా, చలికాలంలో చల్లగా ఎందుకు ఉంటుంది?"
+				},
+				{
+					"text": "భూమి సూర్యుడి చుట్టూ పూర్తిగా తిరుగుతుంది. ఒక్కసారి తిరగడానికి ఒక సంవత్సరం పడుతుంది."
+				},
+				{
+					"text": "భూమి నిటారుగా ఉండదు. అది కొంచెం వాలి ఉంటుంది, ఏడాదంతా అదే వైపు వాలి ఉంటుంది."
+				},
+				{
+					"text": "మనం ఉండే భూమి భాగం సూర్యుడి వైపు వాలినప్పుడు, సూర్యకాంతి మన మీద బలంగా పడుతుంది. అదే ఎండాకాలం!"
+				},
+				{
+					"text": "భారతదేశంలో, ఎండకు వేడెక్కిన నేల సముద్రం నుంచి తేమ గాలులను లాగుతుంది. అవి వర్షాకాలపు వానలు తెస్తాయి."
+				},
+				{
+					"text": "ఆరు నెలల తర్వాత, మన భాగం సూర్యుడికి దూరంగా వాలుతుంది. సూర్యకాంతి బలహీనంగా, పగళ్ళు చిన్నగా ఉంటాయి. అదే చలికాలం."
+				},
+				{
+					"items": [
+						"భారతదేశంలో ఎండాకాలం అయినప్పుడు, ఆస్ట్రేలియాలో చలికాలం!",
+						"ఎండాకాలంలో పగళ్ళు పొడవుగా, చలికాలంలో చిన్నగా ఉంటాయి.",
+						"ఉత్తర ధ్రువం దగ్గర, సూర్యుడు అస్తమించని రోజులు ఉంటాయి."
+					]
+				},
+				{
+					"text": "భూమి వాలి ఉంటూ సూర్యుడి చుట్టూ తిరుగుతుంది కాబట్టే ఋతువులు వస్తాయి."
+				}
+			],
+			"reflection_question": "నీకు ఏ ఋతువు అన్నిటికంటే ఇష్టం? ఎందుకు?",
+			"real_world_mission": "ప్రతి నెల నీ ఊరి వాతావరణం బొమ్మ గీయి. ఏడాది తర్వాత నీకు ఒక ఋతువుల క్యాలెండర్ తయారవుతుంది!"
+		}
+	}
+}

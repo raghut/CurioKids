@@ -1,0 +1,140 @@
+{
+	"id": "fact-bicycle",
+	"topic": "how a bicycle moves",
+	"scene": {
+		"id": "bicycle",
+		"section_layers": [
+			[
+				"move"
+			],
+			[
+				"pedal"
+			],
+			[
+				"pedal",
+				"chain"
+			],
+			[
+				"chain",
+				"wheel"
+			],
+			[
+				"gears",
+				"wheel"
+			],
+			[
+				"pedal",
+				"chain",
+				"move"
+			],
+			[
+				"move"
+			],
+			[
+				"pedal",
+				"chain",
+				"move"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does a bicycle move?",
+			"subtitle": "Pedals, chain and wheels",
+			"sections": [
+				{
+					"text": "You push the pedals with your feet, and the bicycle zooms forward. How does that work?"
+				},
+				{
+					"text": "When you push the pedals, they go round and round, turning a big wheel with teeth called a gear."
+				},
+				{
+					"text": "A chain wraps around this gear. As the gear turns, it pulls the chain along."
+				},
+				{
+					"text": "The chain goes back to a small gear on the back wheel, and turns the back wheel."
+				},
+				{
+					"text": "The front gear is big and the back gear is small. So one turn of the pedals spins the back wheel more than once!"
+				},
+				{
+					"text": "The turning back wheel grips the road and pushes the bicycle forward. Off you go!"
+				},
+				{
+					"items": [
+						"Some bicycles have many gears to make hills easier to climb.",
+						"On most bicycles, pedalling backwards does not move you.",
+						"Always wear a helmet when you ride!"
+					]
+				},
+				{
+					"text": "Your legs turn the pedals, the chain carries the turn to the back wheel, and the wheel pushes you forward."
+				}
+			],
+			"reflection_question": "Why do you think it is harder to pedal up a hill?",
+			"real_world_mission": "With a grown-up, turn a bicycle upside down. Turn the pedals slowly by hand and watch the chain and wheel."
+		},
+		"te": {
+			"title": "సైకిల్ ఎలా కదులుతుంది?",
+			"subtitle": "పెడల్స్, చైను, చక్రాలు",
+			"sections": [
+				{
+					"text": "నువ్వు కాళ్ళతో పెడల్స్ తొక్కుతావు, సైకిల్ ముందుకు దూసుకెళ్తుంది. అది ఎలా పని చేస్తుంది?"
+				},
+				{
+					"text": "నువ్వు పెడల్స్ తొక్కినప్పుడు, అవి గుండ్రంగా తిరుగుతూ, గేర్ అనే పళ్ళున్న పెద్ద చక్రాన్ని తిప్పుతాయి."
+				},
+				{
+					"text": "ఈ గేర్ చుట్టూ ఒక చైను ఉంటుంది. గేర్ తిరుగుతుంటే అది చైనును లాగుతుంది."
+				},
+				{
+					"text": "ఆ చైను వెనక చక్రం మీది చిన్న గేర్ దాకా వెళ్ళి, వెనక చక్రాన్ని తిప్పుతుంది."
+				},
+				{
+					"text": "ముందు గేర్ పెద్దది, వెనక గేర్ చిన్నది. అందుకే పెడల్స్ ఒక్కసారి తిప్పితే వెనక చక్రం ఒకసారి కంటే ఎక్కువ తిరుగుతుంది!"
+				},
+				{
+					"text": "తిరిగే వెనక చక్రం రోడ్డును పట్టుకుని సైకిల్‌ను ముందుకు తోస్తుంది. ఇక దూసుకెళ్ళు!"
+				},
+				{
+					"items": [
+						"ఎత్తులు సులభంగా ఎక్కడానికి కొన్ని సైకిళ్ళకు చాలా గేర్లు ఉంటాయి.",
+						"చాలా సైకిళ్ళలో పెడల్స్ వెనక్కి తొక్కితే సైకిల్ కదలదు.",
+						"సైకిల్ తొక్కేటప్పుడు ఎప్పుడూ హెల్మెట్ పెట్టుకో!"
+					]
+				},
+				{
+					"text": "నీ కాళ్ళు పెడల్స్ తిప్పుతాయి, చైను ఆ తిరుగుడును వెనక చక్రానికి చేరుస్తుంది, చక్రం నిన్ను ముందుకు తోస్తుంది."
+				}
+			],
+			"reflection_question": "ఎత్తు మీదికి సైకిల్ తొక్కడం ఎందుకు కష్టమని నువ్వు అనుకుంటున్నావు?",
+			"real_world_mission": "పెద్దవాళ్ళతో కలిసి సైకిల్‌ను తలకిందులుగా పెట్టు. పెడల్స్‌ను చేతితో మెల్లగా తిప్పి, చైను, చక్రం తిరగడం చూడు."
+		}
+	}
+}

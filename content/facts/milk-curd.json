@@ -1,0 +1,141 @@
+{
+	"id": "fact-milk-curd",
+	"topic": "milk to curd",
+	"scene": {
+		"id": "curd",
+		"section_layers": [
+			[
+				"curd",
+				"bacteria"
+			],
+			[
+				"milk",
+				"warm"
+			],
+			[
+				"milk",
+				"starter"
+			],
+			[
+				"milk",
+				"bacteria"
+			],
+			[
+				"bacteria",
+				"night"
+			],
+			[
+				"curd",
+				"night"
+			],
+			[
+				"curd",
+				"bacteria"
+			],
+			[
+				"curd",
+				"bacteria"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does milk turn into curd?",
+			"subtitle": "Tiny helpers at work overnight",
+			"sections": [
+				{
+					"text": "At night it is milk. In the morning it is thick, sour curd! How does that happen?"
+				},
+				{
+					"text": "First, the milk is boiled and cooled until it is just warm, not hot."
+				},
+				{
+					"text": "Then a spoonful of old curd is mixed in. It holds millions of tiny, friendly living things called bacteria."
+				},
+				{
+					"text": "In the warm milk, the bacteria eat the milk's sugar and multiply, again and again."
+				},
+				{
+					"text": "As they eat, they make the milk sour. The sourness makes the milk thick."
+				},
+				{
+					"text": "By morning, the milk has turned into curd! Keep a little to start the next batch."
+				},
+				{
+					"items": [
+						"Curd sets faster on hot days and slower on cold days.",
+						"The good bacteria in curd help keep your tummy healthy.",
+						"Tiny helpers like these also make idli and dosa batter rise."
+					]
+				},
+				{
+					"text": "Tiny bacteria turn warm milk into curd. Not all germs are bad. Some are our helpers!"
+				}
+			],
+			"reflection_question": "What other foods do you think tiny helpers make?",
+			"real_world_mission": "Help a grown-up set curd tonight. Check it in the morning. Is it thick?"
+		},
+		"te": {
+			"title": "పాలు పెరుగుగా ఎలా మారతాయి?",
+			"subtitle": "రాత్రంతా పని చేసే చిన్న సహాయకులు",
+			"sections": [
+				{
+					"text": "రాత్రి పాలు. ఉదయానికి చిక్కని, పుల్లని పెరుగు! అది ఎలా జరుగుతుంది?"
+				},
+				{
+					"text": "ముందు పాలను మరిగించి, వేడిగా కాకుండా గోరువెచ్చగా అయ్యే వరకు చల్లారుస్తారు."
+				},
+				{
+					"text": "తర్వాత ఒక చెంచా పాత పెరుగు కలుపుతారు. దీన్నే తోడు వేయడం అంటారు. దానిలో బ్యాక్టీరియా అనే లక్షల చిన్న, మంచి జీవులు ఉంటాయి."
+				},
+				{
+					"text": "గోరువెచ్చని పాలలో, బ్యాక్టీరియా పాలలోని చక్కెరను తింటూ మళ్ళీ మళ్ళీ పెరుగుతాయి."
+				},
+				{
+					"text": "అవి తింటున్నప్పుడు పాలు పుల్లగా మారతాయి. ఆ పులుపు వల్లే పాలు చిక్కబడతాయి."
+				},
+				{
+					"text": "తెల్లవారేసరికి పాలు పెరుగుగా మారిపోతాయి! తర్వాతి తోడు కోసం కొంచెం దాచుకోవాలి."
+				},
+				{
+					"items": [
+						"ఎండాకాలంలో పెరుగు త్వరగా, చలికాలంలో నెమ్మదిగా తోడుకుంటుంది.",
+						"పెరుగులోని మంచి బ్యాక్టీరియా మన పొట్టను ఆరోగ్యంగా ఉంచుతాయి.",
+						"ఇలాంటి చిన్న సహాయకులే ఇడ్లీ, దోసె పిండిని పొంగేలా చేస్తాయి."
+					]
+				},
+				{
+					"text": "చిన్న బ్యాక్టీరియా గోరువెచ్చని పాలను పెరుగుగా మారుస్తాయి. అన్ని సూక్ష్మజీవులు చెడ్డవి కావు. కొన్ని మనకు సాయం చేస్తాయి!"
+				}
+			],
+			"reflection_question": "ఇంకా ఏ ఆహారాలను చిన్న సహాయకులు తయారు చేస్తాయని అనుకుంటున్నావు?",
+			"real_world_mission": "ఈ రాత్రి పెద్దవాళ్ళతో కలిసి పాలకు తోడు వేయి. ఉదయం చూడు. పెరుగు చిక్కబడిందా?"
+		}
+	}
+}

@@ -1,0 +1,144 @@
+{
+	"id": "fact-phone-call",
+	"topic": "how a phone call works",
+	"scene": {
+		"id": "phone-call",
+		"section_layers": [
+			[
+				"voice",
+				"hear"
+			],
+			[
+				"voice"
+			],
+			[
+				"voice",
+				"signal"
+			],
+			[
+				"signal",
+				"network"
+			],
+			[
+				"network",
+				"arrive"
+			],
+			[
+				"arrive",
+				"hear"
+			],
+			[
+				"signal",
+				"network",
+				"arrive"
+			],
+			[
+				"voice",
+				"signal",
+				"network",
+				"arrive",
+				"hear"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does a phone call reach someone far away?",
+			"subtitle": "Your voice takes a flying trip",
+			"sections": [
+				{
+					"text": "You talk into a phone, and someone far away hears you at once. How does your voice travel so far?"
+				},
+				{
+					"text": "When you speak, the phone listens with a tiny microphone and turns your voice into a code."
+				},
+				{
+					"text": "The phone sends the code through the air as invisible waves to the nearest phone tower."
+				},
+				{
+					"text": "The tower passes it on, from tower to tower and through cables, very fast."
+				},
+				{
+					"text": "A tower near your friend sends the waves to their phone."
+				},
+				{
+					"text": "Their phone turns the code back into your voice, and they hear you, all in less than a second!"
+				},
+				{
+					"items": [
+						"Some calls travel through cables under the sea to reach other countries.",
+						"Phone waves are a bit like radio waves.",
+						"Long ago, people sent letters, and they took days to arrive!"
+					]
+				},
+				{
+					"text": "Your voice becomes a code, flies as invisible waves from tower to tower, and turns back into your voice far away."
+				}
+			],
+			"reflection_question": "Who would you like to call right now, and what would you tell them?",
+			"real_world_mission": "Make a string phone with two paper cups and a long thread. Can a friend hear you whisper?"
+		},
+		"te": {
+			"title": "ఫోన్ కాల్ దూరంలో ఉన్నవాళ్ళకు ఎలా చేరుతుంది?",
+			"subtitle": "నీ గొంతు ఎగిరే ప్రయాణం",
+			"sections": [
+				{
+					"text": "నువ్వు ఫోన్‌లో మాట్లాడతావు, దూరంలో ఉన్నవాళ్ళకు వెంటనే వినిపిస్తుంది. నీ గొంతు అంత దూరం ఎలా ప్రయాణిస్తుంది?"
+				},
+				{
+					"text": "నువ్వు మాట్లాడినప్పుడు, ఫోన్ ఒక చిన్న మైక్‌తో వింటుంది, నీ గొంతును ఒక సంకేతంగా మారుస్తుంది."
+				},
+				{
+					"text": "ఫోన్ ఆ సంకేతాన్ని కనిపించని తరంగాలుగా గాలి ద్వారా దగ్గరలోని ఫోన్ టవర్‌కు పంపుతుంది."
+				},
+				{
+					"text": "టవర్ దాన్ని ముందుకు పంపుతుంది, టవర్ నుంచి టవర్‌కు, కేబుళ్ళ ద్వారా, చాలా వేగంగా."
+				},
+				{
+					"text": "నీ స్నేహితుడి దగ్గరి టవర్ ఆ తరంగాలను వారి ఫోన్‌కు పంపుతుంది."
+				},
+				{
+					"text": "వారి ఫోన్ ఆ సంకేతాన్ని మళ్ళీ నీ గొంతుగా మారుస్తుంది, వారికి నువ్వు వినిపిస్తావు, అదంతా ఒక్క సెకను లోపే!"
+				},
+				{
+					"items": [
+						"కొన్ని కాల్స్ వేరే దేశాలకు చేరడానికి సముద్రం కింది కేబుళ్ళ ద్వారా ప్రయాణిస్తాయి.",
+						"ఫోన్ తరంగాలు రేడియో తరంగాల లాంటివే.",
+						"చాలా కాలం క్రితం ప్రజలు ఉత్తరాలు పంపేవారు, అవి చేరడానికి రోజులు పట్టేవి!"
+					]
+				},
+				{
+					"text": "నీ గొంతు సంకేతంగా మారి, కనిపించని తరంగాలుగా టవర్ నుంచి టవర్‌కు ఎగిరి, దూరంలో మళ్ళీ నీ గొంతుగా మారుతుంది."
+				}
+			],
+			"reflection_question": "ఇప్పుడు నువ్వు ఎవరికి ఫోన్ చేయాలనుకుంటున్నావు? ఏం చెప్తావు?",
+			"real_world_mission": "రెండు కాగితం కప్పులు, పొడవైన దారంతో దారం ఫోన్ చేయి. నువ్వు గుసగుసలాడితే స్నేహితుడికి వినిపిస్తుందా?"
+		}
+	}
+}

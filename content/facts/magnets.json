@@ -1,0 +1,139 @@
+{
+	"id": "fact-magnets",
+	"topic": "magnets",
+	"scene": {
+		"id": "magnet",
+		"section_layers": [
+			[
+				"field",
+				"pull"
+			],
+			[
+				"field"
+			],
+			[
+				"field",
+				"pull"
+			],
+			[
+				"stay"
+			],
+			[
+				"attract"
+			],
+			[
+				"repel"
+			],
+			[
+				"field",
+				"pull",
+				"stay"
+			],
+			[
+				"field",
+				"pull",
+				"attract"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does a magnet pull things?",
+			"subtitle": "An invisible pull",
+			"sections": [
+				{
+					"text": "A magnet can pull a paper clip without even touching it. How does it do that?"
+				},
+				{
+					"text": "A magnet has an invisible pull all around it. We cannot see it, but we can see what it does."
+				},
+				{
+					"text": "Things made of iron, like paper clips and nails, jump towards the magnet and stick to it."
+				},
+				{
+					"text": "Wood, plastic, paper and rubber do not move at all. A magnet does not pull them."
+				},
+				{
+					"text": "Every magnet has two different ends. Two different ends pull together. Snap!"
+				},
+				{
+					"text": "But two same ends push each other away. Try as you might, they will not touch!"
+				},
+				{
+					"items": [
+						"The Earth is like a giant magnet. That is why a compass needle points north.",
+						"Fridge magnets stick because the fridge door has iron in it.",
+						"A magnet does not pull aluminium foil or gold."
+					]
+				},
+				{
+					"text": "Magnets pull iron, and their ends pull together or push apart. An invisible force, all around us!"
+				}
+			],
+			"reflection_question": "What do you think a magnet would do near a spoon, a pencil and a key?",
+			"real_world_mission": "With a fridge magnet, go round your home. Make two piles: things it sticks to, and things it does not."
+		},
+		"te": {
+			"title": "అయస్కాంతం వస్తువులను ఎలా లాగుతుంది?",
+			"subtitle": "కనిపించని ఆకర్షణ",
+			"sections": [
+				{
+					"text": "అయస్కాంతం తాకకుండానే క్లిప్‌ను లాగగలదు. అది ఎలా చేస్తుంది?"
+				},
+				{
+					"text": "అయస్కాంతం చుట్టూ కంటికి కనిపించని ఆకర్షణ శక్తి ఉంటుంది. అది కనిపించదు, కానీ అది చేసే పని కనిపిస్తుంది."
+				},
+				{
+					"text": "క్లిప్పులు, మేకులు లాంటి ఇనుప వస్తువులు అయస్కాంతం వైపు దూకి దానికి అతుక్కుంటాయి."
+				},
+				{
+					"text": "చెక్క, ప్లాస్టిక్, కాగితం, రబ్బరు అసలు కదలవు. అయస్కాంతం వాటిని లాగదు."
+				},
+				{
+					"text": "ప్రతి అయస్కాంతానికి రెండు వేర్వేరు చివర్లు ఉంటాయి. వేర్వేరు చివర్లు ఒకదాన్ని ఒకటి లాక్కుంటాయి. టప్!"
+				},
+				{
+					"text": "కానీ ఒకేలాంటి రెండు చివర్లు ఒకదాన్ని ఒకటి దూరంగా తోస్తాయి. ఎంత ప్రయత్నించినా అవి తాకవు!"
+				},
+				{
+					"items": [
+						"భూమి ఒక పెద్ద అయస్కాంతం లాంటిది. అందుకే దిక్సూచి ముల్లు ఉత్తరం వైపు చూపిస్తుంది.",
+						"ఫ్రిజ్ తలుపులో ఇనుము ఉంటుంది, అందుకే ఫ్రిజ్ అయస్కాంతాలు అతుక్కుంటాయి.",
+						"అల్యూమినియం రేకును, బంగారాన్ని అయస్కాంతం లాగదు."
+					]
+				},
+				{
+					"text": "అయస్కాంతాలు ఇనుమును లాగుతాయి, వాటి చివర్లు లాక్కుంటాయి లేదా దూరంగా తోసుకుంటాయి. మన చుట్టూ కనిపించని శక్తి!"
+				}
+			],
+			"reflection_question": "చెంచా, పెన్సిల్, తాళంచెవి దగ్గర అయస్కాంతం ఏం చేస్తుందని అనుకుంటున్నావు?",
+			"real_world_mission": "ఫ్రిజ్ అయస్కాంతంతో ఇల్లంతా తిరుగు. అతుక్కునేవి, అతుక్కోనివి అని రెండు కుప్పలు చేయి."
+		}
+	}
+}

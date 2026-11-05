@@ -1,0 +1,143 @@
+{
+	"id": "fact-plane-fly",
+	"topic": "how aeroplanes fly",
+	"scene": {
+		"id": "plane",
+		"section_layers": [
+			[
+				"engines",
+				"air",
+				"lift"
+			],
+			[
+				"engines"
+			],
+			[
+				"engines",
+				"air"
+			],
+			[
+				"air",
+				"lift"
+			],
+			[
+				"lift",
+				"weight"
+			],
+			[
+				"steer"
+			],
+			[
+				"engines",
+				"air",
+				"lift"
+			],
+			[
+				"engines",
+				"air",
+				"lift",
+				"weight"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does an aeroplane fly?",
+			"subtitle": "Engines, wings and lift",
+			"sections": [
+				{
+					"text": "A big aeroplane is heavier than many elephants. How can it fly in the sky?"
+				},
+				{
+					"text": "Powerful engines push the plane forward, faster and faster along the runway."
+				},
+				{
+					"text": "As it speeds along, air rushes over and under its big wings."
+				},
+				{
+					"text": "The wings are shaped and tilted so the air pushes them up. This push is called lift."
+				},
+				{
+					"text": "When the lift is stronger than the plane's weight pulling down, up it goes!"
+				},
+				{
+					"text": "Moving flaps on the wings and tail help the pilot turn, climb and come down."
+				},
+				{
+					"items": [
+						"Planes take off and land facing into the wind, because it helps them.",
+						"Big planes fly higher than the tallest mountains.",
+						"Watching birds gave people the idea that we could fly."
+					]
+				},
+				{
+					"text": "Engines push the plane forward, and air flowing over the wings lifts it up."
+				}
+			],
+			"reflection_question": "If you could fly a plane anywhere, where would you go?",
+			"real_world_mission": "Make two paper planes with different wings. Which one flies further?"
+		},
+		"te": {
+			"title": "విమానం ఎలా ఎగురుతుంది?",
+			"subtitle": "ఇంజన్లు, రెక్కలు, లిఫ్ట్",
+			"sections": [
+				{
+					"text": "పెద్ద విమానం చాలా ఏనుగుల కంటే బరువైనది. అది ఆకాశంలో ఎలా ఎగురుతుంది?"
+				},
+				{
+					"text": "శక్తివంతమైన ఇంజన్లు విమానాన్ని రన్‌వే మీద వేగంగా, ఇంకా వేగంగా ముందుకు తోస్తాయి."
+				},
+				{
+					"text": "అది వేగంగా వెళ్తుంటే, గాలి దాని పెద్ద రెక్కల పైన, కింద దూసుకెళ్తుంది."
+				},
+				{
+					"text": "రెక్కల ఆకారం, వాలు వల్ల గాలి వాటిని పైకి తోస్తుంది. ఈ తోపును లిఫ్ట్ అంటారు."
+				},
+				{
+					"text": "కిందికి లాగే విమానం బరువు కంటే లిఫ్ట్ బలంగా ఉన్నప్పుడు, అది పైకి లేస్తుంది!"
+				},
+				{
+					"text": "రెక్కలు, తోక మీది కదిలే భాగాలు పైలట్‌కు తిరగడానికి, ఎక్కడానికి, దిగడానికి సాయం చేస్తాయి."
+				},
+				{
+					"items": [
+						"విమానాలు గాలికి ఎదురుగా ఎగురుతాయి, దిగుతాయి, ఎందుకంటే అది వాటికి సాయం చేస్తుంది.",
+						"పెద్ద విమానాలు ఎత్తైన పర్వతాల కంటే ఎత్తులో ఎగురుతాయి.",
+						"పక్షులను చూసే మనం కూడా ఎగరవచ్చనే ఆలోచన మనుషులకు వచ్చింది."
+					]
+				},
+				{
+					"text": "ఇంజన్లు విమానాన్ని ముందుకు తోస్తాయి, రెక్కల మీదుగా ప్రవహించే గాలి దాన్ని పైకి లేపుతుంది."
+				}
+			],
+			"reflection_question": "నువ్వు విమానాన్ని ఎక్కడికైనా నడపగలిగితే, ఎక్కడికి వెళ్తావు?",
+			"real_world_mission": "వేర్వేరు రెక్కలతో రెండు కాగితం విమానాలు చేయి. ఏది ఎక్కువ దూరం ఎగురుతుంది?"
+		}
+	}
+}

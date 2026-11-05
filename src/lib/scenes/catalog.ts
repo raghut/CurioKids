@@ -173,6 +173,56 @@ export const SCENE_CATALOG: Readonly<Record<string, SceneInfo>> = {
 		layers: ['germs', 'water-only', 'soap', 'grab', 'rinse', 'clean'],
 		cover: ['soap', 'grab']
 	},
+	curd: {
+		label: 'Milk to curd',
+		layers: ['milk', 'warm', 'starter', 'bacteria', 'night', 'curd'],
+		cover: ['curd', 'bacteria']
+	},
+	magnet: {
+		label: 'Magnets',
+		layers: ['field', 'pull', 'stay', 'attract', 'repel'],
+		cover: ['field', 'pull', 'stay', 'attract']
+	},
+	ice: {
+		label: 'Why ice floats',
+		layers: ['cube', 'water-bits', 'ice-bits', 'expand', 'pond'],
+		cover: ['cube', 'water-bits', 'ice-bits', 'pond']
+	},
+	bicycle: {
+		label: 'How a bicycle moves',
+		layers: ['pedal', 'chain', 'wheel', 'gears', 'move'],
+		cover: ['pedal', 'chain', 'move']
+	},
+	'phone-call': {
+		label: 'Phone calls',
+		layers: ['voice', 'signal', 'network', 'arrive', 'hear'],
+		cover: ['voice', 'signal', 'network', 'arrive', 'hear']
+	},
+	plane: {
+		label: 'How planes fly',
+		layers: ['engines', 'air', 'lift', 'weight', 'steer'],
+		cover: ['engines', 'air', 'lift']
+	},
+	rocket: {
+		label: 'Rocket launch',
+		layers: ['pad', 'fuel', 'fire', 'push', 'flying', 'space'],
+		cover: ['flying', 'space']
+	},
+	stars: {
+		label: 'Twinkling stars',
+		layers: ['stars', 'air', 'bend', 'twinkle', 'planet'],
+		cover: ['stars', 'twinkle', 'planet']
+	},
+	seasons: {
+		label: 'Seasons',
+		layers: ['orbit', 'tilt', 'summer', 'winter', 'monsoon'],
+		cover: ['orbit', 'tilt', 'summer', 'winter']
+	},
+	'salty-sea': {
+		label: 'Why the sea is salty',
+		layers: ['rain', 'river', 'salt', 'evaporate', 'pans'],
+		cover: ['rain', 'river', 'salt', 'evaporate']
+	},
 	// --- Story scenes: stepped by page instead of by section ---
 	'carrot-share': {
 		label: 'Mishti shares a carrot (story)',

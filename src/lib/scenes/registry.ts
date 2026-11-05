@@ -29,6 +29,16 @@ import EyeScene from './EyeScene.svelte';
 import EarScene from './EarScene.svelte';
 import SweatScene from './SweatScene.svelte';
 import SoapScene from './SoapScene.svelte';
+import CurdScene from './CurdScene.svelte';
+import MagnetScene from './MagnetScene.svelte';
+import IceScene from './IceScene.svelte';
+import BicycleScene from './BicycleScene.svelte';
+import PhoneCallScene from './PhoneCallScene.svelte';
+import PlaneScene from './PlaneScene.svelte';
+import RocketScene from './RocketScene.svelte';
+import StarsScene from './StarsScene.svelte';
+import SeasonsScene from './SeasonsScene.svelte';
+import SaltySeaScene from './SaltySeaScene.svelte';
 import CarrotShareScene from './CarrotShareScene.svelte';
 
 type SceneProps = { layers?: string[]; still?: boolean; cover?: boolean };
@@ -68,5 +78,15 @@ export const SCENES: Record<string, Component<SceneProps>> = {
 	ear: EarScene,
 	sweat: SweatScene,
 	soap: SoapScene,
+	curd: CurdScene,
+	magnet: MagnetScene,
+	ice: IceScene,
+	bicycle: BicycleScene,
+	'phone-call': PhoneCallScene,
+	plane: PlaneScene,
+	rocket: RocketScene,
+	stars: StarsScene,
+	seasons: SeasonsScene,
+	'salty-sea': SaltySeaScene,
 	'carrot-share': CarrotShareScene
 };
