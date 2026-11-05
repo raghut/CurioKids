@@ -19,6 +19,16 @@ import BoatScene from './BoatScene.svelte';
 import ThunderScene from './ThunderScene.svelte';
 import VolcanoScene from './VolcanoScene.svelte';
 import WindScene from './WindScene.svelte';
+import PlantDrinkScene from './PlantDrinkScene.svelte';
+import FrogScene from './FrogScene.svelte';
+import ChickScene from './ChickScene.svelte';
+import EarthwormScene from './EarthwormScene.svelte';
+import ElephantScene from './ElephantScene.svelte';
+import HeartScene from './HeartScene.svelte';
+import EyeScene from './EyeScene.svelte';
+import EarScene from './EarScene.svelte';
+import SweatScene from './SweatScene.svelte';
+import SoapScene from './SoapScene.svelte';
 import CarrotShareScene from './CarrotShareScene.svelte';
 
 type SceneProps = { layers?: string[]; still?: boolean; cover?: boolean };
@@ -48,5 +58,15 @@ export const SCENES: Record<string, Component<SceneProps>> = {
 	thunder: ThunderScene,
 	volcano: VolcanoScene,
 	wind: WindScene,
+	'plant-water': PlantDrinkScene,
+	frog: FrogScene,
+	chick: ChickScene,
+	earthworm: EarthwormScene,
+	elephant: ElephantScene,
+	heart: HeartScene,
+	eye: EyeScene,
+	ear: EarScene,
+	sweat: SweatScene,
+	soap: SoapScene,
 	'carrot-share': CarrotShareScene
 };

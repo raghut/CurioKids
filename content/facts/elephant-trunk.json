@@ -1,0 +1,133 @@
+{
+	"id": "fact-elephant-trunk",
+	"topic": "elephant trunk",
+	"scene": {
+		"id": "elephant",
+		"section_layers": [
+			[
+				"spray"
+			],
+			[
+				"trunk"
+			],
+			[
+				"smell"
+			],
+			[
+				"drink"
+			],
+			[
+				"spray"
+			],
+			[
+				"lift"
+			],
+			[
+				"trumpet"
+			],
+			[
+				"spray"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "What can an elephant do with its trunk?",
+			"subtitle": "A nose that works like a hand",
+			"sections": [
+				{
+					"text": "An elephant's trunk is long and wiggly. What is it for?"
+				},
+				{
+					"text": "The trunk is the elephant's nose and top lip joined together. It has thousands of muscles and no bones."
+				},
+				{
+					"text": "Elephants smell with their trunks. They can smell water from very far away."
+				},
+				{
+					"text": "To drink, an elephant sucks water up its trunk, then squirts it into its mouth."
+				},
+				{
+					"text": "On hot days, elephants spray water or dust over their backs to stay cool."
+				},
+				{
+					"text": "The trunk is strong enough to lift a heavy log, and gentle enough to pick a single leaf."
+				},
+				{
+					"items": [
+						"Elephants trumpet through their trunks to call each other.",
+						"Elephants say hello by touching trunks.",
+						"A baby elephant takes months to learn to use its trunk."
+					]
+				},
+				{
+					"text": "A trunk is a nose, a straw, a shower and a hand, all in one!"
+				}
+			],
+			"reflection_question": "If you had a trunk for one day, what would you do with it?",
+			"real_world_mission": "Try picking up a small toy without using your hands. How hard is it? Now think of an elephant!"
+		},
+		"te": {
+			"title": "ఏనుగు తన తొండంతో ఏం చేయగలదు?",
+			"subtitle": "చేతిలా పని చేసే ముక్కు",
+			"sections": [
+				{
+					"text": "ఏనుగు తొండం పొడవుగా, మెలికలు తిరిగేలా ఉంటుంది. అది దేనికి?"
+				},
+				{
+					"text": "తొండం అంటే ఏనుగు ముక్కు, పై పెదవి కలిసినది. దానిలో వేల కండరాలు ఉంటాయి, ఎముకలు ఉండవు."
+				},
+				{
+					"text": "ఏనుగులు తొండంతో వాసన చూస్తాయి. అవి చాలా దూరం నుంచే నీళ్ళ వాసన పసిగట్టగలవు."
+				},
+				{
+					"text": "నీళ్ళు తాగడానికి, ఏనుగు తొండంలోకి నీళ్ళు పీల్చి, తర్వాత నోట్లోకి చిమ్ముకుంటుంది."
+				},
+				{
+					"text": "ఎండ రోజుల్లో, చల్లగా ఉండటానికి ఏనుగులు వీపు మీద నీళ్ళు లేదా దుమ్ము చల్లుకుంటాయి."
+				},
+				{
+					"text": "తొండం బరువైన దుంగను ఎత్తేంత బలంగా, ఒక్క ఆకును తెంపేంత సున్నితంగా ఉంటుంది."
+				},
+				{
+					"items": [
+						"ఏనుగులు ఒకదాన్ని ఒకటి పిలుచుకోవడానికి తొండంతో ఘీంకరిస్తాయి.",
+						"ఏనుగులు తొండాలు తాకించుకుని పలకరించుకుంటాయి.",
+						"ఏనుగు పిల్లకు తొండం వాడటం నేర్చుకోవడానికి నెలలు పడుతుంది."
+					]
+				},
+				{
+					"text": "తొండం ఒకే దానిలో ముక్కు, స్ట్రా, షవర్, చేయి!"
+				}
+			],
+			"reflection_question": "ఒక రోజు నీకు తొండం ఉంటే, దానితో ఏం చేస్తావు?",
+			"real_world_mission": "చేతులు వాడకుండా ఒక చిన్న బొమ్మను ఎత్తి చూడు. ఎంత కష్టంగా ఉంది? ఇప్పుడు ఏనుగు గురించి ఆలోచించు!"
+		}
+	}
+}

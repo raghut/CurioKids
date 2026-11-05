@@ -1,0 +1,137 @@
+{
+	"id": "fact-soap-cleans",
+	"topic": "how soap cleans",
+	"scene": {
+		"id": "soap",
+		"section_layers": [
+			[
+				"germs",
+				"soap"
+			],
+			[
+				"germs"
+			],
+			[
+				"germs",
+				"water-only"
+			],
+			[
+				"germs",
+				"soap"
+			],
+			[
+				"grab"
+			],
+			[
+				"grab",
+				"rinse"
+			],
+			[
+				"clean"
+			],
+			[
+				"clean"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does soap clean our hands?",
+			"subtitle": "Grab the dirt, wash it away",
+			"sections": [
+				{
+					"text": "We are told to wash our hands with soap, not just water. What does soap do?"
+				},
+				{
+					"text": "Germs are tiny living things, too small to see. Some can make us ill. They hide in oily dirt on our hands."
+				},
+				{
+					"text": "Water alone slides right over the oily dirt. Oil and water do not mix!"
+				},
+				{
+					"text": "Soap is made of tiny bits shaped like lollipops. The tail loves oil, and the head loves water."
+				},
+				{
+					"text": "The tails grab the oily dirt and germs, and wrap them up in little balls."
+				},
+				{
+					"text": "When you rinse, the water pulls on the heads and washes the balls away. Clean hands!"
+				},
+				{
+					"items": [
+						"Scrub for about twenty seconds, as long as singing a short song twice.",
+						"Do not forget between your fingers and under your nails!",
+						"Washing hands before eating stops many germs from getting inside you."
+					]
+				},
+				{
+					"text": "Soap grabs dirt and germs, and water washes them away. Soap and water together keep us healthy."
+				}
+			],
+			"reflection_question": "When are the most important times to wash your hands?",
+			"real_world_mission": "Sprinkle pepper on a plate of water. Touch it with a soapy finger and watch the pepper run away!"
+		},
+		"te": {
+			"title": "సబ్బు మన చేతులను ఎలా శుభ్రం చేస్తుంది?",
+			"subtitle": "మురికిని పట్టు, కడిగెయ్",
+			"sections": [
+				{
+					"text": "కేవలం నీళ్ళతో కాదు, సబ్బుతో చేతులు కడుక్కోమని చెప్తారు. సబ్బు ఏం చేస్తుంది?"
+				},
+				{
+					"text": "సూక్ష్మక్రిములు కంటికి కనిపించనంత చిన్న జీవులు. కొన్ని మనకు జబ్బు చేస్తాయి. అవి మన చేతుల మీది జిడ్డు మురికిలో దాక్కుంటాయి."
+				},
+				{
+					"text": "కేవలం నీళ్ళు జిడ్డు మురికి మీదుగా జారిపోతాయి. నూనె, నీళ్ళు కలవవు!"
+				},
+				{
+					"text": "సబ్బు లాలీపాప్‌ల ఆకారంలో ఉండే చిన్న కణాలతో తయారవుతుంది. తోకకు నూనె ఇష్టం, తలకు నీళ్ళు ఇష్టం."
+				},
+				{
+					"text": "తోకలు జిడ్డు మురికిని, సూక్ష్మక్రిములను పట్టుకుని, చిన్న ఉండల్లా చుట్టేస్తాయి."
+				},
+				{
+					"text": "నువ్వు కడిగినప్పుడు, నీళ్ళు తలలను లాగి ఆ ఉండలను కొట్టుకుపోయేలా చేస్తాయి. శుభ్రమైన చేతులు!"
+				},
+				{
+					"items": [
+						"దాదాపు ఇరవై సెకన్లు, ఒక చిన్న పాట రెండుసార్లు పాడేంత సేపు రుద్దు.",
+						"వేళ్ళ మధ్య, గోళ్ళ కింద మర్చిపోకు!",
+						"తినే ముందు చేతులు కడుక్కుంటే చాలా సూక్ష్మక్రిములు లోపలికి వెళ్ళవు."
+					]
+				},
+				{
+					"text": "సబ్బు మురికిని, సూక్ష్మక్రిములను పట్టుకుంటుంది, నీళ్ళు వాటిని కడిగేస్తాయి. సబ్బు, నీళ్ళు కలిసి మనల్ని ఆరోగ్యంగా ఉంచుతాయి."
+				}
+			],
+			"reflection_question": "చేతులు కడుక్కోవడం అన్నిటికంటే ముఖ్యమైన సమయాలు ఏవి?",
+			"real_world_mission": "ఒక పళ్ళెంలో నీళ్ళు పోసి మిరియాల పొడి చల్లు. సబ్బు రాసిన వేలితో తాకి, మిరియాలు పారిపోవడం చూడు!"
+		}
+	}
+}

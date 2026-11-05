@@ -1,0 +1,144 @@
+{
+	"id": "fact-frog-life",
+	"topic": "tadpole to frog",
+	"scene": {
+		"id": "frog",
+		"section_layers": [
+			[
+				"tadpole",
+				"frog"
+			],
+			[
+				"eggs"
+			],
+			[
+				"tadpole"
+			],
+			[
+				"legs"
+			],
+			[
+				"froglet"
+			],
+			[
+				"frog"
+			],
+			[
+				"eggs",
+				"tadpole",
+				"legs",
+				"froglet",
+				"frog",
+				"cycle"
+			],
+			[
+				"eggs",
+				"tadpole",
+				"legs",
+				"froglet",
+				"frog",
+				"cycle"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does a tadpole become a frog?",
+			"subtitle": "From water to land",
+			"sections": [
+				{
+					"text": "A tadpole swims like a little fish. A frog hops on land. Did you know they are the same animal?"
+				},
+				{
+					"text": "A mother frog lays lots of eggs in the water. They are wrapped in soft jelly."
+				},
+				{
+					"text": "A tiny tadpole wriggles out of each egg. It has a long tail and breathes underwater, like a fish."
+				},
+				{
+					"text": "As it grows, the tadpole sprouts back legs, and then front legs."
+				},
+				{
+					"text": "Its tail gets shorter and shorter. It starts breathing air and climbs out of the water."
+				},
+				{
+					"text": "Now it is a grown-up frog! It hops on land and catches insects with its long, sticky tongue."
+				},
+				{
+					"items": [
+						"A frog's big change is called metamorphosis, just like a butterfly's.",
+						"Frogs can drink water through their skin.",
+						"In the monsoon you can hear frogs croaking at night."
+					]
+				},
+				{
+					"text": "A frog starts life in water and ends up on land: egg, tadpole, froglet, frog."
+				}
+			],
+			"reflection_question": "If you could live in water and on land like a frog, which would you like more?",
+			"real_world_mission": "After rain, look near a pond or puddle with a grown-up. Can you spot tadpoles or hear frogs?"
+		},
+		"te": {
+			"title": "కప్ప పిల్ల కప్పగా ఎలా మారుతుంది?",
+			"subtitle": "నీళ్ళ నుంచి నేల మీదికి",
+			"sections": [
+				{
+					"text": "కప్ప పిల్ల చిన్న చేపలా ఈదుతుంది. కప్ప నేల మీద గెంతుతుంది. అవి రెండూ ఒకే ప్రాణి అని నీకు తెలుసా?"
+				},
+				{
+					"text": "అమ్మ కప్ప నీళ్ళలో చాలా గుడ్లు పెడుతుంది. అవి మెత్తని జెల్లీలో చుట్టుకుని ఉంటాయి."
+				},
+				{
+					"text": "ప్రతి గుడ్డు నుంచి ఒక చిన్న కప్ప పిల్ల బయటికి వస్తుంది. దానికి పొడవైన తోక ఉంటుంది, అది చేపలా నీళ్ళలో శ్వాస తీసుకుంటుంది."
+				},
+				{
+					"text": "పెరుగుతున్న కొద్దీ, కప్ప పిల్లకు ముందు వెనక కాళ్ళు, తర్వాత ముందు కాళ్ళు వస్తాయి."
+				},
+				{
+					"text": "దాని తోక చిన్నగా చిన్నగా అవుతుంది. అది గాలి పీల్చడం మొదలుపెట్టి, నీళ్ళ నుంచి బయటికి ఎక్కుతుంది."
+				},
+				{
+					"text": "ఇప్పుడు అది పెద్ద కప్ప! అది నేల మీద గెంతుతూ, పొడవైన జిగట నాలుకతో పురుగులను పట్టుకుంటుంది."
+				},
+				{
+					"items": [
+						"కప్పలో వచ్చే ఈ పెద్ద మార్పును రూపాంతరం అంటారు, సీతాకోకచిలుకలాగే.",
+						"కప్పలు చర్మం ద్వారా నీళ్ళు తాగగలవు.",
+						"వర్షాకాలంలో రాత్రుళ్ళు కప్పలు బెకబెకమనడం వినిపిస్తుంది."
+					]
+				},
+				{
+					"text": "కప్ప జీవితం నీళ్ళలో మొదలై నేల మీదికి చేరుతుంది: గుడ్డు, కప్ప పిల్ల, చిన్న కప్ప, కప్ప."
+				}
+			],
+			"reflection_question": "నువ్వు కప్పలా నీళ్ళలో, నేల మీద రెండు చోట్లా ఉండగలిగితే, ఏది ఎక్కువ ఇష్టపడతావు?",
+			"real_world_mission": "వర్షం తర్వాత, పెద్దవాళ్ళతో కలిసి చెరువు లేదా నీటి గుంట దగ్గర చూడు. కప్ప పిల్లలు కనిపిస్తాయా, కప్పలు వినిపిస్తాయా?"
+		}
+	}
+}
