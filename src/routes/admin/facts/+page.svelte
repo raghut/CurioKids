@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { AdminFactSummary } from '$lib/types';
 	import StatusChip from '$lib/components/admin/StatusChip.svelte';
+	import CoverThumb from '$lib/components/admin/CoverThumb.svelte';
 	import { invalidateAll } from '$app/navigation';
 	import { Trash2, Send, Eye, EyeOff, Pencil } from 'lucide-svelte';
 
@@ -105,15 +106,7 @@
 							<tr class="hover:bg-slate-50/70">
 								<td class="px-4 py-3">
 									<div class="flex items-center gap-3">
-										{#if f.cover_url}
-											<img src={f.cover_url} alt="" class="h-10 w-10 shrink-0 rounded-md object-cover" />
-										{:else}
-											<div
-												class="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-slate-200 text-lg"
-											>
-												🌿
-											</div>
-										{/if}
+										<CoverThumb coverUrl={f.cover_url} sceneId={f.scene_id} size="sm" placeholder="🌿" />
 										<div class="min-w-0">
 											<a
 												href="/admin/facts/{f.id}"
@@ -204,15 +197,7 @@
 				{#each data.facts as f (f.id)}
 					<div class="rounded-xl bg-white p-3 ring-1 ring-slate-200">
 						<div class="flex items-center gap-3">
-							{#if f.cover_url}
-								<img src={f.cover_url} alt="" class="h-14 w-14 shrink-0 rounded-lg object-cover" />
-							{:else}
-								<div
-									class="grid h-14 w-14 shrink-0 place-items-center rounded-lg bg-slate-200 text-2xl"
-								>
-									🌿
-								</div>
-							{/if}
+							<CoverThumb coverUrl={f.cover_url} sceneId={f.scene_id} size="md" placeholder="🌿" />
 							<div class="min-w-0 flex-1">
 								<a href="/admin/facts/{f.id}" class="truncate font-semibold text-slate-800 hover:underline">
 									{f.title}

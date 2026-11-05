@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CoverThumb from '$lib/components/admin/CoverThumb.svelte';
 	import type { AdminStorySummary } from '$lib/types';
 	import StatusChip from './StatusChip.svelte';
 	import { Eye, Send, EyeOff, Trash2, Pencil } from 'lucide-svelte';
@@ -33,11 +34,7 @@
 				<tr class="hover:bg-slate-50/70">
 					<td class="px-4 py-3">
 						<div class="flex items-center gap-3">
-							{#if s.cover_url}
-								<img src={s.cover_url} alt="" class="h-10 w-10 shrink-0 rounded-md object-cover" />
-							{:else}
-								<div class="h-10 w-10 shrink-0 rounded-md bg-slate-200"></div>
-							{/if}
+							<CoverThumb coverUrl={s.cover_url} sceneId={s.scene_id} size="sm" />
 							<span class="font-semibold text-slate-800">{s.title}</span>
 						</div>
 					</td>

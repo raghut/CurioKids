@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CoverThumb from '$lib/components/admin/CoverThumb.svelte';
 	import type { AdminStorySummary } from '$lib/types';
 	import StatusChip from './StatusChip.svelte';
 	import { Eye, Send, EyeOff, Trash2, Pencil } from 'lucide-svelte';
@@ -20,11 +21,7 @@
 	{#each stories as s (s.id)}
 		<div class="rounded-xl bg-white p-3 ring-1 ring-slate-200">
 			<div class="flex items-center gap-3">
-				{#if s.cover_url}
-					<img src={s.cover_url} alt="" class="h-14 w-14 shrink-0 rounded-lg object-cover" />
-				{:else}
-					<div class="h-14 w-14 shrink-0 rounded-lg bg-slate-200"></div>
-				{/if}
+				<CoverThumb coverUrl={s.cover_url} sceneId={s.scene_id} size="md" />
 				<div class="min-w-0 flex-1">
 					<p class="truncate font-semibold text-slate-800">{s.title}</p>
 					<p class="text-xs text-slate-500">{s.character_id} · {s.theme_id} · {s.language.toUpperCase()}</p>

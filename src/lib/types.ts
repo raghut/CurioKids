@@ -113,6 +113,8 @@ export type AdminStorySummary = {
 	status: 'draft' | 'published';
 	character_id: string;
 	theme_id: string;
+	/** Scene id when the story uses an animated scene, so admin can draw its thumbnail. */
+	scene_id?: string | null;
 };
 
 export type CharacterId = 'rabbit' | 'peacock' | 'elephant' | 'monkey' | 'tortoise' | 'parrot';
@@ -215,4 +217,6 @@ export type AdminFactSummary = {
 	languages: Language[];
 	section_count: number;
 	created_at: string;
+	/** Scene id when the fact uses an animated scene, so admin can draw its thumbnail. */
+	scene_id?: string | null;
 };
