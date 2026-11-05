@@ -1,0 +1,83 @@
+{
+  "id": "story-carrot-share",
+  "character_id": "rabbit",
+  "theme_id": "sharing",
+  "age_tag": "5-6",
+  "scene": {
+    "id": "carrot-share",
+    "page_layers": [
+      [
+        "day",
+        "pull"
+      ],
+      [
+        "day",
+        "carrot",
+        "sound"
+      ],
+      [
+        "day",
+        "carrot",
+        "tortoise"
+      ],
+      [
+        "day",
+        "share",
+        "tortoise",
+        "hearts"
+      ],
+      [
+        "sunset",
+        "share",
+        "tortoise",
+        "hearts"
+      ]
+    ]
+  },
+  "content": {
+    "en": {
+      "title": "Mishti and the Big Carrot",
+      "pages": [
+        {
+          "text": "Mishti the rabbit hopped into her garden one sunny morning. She saw green leaves poking out of the soil. She pulled and pulled with all her might. Out came the biggest, brightest orange carrot she had ever seen!"
+        },
+        {
+          "text": "Mishti hugged her carrot tight. \"This is all mine,\" she whispered. She carried it to her favourite rock under the tree. She opened her mouth for the very first crunch. Then she heard a small, sad sound nearby."
+        },
+        {
+          "text": "Dheera the tortoise was walking slowly past the tree. His tummy was rumbling loudly. \"I walked all night to find food,\" he said softly. \"But the bushes are empty today.\" Mishti looked at Dheera. Then she looked at her carrot."
+        },
+        {
+          "text": "Mishti took a deep breath. She broke the carrot into two pieces. She gave the bigger piece to Dheera. Dheera's eyes grew bright and happy. \"Thank you, Mishti!\" he said. They sat together on the rock and crunched side by side."
+        },
+        {
+          "text": "The sun began to set over the garden. Mishti's half of the carrot was smaller. But her heart felt bigger than ever. \"Sharing made it taste sweeter,\" she said. Dheera smiled a slow, happy smile. Now they were good friends."
+        }
+      ],
+      "moral": "Sharing what we love makes everyone happier, including us.",
+      "reflection_question": "What is something special you could share with a friend?"
+    },
+    "te": {
+      "title": "మిష్టి – పెద్ద క్యారెట్",
+      "pages": [
+        {
+          "text": "ఒక రోజు పొద్దున్నే చక్కగా ఎండ కాస్తోంది. మిష్టి కుందేలు గెంతుకుంటూ తన తోటకి వెళ్ళింది. మట్టిలోంచి పచ్చని ఆకులు బయటికి కనిపిస్తున్నాయి. మిష్టి తన బలమంతా పెట్టి లాగింది, లాగింది. అబ్బో! ఎప్పుడూ చూడనంత పెద్ద నారింజ రంగు క్యారెట్ బయటికి వచ్చింది!"
+        },
+        {
+          "text": "మిష్టి తన క్యారెట్‌ని గట్టిగా హత్తుకుంది. \"ఇది మొత్తం నాదే,\" అని గుసగుసగా అంది. దాన్ని చెట్టు కింద ఉన్న తనకిష్టమైన బండ దగ్గరికి తీసుకెళ్ళింది. మొదటి ముక్క కొరకడానికి నోరు తెరిచింది. అంతలోనే దగ్గర్లోంచి ఒక చిన్న, దిగులుగా ఉన్న శబ్దం వినిపించింది."
+        },
+        {
+          "text": "ధీర తాబేలు చెట్టు పక్కనుంచి మెల్లగా నడుస్తూ వచ్చాడు. అతని పొట్ట ఆకలితో గుడగుడలాడుతోంది. \"తిండి కోసం రాత్రంతా నడిచాను,\" అని మెల్లగా చెప్పాడు. \"కానీ ఈ రోజు పొదలన్నీ ఖాళీగా ఉన్నాయి.\" మిష్టి ధీర వైపు చూసింది. తర్వాత తన క్యారెట్ వైపు చూసింది."
+        },
+        {
+          "text": "మిష్టి గట్టిగా ఊపిరి పీల్చుకుంది. క్యారెట్‌ని రెండు ముక్కలుగా విరిచింది. పెద్ద ముక్కను ధీరకి ఇచ్చింది. ధీర కళ్ళు సంతోషంతో మెరిశాయి. \"చాలా థాంక్స్, మిష్టీ!\" అన్నాడు. ఇద్దరూ బండ దగ్గర పక్కపక్కనే కూర్చుని కరకరా తిన్నారు."
+        },
+        {
+          "text": "సాయంత్రం అయింది. తోట మీద సూర్యుడు కిందికి దిగుతున్నాడు. మిష్టికి వచ్చిన క్యారెట్ ముక్క చిన్నదే. కానీ తన మనసు ఎప్పటికన్నా పెద్దగా అనిపించింది. \"పంచుకుంటే క్యారెట్ ఇంకా తియ్యగా ఉంది,\" అంది మిష్టి. ధీర మెల్లగా, సంతోషంగా నవ్వాడు. ఇప్పుడు వాళ్ళిద్దరూ మంచి స్నేహితులు."
+        }
+      ],
+      "moral": "మనకిష్టమైనది పంచుకుంటే, అందరితో పాటు మనకూ సంతోషమే.",
+      "reflection_question": "నీ స్నేహితులతో నువ్వు ఏ ప్రత్యేకమైన వస్తువు పంచుకోగలవు?"
+    }
+  }
+}

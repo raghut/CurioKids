@@ -19,6 +19,7 @@ import BoatScene from './BoatScene.svelte';
 import ThunderScene from './ThunderScene.svelte';
 import VolcanoScene from './VolcanoScene.svelte';
 import WindScene from './WindScene.svelte';
+import CarrotShareScene from './CarrotShareScene.svelte';
 
 type SceneProps = { layers?: string[]; still?: boolean; cover?: boolean };
 
@@ -46,5 +47,6 @@ export const SCENES: Record<string, Component<SceneProps>> = {
 	boat: BoatScene,
 	thunder: ThunderScene,
 	volcano: VolcanoScene,
-	wind: WindScene
+	wind: WindScene,
+	'carrot-share': CarrotShareScene
 };

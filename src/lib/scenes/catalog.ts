@@ -122,6 +122,12 @@ export const SCENE_CATALOG: Readonly<Record<string, SceneInfo>> = {
 		label: 'What makes the wind',
 		layers: ['warm', 'rise', 'breeze', 'loop', 'kite'],
 		cover: ['warm', 'breeze', 'loop', 'kite']
+	},
+	// --- Story scenes: stepped by page instead of by section ---
+	'carrot-share': {
+		label: 'Mishti shares a carrot (story)',
+		layers: ['day', 'pull', 'carrot', 'sound', 'tortoise', 'share', 'sunset', 'hearts'],
+		cover: ['day', 'share', 'tortoise', 'hearts']
 	}
 };
 
