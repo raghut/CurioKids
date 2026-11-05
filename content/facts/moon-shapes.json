@@ -1,0 +1,141 @@
+{
+	"id": "fact-moon-shapes",
+	"topic": "phases of the moon",
+	"scene": {
+		"id": "moon",
+		"section_layers": [
+			[
+				"full"
+			],
+			[
+				"sunlight",
+				"full"
+			],
+			[
+				"sunlight",
+				"orbit"
+			],
+			[
+				"orbit",
+				"crescent"
+			],
+			[
+				"orbit",
+				"half"
+			],
+			[
+				"orbit",
+				"new"
+			],
+			[
+				"sunlight",
+				"full"
+			],
+			[
+				"sunlight",
+				"orbit",
+				"full"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "Why does the moon change shape?",
+			"subtitle": "The moon's monthly trip",
+			"sections": [
+				{
+					"text": "Some nights the moon is a round ball. Other nights it is a thin smile. Does the moon really change shape?"
+				},
+				{
+					"text": "The moon does not make its own light. It shines because sunlight falls on it, like a torch shining on a ball."
+				},
+				{
+					"text": "The sun always lights up one half of the moon. The other half stays dark."
+				},
+				{
+					"text": "The moon travels all the way around the Earth. One trip takes about a month."
+				},
+				{
+					"text": "As it travels, we see different amounts of its bright half. First a thin slice, then half, then a full round moon."
+				},
+				{
+					"text": "When we see the whole bright half, it is a full moon, called Pournami. When we cannot see the bright half at all, it is Amavasya."
+				},
+				{
+					"items": [
+						"The moon is always round. Only the part we can see changes.",
+						"The English word 'month' comes from the word 'moon'.",
+						"Many festivals are planned by watching the moon's shapes."
+					]
+				},
+				{
+					"text": "The moon does not really change shape. As it goes around the Earth, we see more or less of its sunny side."
+				}
+			],
+			"reflection_question": "What shape was the moon the last time you saw it?",
+			"real_world_mission": "For one week, look at the moon each night with a grown-up and draw its shape. Is it getting bigger or smaller?"
+		},
+		"te": {
+			"title": "చంద్రుడి ఆకారం ఎందుకు మారుతుంది?",
+			"subtitle": "చంద్రుడి నెలవారీ ప్రయాణం",
+			"sections": [
+				{
+					"text": "కొన్ని రాత్రులు చంద్రుడు గుండ్రని బంతిలా ఉంటాడు. మరికొన్ని రాత్రులు సన్నని చిరునవ్వులా ఉంటాడు. చంద్రుడి ఆకారం నిజంగా మారుతుందా?"
+				},
+				{
+					"text": "చంద్రుడికి సొంత వెలుగు లేదు. బంతి మీద టార్చి వెలుగు పడినట్లు, సూర్యకాంతి పడటం వల్లే చంద్రుడు మెరుస్తాడు."
+				},
+				{
+					"text": "సూర్యుడు ఎప్పుడూ చంద్రుడి సగ భాగాన్ని వెలిగిస్తాడు. మిగతా సగం చీకటిగానే ఉంటుంది."
+				},
+				{
+					"text": "చంద్రుడు భూమి చుట్టూ పూర్తిగా తిరుగుతాడు. ఒక్కసారి తిరగడానికి దాదాపు ఒక నెల పడుతుంది."
+				},
+				{
+					"text": "అలా తిరుగుతున్నప్పుడు, వెలుగుతున్న సగంలో మనకు కనిపించే భాగం మారుతూ ఉంటుంది. ముందు సన్నని ముక్క, తర్వాత సగం, తర్వాత పూర్తి గుండ్రని చంద్రుడు."
+				},
+				{
+					"text": "వెలుగుతున్న సగం మొత్తం కనిపించినప్పుడు, అది పౌర్ణమి. వెలుగుతున్న భాగం అసలు కనిపించనప్పుడు, అది అమావాస్య."
+				},
+				{
+					"items": [
+						"చంద్రుడు ఎప్పుడూ గుండ్రంగానే ఉంటాడు. మనకు కనిపించే భాగం మాత్రమే మారుతుంది.",
+						"ఇంగ్లీషులో 'మంత్' (నెల) అనే మాట 'మూన్' (చంద్రుడు) అనే మాట నుంచి వచ్చింది.",
+						"చాలా పండుగలను చంద్రుడి ఆకారాలను చూసి నిర్ణయిస్తారు."
+					]
+				},
+				{
+					"text": "చంద్రుడి ఆకారం నిజంగా మారదు. అది భూమి చుట్టూ తిరుగుతున్నప్పుడు, దాని వెలుగు వైపు మనకు ఎక్కువగానో తక్కువగానో కనిపిస్తుంది."
+				}
+			],
+			"reflection_question": "నువ్వు చివరిసారి చంద్రుడిని చూసినప్పుడు అది ఏ ఆకారంలో ఉంది?",
+			"real_world_mission": "ఒక వారం పాటు, పెద్దవాళ్ళతో కలిసి ప్రతి రాత్రి చంద్రుడిని చూసి దాని ఆకారం గీయి. అది పెద్దదవుతోందా, చిన్నదవుతోందా?"
+		}
+	}
+}

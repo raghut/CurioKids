@@ -1,0 +1,127 @@
+{
+	"id": "fact-rainbow",
+	"topic": "rainbow",
+	"scene": {
+		"id": "rainbow",
+		"section_layers": [
+			[
+				"rainbow",
+				"rain"
+			],
+			[
+				"sunlight"
+			],
+			[
+				"sunlight",
+				"rain"
+			],
+			[
+				"sunlight",
+				"drop"
+			],
+			[
+				"rain",
+				"rainbow"
+			],
+			[
+				"rainbow"
+			],
+			[
+				"sunlight",
+				"rain",
+				"rainbow"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does a rainbow happen?",
+			"subtitle": "Sunlight and raindrops make colours",
+			"sections": [
+				{
+					"text": "After rain, sometimes a beautiful rainbow appears in the sky. Where do all those colours come from?"
+				},
+				{
+					"text": "Sunlight looks white, but it is really many colours mixed together."
+				},
+				{
+					"text": "A rainbow needs two things: the sun shining behind you, and raindrops in the sky in front of you."
+				},
+				{
+					"text": "When sunlight goes into a raindrop, it bends and bounces. The colours spread apart and come out one by one."
+				},
+				{
+					"text": "Millions of raindrops do this at the same time. Together they paint a big coloured arc in the sky."
+				},
+				{
+					"items": [
+						"A rainbow has seven colours: red, orange, yellow, green, blue, indigo and violet.",
+						"You can never reach the end of a rainbow. It moves when you move!",
+						"Sometimes you can see two rainbows, one above the other."
+					]
+				},
+				{
+					"text": "Sunlight is full of hidden colours. Raindrops help us see them as a rainbow."
+				}
+			],
+			"reflection_question": "Why can't we see a rainbow when it rains at night?",
+			"real_world_mission": "On a sunny day, stand with your back to the sun and spray water with a grown-up. Do you see a rainbow?"
+		},
+		"te": {
+			"title": "ఇంద్రధనుస్సు ఎలా వస్తుంది?",
+			"subtitle": "సూర్యకాంతి, వాన చినుకులు కలిసి రంగులు చేస్తాయి",
+			"sections": [
+				{
+					"text": "వర్షం తర్వాత, కొన్నిసార్లు ఆకాశంలో ఒక అందమైన ఇంద్రధనుస్సు కనిపిస్తుంది. ఆ రంగులన్నీ ఎక్కడి నుంచి వస్తాయి?"
+				},
+				{
+					"text": "సూర్యకాంతి తెల్లగా కనిపిస్తుంది, కానీ నిజానికి అది చాలా రంగులు కలిసిన కాంతి."
+				},
+				{
+					"text": "ఇంద్రధనుస్సుకు రెండు కావాలి: నీ వెనక ప్రకాశించే సూర్యుడు, నీ ముందు ఆకాశంలో వాన చినుకులు."
+				},
+				{
+					"text": "సూర్యకాంతి ఒక వాన చినుకులోకి వెళ్ళినప్పుడు, అది వంగి, లోపల తగిలి వెనక్కి తిరుగుతుంది. రంగులు విడిపోయి ఒక్కొక్కటిగా బయటికి వస్తాయి."
+				},
+				{
+					"text": "కోట్ల వాన చినుకులు ఒకేసారి ఇలా చేస్తాయి. అన్నీ కలిసి ఆకాశంలో ఒక పెద్ద రంగుల వంపును గీస్తాయి."
+				},
+				{
+					"items": [
+						"ఇంద్రధనుస్సులో ఏడు రంగులు ఉంటాయి: ఎరుపు, నారింజ, పసుపు, ఆకుపచ్చ, నీలం, ముదురు నీలం, ఊదా.",
+						"ఇంద్రధనుస్సు చివరను నువ్వు ఎప్పటికీ చేరుకోలేవు. నువ్వు కదిలితే అదీ కదులుతుంది!",
+						"కొన్నిసార్లు ఒకదాని పైన ఇంకొకటి, రెండు ఇంద్రధనుస్సులు కనిపిస్తాయి."
+					]
+				},
+				{
+					"text": "సూర్యకాంతిలో రంగులు దాగి ఉంటాయి. వాన చినుకులు వాటిని ఇంద్రధనుస్సుగా మనకు చూపిస్తాయి."
+				}
+			],
+			"reflection_question": "రాత్రి వర్షం పడినప్పుడు ఇంద్రధనుస్సు ఎందుకు కనిపించదు?",
+			"real_world_mission": "ఎండ రోజున, సూర్యుడు నీ వెనక ఉండేలా నిలబడి, పెద్దవాళ్ళతో కలిసి నీళ్ళు చల్లు. ఇంద్రధనుస్సు కనిపించిందా?"
+		}
+	}
+}

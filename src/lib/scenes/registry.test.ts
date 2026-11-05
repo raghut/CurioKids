@@ -9,7 +9,7 @@ const svelteSources = import.meta.glob<string>('./*.svelte', { query: '?raw', im
 describe('scene registry', () => {
 	// 'water-cycle': WaterCycleScene  ->  { 'water-cycle': 'WaterCycleScene' }
 	const entries = Object.fromEntries(
-		[...src.matchAll(/^\t'([a-z0-9-]+)':\s*(\w+)/gm)].map((m) => [m[1], m[2]])
+		[...src.matchAll(/^\t'?([a-z0-9-]+)'?:\s*(\w+)/gm)].map((m) => [m[1], m[2]])
 	);
 	// import WaterCycleScene from './WaterCycleScene.svelte'  ->  component -> file
 	const files = Object.fromEntries(

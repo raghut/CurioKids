@@ -1,0 +1,123 @@
+{
+	"id": "fact-shadows",
+	"topic": "shadows",
+	"scene": {
+		"id": "shadow",
+		"section_layers": [
+			[
+				"morning"
+			],
+			[
+				"morning",
+				"rays"
+			],
+			[
+				"morning",
+				"rays"
+			],
+			[
+				"noon"
+			],
+			[
+				"evening"
+			],
+			[
+				"noon"
+			],
+			[
+				"evening"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "Why do shadows grow long and short?",
+			"subtitle": "Follow the sun",
+			"sections": [
+				{
+					"text": "Have you noticed your shadow is long in the morning but short at lunchtime? Why does it change?"
+				},
+				{
+					"text": "Light travels in straight lines. It cannot bend around things."
+				},
+				{
+					"text": "When something blocks the light, a dark shape appears behind it. That dark shape is a shadow."
+				},
+				{
+					"text": "At noon, the sun is high above us. The light comes from the top, so shadows are short."
+				},
+				{
+					"text": "In the morning and evening, the sun is low in the sky. The light comes from the side, so shadows are long. They always fall away from the sun."
+				},
+				{
+					"items": [
+						"Your shadow copies everything you do!",
+						"On a cloudy day, shadows are faint or disappear.",
+						"Long ago, people told the time by looking at shadows, using a sundial."
+					]
+				},
+				{
+					"text": "Shadows happen when something blocks light. As the sun moves across the sky, shadows change their size and direction."
+				}
+			],
+			"reflection_question": "Where would your shadow be if the sun were right in front of you?",
+			"real_world_mission": "Stand in the same spot in the morning, at noon and in the evening. Ask someone to mark the end of your shadow with chalk."
+		},
+		"te": {
+			"title": "నీడలు ఎందుకు పొడవుగా, పొట్టిగా అవుతాయి?",
+			"subtitle": "సూర్యుడి వెంట చూడు",
+			"sections": [
+				{
+					"text": "నీ నీడ ఉదయం పొడవుగా, మధ్యాహ్నం పొట్టిగా ఉండటం గమనించావా? అది ఎందుకు మారుతుంది?"
+				},
+				{
+					"text": "వెలుగు సరళ రేఖల్లో ప్రయాణిస్తుంది. అది వస్తువుల చుట్టూ వంగి వెళ్ళలేదు."
+				},
+				{
+					"text": "ఏదైనా వస్తువు వెలుగును అడ్డుకున్నప్పుడు, దాని వెనక ఒక చీకటి ఆకారం కనిపిస్తుంది. ఆ చీకటి ఆకారమే నీడ."
+				},
+				{
+					"text": "మధ్యాహ్నం, సూర్యుడు మన తల మీద ఎత్తులో ఉంటాడు. వెలుగు పై నుంచి పడుతుంది, అందుకే నీడలు పొట్టిగా ఉంటాయి."
+				},
+				{
+					"text": "ఉదయం, సాయంత్రం సూర్యుడు ఆకాశంలో కిందగా ఉంటాడు. వెలుగు పక్క నుంచి పడుతుంది, అందుకే నీడలు పొడవుగా ఉంటాయి. నీడ ఎప్పుడూ సూర్యుడికి అవతలి వైపే పడుతుంది."
+				},
+				{
+					"items": [
+						"నువ్వు ఏం చేసినా నీ నీడ అదే చేస్తుంది!",
+						"మబ్బుగా ఉన్న రోజున నీడలు లేతగా ఉంటాయి, లేదా కనిపించవు.",
+						"చాలా కాలం క్రితం, ప్రజలు సూర్య గడియారం మీది నీడను చూసి సమయం తెలుసుకునేవారు."
+					]
+				},
+				{
+					"text": "ఏదైనా వస్తువు వెలుగును అడ్డుకున్నప్పుడు నీడ ఏర్పడుతుంది. సూర్యుడు ఆకాశంలో కదులుతుంటే, నీడల పొడవు, దిశ మారుతాయి."
+				}
+			],
+			"reflection_question": "సూర్యుడు సరిగ్గా నీ ముందు ఉంటే, నీ నీడ ఎక్కడ పడుతుంది?",
+			"real_world_mission": "ఉదయం, మధ్యాహ్నం, సాయంత్రం ఒకే చోట నిలబడు. నీ నీడ ఎక్కడ ముగుస్తుందో సుద్దముక్కతో గుర్తు పెట్టమని ఎవరినైనా అడుగు."
+		}
+	}
+}

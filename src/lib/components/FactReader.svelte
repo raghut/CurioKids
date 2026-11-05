@@ -50,10 +50,10 @@
 		scene ? (scene.section_layers[Math.min(stepIndex, sections.length - 1)] ?? []) : []
 	);
 
-	// A fun-facts list and the closing screen are the two tallest steps; with a full-size
-	// scene both pushed the arrows off a 390x844 phone. The list gets a half-size scene;
-	// the closing screen (two boxes and Done) has no room for one at all.
-	const compactScene = $derived(section?.type === 'fun_facts');
+	// A fun-facts list and the closing screen are the two tallest steps; with any scene
+	// above them the arrows fell off a 390x844 phone (measured across all 11 facts), so
+	// those two steps show the words alone.
+	const showScene = $derived(!onClosing && section?.type !== 'fun_facts');
 
 	const te = $derived(language === 'te');
 	const lead = $derived(te ? 'leading-[1.6]' : 'leading-relaxed');
@@ -85,11 +85,9 @@
 
 	<h2 class="text-3xl font-bold mb-4" lang={te ? 'te' : undefined}>{title}</h2>
 
-	{#if scene && !onClosing}
+	{#if scene && showScene}
 		<div
-			class="mx-auto mb-4 aspect-[680/360] overflow-hidden rounded-2xl transition-[width] duration-700 {compactScene
-				? 'w-1/2'
-				: 'w-full'}"
+			class="mx-auto mb-4 aspect-[680/360] w-full overflow-hidden rounded-2xl"
 		>
 			<FactScene sceneId={scene.id} layers={sceneLayers} />
 		</div>

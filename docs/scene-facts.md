@@ -12,7 +12,7 @@ look exactly as before.
 
 | Part | Lives in | Gets there by |
 |---|---|---|
-| Words (English + Telugu) | `facts` table | `/admin/facts/import` — paste or upload the JSON |
+| Words (English + Telugu) | `facts` table | `/admin/facts/import` — paste one, or choose several files at once |
 | The scene (the drawing) | `src/lib/scenes/` | code: a commit and a Vercel deploy |
 
 There is **no OpenAI call and no Blob upload**. The import runs the words through
@@ -54,9 +54,21 @@ A `fun_facts` section shows the scene at half size for the same reason.
 
 ## Available scenes
 
-| id | Layers |
-|---|---|
-| `water-cycle` | `sunbeams`, `vapor`, `cloud`, `rain-cloud`, `rain`, `stream` |
+| id | Layers | Used by |
+|---|---|---|
+| `water-cycle` | `sunbeams`, `vapor`, `cloud`, `rain-cloud`, `rain`, `stream` | water-cycle |
+| `ant-trail` | `scout`, `trail`, `line`, `smell`, `carry`, `team` | ants |
+| `rainbow` | `sunlight`, `rain`, `drop`, `rainbow` | rainbow |
+| `electricity` | `flow-high`, `transformer`, `flow-home`, `bulb` | electricity |
+| `day-night` | `sunlight`, `spin`, `day`, `night` | day-night |
+| `seed` | `water`, `root`, `shoot`, `leaves`, `flower`, `sunlight` | seed-grows |
+| `butterfly` | `egg`, `caterpillar`, `chrysalis`, `butterfly`, `cycle` | butterfly |
+| `bees` | `nectar`, `pollen`, `fly`, `cells`, `fan`, `honey` | bees-honey |
+| `moon` | `sunlight`, `orbit`, `full`, `half`, `crescent`, `new` | moon-shapes |
+| `shadow` | `morning`, `noon`, `evening`, `rays` | shadows |
+
+Every file in `content/facts/` is checked by `factImport.test.ts` with the same rules the
+import page uses, so a broken file fails `npm test` before it reaches the admin.
 
 ## Adding a scene
 

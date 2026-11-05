@@ -21,6 +21,42 @@ export const SCENE_CATALOG: Readonly<Record<string, SceneInfo>> = {
 	'water-cycle': {
 		label: 'Water cycle',
 		layers: ['sunbeams', 'vapor', 'cloud', 'rain-cloud', 'rain', 'stream']
+	},
+	'ant-trail': {
+		label: 'Ants and their trail',
+		layers: ['scout', 'trail', 'line', 'smell', 'carry', 'team']
+	},
+	rainbow: {
+		label: 'Rainbow',
+		layers: ['sunlight', 'rain', 'drop', 'rainbow']
+	},
+	electricity: {
+		label: 'Electricity to a home',
+		layers: ['flow-high', 'transformer', 'flow-home', 'bulb']
+	},
+	'day-night': {
+		label: 'Day and night',
+		layers: ['sunlight', 'spin', 'day', 'night']
+	},
+	seed: {
+		label: 'Seed to plant',
+		layers: ['water', 'root', 'shoot', 'leaves', 'flower', 'sunlight']
+	},
+	butterfly: {
+		label: 'Butterfly life cycle',
+		layers: ['egg', 'caterpillar', 'chrysalis', 'butterfly', 'cycle']
+	},
+	bees: {
+		label: 'Bees and honey',
+		layers: ['nectar', 'pollen', 'fly', 'cells', 'fan', 'honey']
+	},
+	moon: {
+		label: "The moon's shapes",
+		layers: ['sunlight', 'orbit', 'full', 'half', 'crescent', 'new']
+	},
+	shadow: {
+		label: 'Shadows',
+		layers: ['morning', 'noon', 'evening', 'rays']
 	}
 };
 

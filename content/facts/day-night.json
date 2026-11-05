@@ -1,0 +1,132 @@
+{
+	"id": "fact-day-night",
+	"topic": "day and night",
+	"scene": {
+		"id": "day-night",
+		"section_layers": [
+			[
+				"sunlight",
+				"day",
+				"night"
+			],
+			[],
+			[
+				"spin"
+			],
+			[
+				"sunlight",
+				"day",
+				"spin"
+			],
+			[
+				"sunlight",
+				"day",
+				"night",
+				"spin"
+			],
+			[
+				"sunlight",
+				"day",
+				"night",
+				"spin"
+			],
+			[
+				"sunlight",
+				"day",
+				"night",
+				"spin"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "Why do we have day and night?",
+			"subtitle": "Our Earth is always spinning",
+			"sections": [
+				{
+					"text": "Every morning the sun comes up, and every evening it goes away. Where does the sun go at night?"
+				},
+				{
+					"text": "We live on the Earth. The Earth is a giant round ball, floating in space."
+				},
+				{
+					"text": "The Earth is always spinning, like a top. It turns all the way around once every day."
+				},
+				{
+					"text": "The side of the Earth facing the sun gets sunlight. There, it is day."
+				},
+				{
+					"text": "The side facing away from the sun is dark. There, it is night. As the Earth spins, we move from day into night, and back again."
+				},
+				{
+					"items": [
+						"The sun does not really go away. It is the Earth that turns!",
+						"When it is day in India, it is night in America.",
+						"We cannot feel the Earth spinning because it turns so smoothly."
+					]
+				},
+				{
+					"text": "The spinning Earth gives us day and night. When half the world is sleeping, the other half is playing."
+				}
+			],
+			"reflection_question": "When you go to sleep, what do you think children on the other side of the Earth are doing?",
+			"real_world_mission": "In a dark room, shine a torch on a ball and slowly turn the ball. Watch day and night move across it!"
+		},
+		"te": {
+			"title": "పగలు, రాత్రి ఎందుకు వస్తాయి?",
+			"subtitle": "మన భూమి ఎప్పుడూ తిరుగుతూనే ఉంటుంది",
+			"sections": [
+				{
+					"text": "ప్రతి ఉదయం సూర్యుడు ఉదయిస్తాడు, ప్రతి సాయంత్రం వెళ్ళిపోతాడు. రాత్రి సూర్యుడు ఎక్కడికి వెళ్తాడు?"
+				},
+				{
+					"text": "మనం భూమి మీద ఉంటాం. భూమి అంతరిక్షంలో తేలుతున్న ఒక పెద్ద గుండ్రని బంతి."
+				},
+				{
+					"text": "భూమి బొంగరంలా ఎప్పుడూ తిరుగుతూనే ఉంటుంది. అది ప్రతి రోజు ఒకసారి పూర్తిగా చుట్టూ తిరుగుతుంది."
+				},
+				{
+					"text": "సూర్యుడి వైపు ఉన్న భూమి భాగానికి సూర్యకాంతి తగులుతుంది. అక్కడ పగలు."
+				},
+				{
+					"text": "సూర్యుడికి అవతలి వైపు ఉన్న భాగం చీకటిగా ఉంటుంది. అక్కడ రాత్రి. భూమి తిరుగుతుంటే, మనం పగలు నుంచి రాత్రిలోకి, మళ్ళీ పగలులోకి వెళ్తాం."
+				},
+				{
+					"items": [
+						"సూర్యుడు నిజంగా ఎక్కడికీ వెళ్ళడు. తిరుగుతున్నది భూమే!",
+						"భారతదేశంలో పగలు అయినప్పుడు, అమెరికాలో రాత్రి.",
+						"భూమి చాలా సాఫీగా తిరుగుతుంది కాబట్టి, అది తిరుగుతున్నట్లు మనకు తెలియదు."
+					]
+				},
+				{
+					"text": "భూమి తిరగడం వల్లే మనకు పగలు, రాత్రి వస్తాయి. ప్రపంచంలో సగం మంది నిద్రపోతుంటే, మిగతా సగం మంది ఆడుకుంటూ ఉంటారు."
+				}
+			],
+			"reflection_question": "నువ్వు నిద్రపోయేటప్పుడు, భూమికి అవతలి వైపు ఉన్న పిల్లలు ఏం చేస్తుంటారని అనుకుంటున్నావు?",
+			"real_world_mission": "చీకటి గదిలో, ఒక బంతి మీద టార్చి వెలుగు వేసి, బంతిని మెల్లగా తిప్పు. దాని మీద పగలు, రాత్రి కదలడం చూడు!"
+		}
+	}
+}
