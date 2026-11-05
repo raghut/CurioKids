@@ -1,0 +1,142 @@
+{
+	"id": "fact-rocket",
+	"topic": "how rockets reach space",
+	"scene": {
+		"id": "rocket",
+		"section_layers": [
+			[
+				"flying",
+				"space"
+			],
+			[
+				"pad",
+				"fuel"
+			],
+			[
+				"pad",
+				"fire"
+			],
+			[
+				"pad",
+				"fire",
+				"push"
+			],
+			[
+				"flying"
+			],
+			[
+				"flying",
+				"space"
+			],
+			[
+				"flying",
+				"space"
+			],
+			[
+				"pad",
+				"fire",
+				"push"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "How does a rocket go to space?",
+			"subtitle": "Push down to go up",
+			"sections": [
+				{
+					"text": "Rockets fly past the sky, right into space. How do they get so high?"
+				},
+				{
+					"text": "A rocket is mostly a giant tank full of fuel. It needs lots of fuel to escape the Earth's pull."
+				},
+				{
+					"text": "The fuel burns and blasts hot gas out of the bottom, very, very fast."
+				},
+				{
+					"text": "Pushing the gas down pushes the rocket up! It is like a balloon zooming away when you let it go."
+				},
+				{
+					"text": "With a huge roar, the rocket lifts off and climbs faster and faster."
+				},
+				{
+					"text": "High up, the sky turns dark and there is no air. The rocket has reached space!"
+				},
+				{
+					"items": [
+						"India's space agency, ISRO, has sent rockets to the Moon and to Mars.",
+						"Space has no air, so rockets carry their own to burn their fuel.",
+						"A rocket must go much faster than any plane to reach space."
+					]
+				},
+				{
+					"text": "A rocket pushes hot gas down hard, and that pushes the rocket up into space."
+				}
+			],
+			"reflection_question": "If you could ride a rocket, where in space would you visit?",
+			"real_world_mission": "With a grown-up, blow up a balloon, hold the end, then let it go. Watch it zoom like a rocket!"
+		},
+		"te": {
+			"title": "రాకెట్ అంతరిక్షానికి ఎలా వెళ్తుంది?",
+			"subtitle": "పైకి వెళ్ళడానికి కిందికి తోయాలి",
+			"sections": [
+				{
+					"text": "రాకెట్లు ఆకాశం దాటి అంతరిక్షంలోకి వెళ్తాయి. అవి అంత ఎత్తుకు ఎలా వెళ్తాయి?"
+				},
+				{
+					"text": "రాకెట్ అంటే ఎక్కువగా ఇంధనంతో నిండిన పెద్ద ట్యాంకే. భూమి ఆకర్షణ నుంచి తప్పించుకోవడానికి చాలా ఇంధనం కావాలి."
+				},
+				{
+					"text": "ఇంధనం మండి, వేడి వాయువును కింద నుంచి చాలా చాలా వేగంగా బయటికి చిమ్ముతుంది."
+				},
+				{
+					"text": "వాయువును కిందికి తోయడం రాకెట్‌ను పైకి తోస్తుంది! ఊదిన బెలూన్‌ను వదిలేస్తే అది దూసుకెళ్ళినట్లు."
+				},
+				{
+					"text": "పెద్ద గర్జనతో రాకెట్ పైకి లేచి, వేగంగా, ఇంకా వేగంగా ఎక్కుతుంది."
+				},
+				{
+					"text": "చాలా ఎత్తులో ఆకాశం చీకటిగా మారుతుంది, అక్కడ గాలి ఉండదు. రాకెట్ అంతరిక్షానికి చేరుకుంది!"
+				},
+				{
+					"items": [
+						"భారత అంతరిక్ష సంస్థ ఇస్రో చంద్రుడికి, అంగారకుడికి రాకెట్లు పంపింది.",
+						"అంతరిక్షంలో గాలి ఉండదు, అందుకే ఇంధనం మండటానికి కావాల్సిన గాలిని రాకెట్లు తమతో తీసుకెళ్తాయి.",
+						"అంతరిక్షానికి చేరాలంటే రాకెట్ ఏ విమానం కంటే అయినా చాలా వేగంగా వెళ్ళాలి."
+					]
+				},
+				{
+					"text": "రాకెట్ వేడి వాయువును బలంగా కిందికి తోస్తుంది, అది రాకెట్‌ను అంతరిక్షంలోకి పైకి తోస్తుంది."
+				}
+			],
+			"reflection_question": "నువ్వు రాకెట్ ఎక్కగలిగితే, అంతరిక్షంలో ఎక్కడికి వెళ్తావు?",
+			"real_world_mission": "పెద్దవాళ్ళతో కలిసి బెలూన్ ఊది, మూతి పట్టుకుని, తర్వాత వదిలెయ్. అది రాకెట్‌లా దూసుకెళ్ళడం చూడు!"
+		}
+	}
+}

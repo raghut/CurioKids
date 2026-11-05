@@ -1,0 +1,143 @@
+{
+	"id": "fact-salty-sea",
+	"topic": "why the sea is salty",
+	"scene": {
+		"id": "salty-sea",
+		"section_layers": [
+			[
+				"river",
+				"salt"
+			],
+			[
+				"rain"
+			],
+			[
+				"rain",
+				"river"
+			],
+			[
+				"river",
+				"salt"
+			],
+			[
+				"salt",
+				"evaporate"
+			],
+			[
+				"salt",
+				"evaporate",
+				"pans"
+			],
+			[
+				"salt",
+				"pans"
+			],
+			[
+				"rain",
+				"river",
+				"salt",
+				"evaporate"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "Why is the sea salty?",
+			"subtitle": "Salt that the rivers bring",
+			"sections": [
+				{
+					"text": "River water is not salty, but sea water is very salty. Where does the salt come from?"
+				},
+				{
+					"text": "Rain falls on rocks and soil. Over many years, it washes out tiny bits of salt from them."
+				},
+				{
+					"text": "Rivers carry these tiny bits of salt to the sea. There is so little that river water does not taste salty."
+				},
+				{
+					"text": "In the sea, the salt stays and stays. Bit by bit, over millions of years, it has piled up."
+				},
+				{
+					"text": "The sun lifts water out of the sea as vapour, but the salt cannot fly up. It is left behind!"
+				},
+				{
+					"text": "People collect salt by letting the sun dry sea water in shallow pans. That salt may be in your kitchen!"
+				},
+				{
+					"items": [
+						"It is easier to float in salty sea water than in a river.",
+						"Gujarat and Tamil Nadu make a lot of India's salt from the sea.",
+						"Never drink sea water. It makes you more thirsty!"
+					]
+				},
+				{
+					"text": "Rivers bring a little salt, the sun takes away only the water, and so the sea stays salty."
+				}
+			],
+			"reflection_question": "Why do you think rain is not salty, even though it comes from the sea?",
+			"real_world_mission": "With a grown-up, mix salt in a plate of water and leave it in the sun. What is left when the water dries?"
+		},
+		"te": {
+			"title": "సముద్రం ఎందుకు ఉప్పగా ఉంటుంది?",
+			"subtitle": "నదులు తెచ్చే ఉప్పు",
+			"sections": [
+				{
+					"text": "నది నీళ్ళు ఉప్పగా ఉండవు, కానీ సముద్రపు నీళ్ళు చాలా ఉప్పగా ఉంటాయి. ఆ ఉప్పు ఎక్కడి నుంచి వస్తుంది?"
+				},
+				{
+					"text": "రాళ్ళ మీద, మట్టి మీద వర్షం పడుతుంది. చాలా ఏళ్ళుగా, అది వాటి నుంచి ఉప్పు కణాలను కడిగేస్తుంది."
+				},
+				{
+					"text": "నదులు ఆ ఉప్పు కణాలను సముద్రం దాకా మోసుకెళ్తాయి. అవి చాలా కొంచెమే, అందుకే నది నీళ్ళు ఉప్పగా అనిపించవు."
+				},
+				{
+					"text": "సముద్రంలో ఆ ఉప్పు అక్కడే ఉండిపోతుంది. కోట్ల సంవత్సరాలుగా, కొంచెం కొంచెంగా పోగైంది."
+				},
+				{
+					"text": "సూర్యుడు సముద్రం నుంచి నీటిని ఆవిరిగా పైకి లేపుతాడు, కానీ ఉప్పు పైకి వెళ్ళలేదు. అది అక్కడే మిగిలిపోతుంది!"
+				},
+				{
+					"text": "లోతు తక్కువ మడుల్లో సముద్రపు నీటిని ఎండకు ఆరబెట్టి ఉప్పు తీస్తారు. ఆ ఉప్పు నీ వంటింట్లో ఉండవచ్చు!"
+				},
+				{
+					"items": [
+						"నది నీళ్ళ కంటే ఉప్పు సముద్రపు నీళ్ళలో తేలడం సులభం.",
+						"భారతదేశపు ఉప్పులో చాలా భాగాన్ని గుజరాత్, తమిళనాడు సముద్రపు నీటి నుంచి తయారు చేస్తాయి.",
+						"సముద్రపు నీళ్ళు ఎప్పుడూ తాగకు. అవి ఇంకా దాహం వేసేలా చేస్తాయి!"
+					]
+				},
+				{
+					"text": "నదులు కొంచెం ఉప్పు తెస్తాయి, సూర్యుడు నీటిని మాత్రమే తీసుకెళ్తాడు, అందుకే సముద్రం ఉప్పగానే ఉంటుంది."
+				}
+			],
+			"reflection_question": "వర్షం సముద్రం నుంచే వచ్చినా, అది ఉప్పగా ఎందుకు ఉండదు?",
+			"real_world_mission": "పెద్దవాళ్ళతో కలిసి పళ్ళెం నీళ్ళలో ఉప్పు కలిపి ఎండలో పెట్టు. నీళ్ళు ఆరిపోయాక ఏం మిగిలింది?"
+		}
+	}
+}

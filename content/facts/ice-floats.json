@@ -1,0 +1,138 @@
+{
+	"id": "fact-ice-floats",
+	"topic": "why ice floats",
+	"scene": {
+		"id": "ice",
+		"section_layers": [
+			[
+				"cube"
+			],
+			[
+				"water-bits"
+			],
+			[
+				"water-bits",
+				"ice-bits"
+			],
+			[
+				"expand"
+			],
+			[
+				"cube",
+				"ice-bits"
+			],
+			[
+				"pond"
+			],
+			[
+				"cube",
+				"pond"
+			],
+			[
+				"cube",
+				"water-bits",
+				"ice-bits"
+			]
+		]
+	},
+	"structure": [
+		{
+			"type": "question"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "discovery"
+		},
+		{
+			"type": "fun_facts"
+		},
+		{
+			"type": "lesson"
+		}
+	],
+	"content": {
+		"en": {
+			"title": "Why does ice float?",
+			"subtitle": "Water grows when it freezes",
+			"sections": [
+				{
+					"text": "Ice is just frozen water. So why does an ice cube float on top instead of sinking?"
+				},
+				{
+					"text": "Water is made of tiny bits. In liquid water, they jiggle around, packed close together."
+				},
+				{
+					"text": "When water freezes, the bits lock into a neat pattern with more space between them."
+				},
+				{
+					"text": "So ice takes up more room than the same water. A full bottle can even crack when it freezes!"
+				},
+				{
+					"text": "Ice is lighter than the same amount of water, so it floats on top."
+				},
+				{
+					"text": "In very cold places, ponds freeze only on top. The ice is like a lid, and fish stay safe in the water below."
+				},
+				{
+					"items": [
+						"Icebergs are giant floating ice. Most of an iceberg hides under the water.",
+						"Most things shrink when they freeze, but water grows bigger.",
+						"Never put a full glass bottle in the freezer."
+					]
+				},
+				{
+					"text": "When water freezes, it spreads out and becomes lighter. That is why ice floats."
+				}
+			],
+			"reflection_question": "What would happen to fish if ponds froze from the bottom up?",
+			"real_world_mission": "With a grown-up, fill a small cup to the brim with water and freeze it. Is the ice higher than the brim?"
+		},
+		"te": {
+			"title": "మంచు ఎందుకు తేలుతుంది?",
+			"subtitle": "గడ్డకట్టినప్పుడు నీళ్ళు పెరుగుతాయి",
+			"sections": [
+				{
+					"text": "మంచు గడ్డ అంటే గడ్డకట్టిన నీళ్ళే. మరి అది మునగకుండా పైన ఎందుకు తేలుతుంది?"
+				},
+				{
+					"text": "నీళ్ళు చిన్న చిన్న కణాలతో తయారవుతాయి. ద్రవ రూపంలో అవి దగ్గరదగ్గరగా ఉంటూ అటూ ఇటూ కదులుతుంటాయి."
+				},
+				{
+					"text": "నీళ్ళు గడ్డకట్టినప్పుడు, ఆ కణాలు మధ్యలో ఎక్కువ ఖాళీతో ఒక చక్కని అమరికలో బిగుసుకుంటాయి."
+				},
+				{
+					"text": "అందుకే అంతే నీటి కంటే మంచు ఎక్కువ చోటు తీసుకుంటుంది. నిండా ఉన్న సీసా గడ్డకట్టినప్పుడు పగిలిపోవచ్చు కూడా!"
+				},
+				{
+					"text": "అంతే నీటి కంటే మంచు తేలికగా ఉంటుంది, అందుకే అది పైన తేలుతుంది."
+				},
+				{
+					"text": "చాలా చల్లని చోట్ల, చెరువులు పైన మాత్రమే గడ్డకడతాయి. ఆ మంచు మూతలా ఉంటుంది, కింద నీళ్ళలో చేపలు సురక్షితంగా ఉంటాయి."
+				},
+				{
+					"items": [
+						"మంచు కొండలు నీళ్ళలో తేలే పెద్ద మంచు ముక్కలు. వాటిలో చాలా భాగం నీళ్ళ కింద దాగి ఉంటుంది.",
+						"చాలా వస్తువులు గడ్డకట్టినప్పుడు కుంచించుకుపోతాయి, కానీ నీళ్ళు పెరుగుతాయి.",
+						"నిండా ఉన్న గాజు సీసాను ఎప్పుడూ ఫ్రీజర్‌లో పెట్టకు."
+					]
+				},
+				{
+					"text": "నీళ్ళు గడ్డకట్టినప్పుడు విస్తరించి తేలికవుతాయి. అందుకే మంచు తేలుతుంది."
+				}
+			],
+			"reflection_question": "చెరువులు కింద నుంచి పైకి గడ్డకడితే చేపలకు ఏమవుతుంది?",
+			"real_world_mission": "పెద్దవాళ్ళతో కలిసి చిన్న కప్పు అంచు దాకా నీళ్ళు నింపి ఫ్రీజ్ చేయి. మంచు అంచు కంటే పైకి వచ్చిందా?"
+		}
+	}
+}
