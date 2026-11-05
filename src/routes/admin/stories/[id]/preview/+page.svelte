@@ -73,7 +73,7 @@
 				? 'w-full max-w-[390px] overflow-hidden rounded-[2rem] border-8 border-slate-800 bg-white shadow-xl'
 				: 'rounded-2xl border border-slate-200 bg-white shadow-sm'}
 		>
-			<div class="flex min-h-[600px] flex-col bg-white p-6">
+			<div class="flex {view === 'mobile' ? 'h-[700px]' : 'min-h-[600px]'} flex-col bg-white px-6 pt-4 pb-4">
 				<StoryReader
 					bind:this={reader}
 					title={story.title}
