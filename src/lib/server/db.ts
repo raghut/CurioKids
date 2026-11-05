@@ -54,7 +54,8 @@ export async function listStoriesAdmin(): Promise<AdminStorySummary[]> {
 	const rows = await q`
 		SELECT id, title, cover_url, age_tag, language, created_at, status,
 		       story->>'character_id' AS character_id,
-		       story->>'theme_id' AS theme_id
+		       story->>'theme_id' AS theme_id,
+		       story->'scene'->>'id' AS scene_id
 		FROM stories
 		ORDER BY created_at DESC
 	`;

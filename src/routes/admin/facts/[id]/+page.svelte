@@ -1,4 +1,6 @@
 <script lang="ts">
+	import FactScene from '$lib/components/FactScene.svelte';
+	import { SCENE_CATALOG } from '$lib/scenes/catalog';
 	import { untrack } from 'svelte';
 	import { ArrowLeft, RefreshCw, Save, Languages, Eye } from 'lucide-svelte';
 	import StatusChip from '$lib/components/admin/StatusChip.svelte';
@@ -227,6 +229,11 @@
 
 		{#if fact.cover_image_url}
 			<img src={fact.cover_image_url} alt="" class="mb-3 w-full rounded-xl object-cover" />
+		{:else if fact.scene}
+			<!-- A scene fact's cover is its scene, exactly as the child's list shows it. -->
+			<div class="mb-3 aspect-[680/360] w-full overflow-hidden rounded-xl">
+				<FactScene sceneId={fact.scene.id} layers={[...(SCENE_CATALOG[fact.scene.id]?.cover ?? [])]} />
+			</div>
 		{:else}
 			<p class="mb-3 rounded-lg bg-slate-50 px-3 py-6 text-center text-sm text-slate-400">No cover image.</p>
 		{/if}

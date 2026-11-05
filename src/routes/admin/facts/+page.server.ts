@@ -17,7 +17,8 @@ export const load: PageServerLoad = async () => {
 				status: r.status,
 				languages: langs,
 				section_count: r.structure.length,
-				created_at: r.created_at
+				created_at: r.created_at,
+				scene_id: r.scene?.id ?? null
 			};
 		});
 		return { facts, loadError: false };
