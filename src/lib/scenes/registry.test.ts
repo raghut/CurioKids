@@ -20,6 +20,13 @@ describe('scene registry', () => {
 		expect(Object.keys(entries).sort()).toEqual(Object.keys(SCENE_CATALOG).sort());
 	});
 
+	it('builds every cover only from layers the scene has', () => {
+		for (const [id, info] of Object.entries(SCENE_CATALOG)) {
+			expect(info.cover.length, id).toBeGreaterThan(0);
+			for (const layer of info.cover) expect(info.layers, `${id} cover`).toContain(layer);
+		}
+	});
+
 	it('draws every catalog layer in its component', () => {
 		for (const [id, info] of Object.entries(SCENE_CATALOG)) {
 			const file = files[entries[id]];

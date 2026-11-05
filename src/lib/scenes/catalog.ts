@@ -15,48 +15,63 @@ export type SceneInfo = {
 	 * ground, the sun's face) is always visible.
 	 */
 	layers: readonly string[];
+	/**
+	 * The busiest, most inviting moment of the scene, shown on the fact's card in the
+	 * Why? list. Chosen to make a child want to tap, not to explain anything yet.
+	 */
+	cover: readonly string[];
 };
 
 export const SCENE_CATALOG: Readonly<Record<string, SceneInfo>> = {
 	'water-cycle': {
 		label: 'Water cycle',
-		layers: ['sunbeams', 'vapor', 'cloud', 'rain-cloud', 'rain', 'stream']
+		layers: ['sunbeams', 'vapor', 'cloud', 'rain-cloud', 'rain', 'stream'],
+		cover: ['vapor', 'rain-cloud', 'rain', 'stream']
 	},
 	'ant-trail': {
 		label: 'Ants and their trail',
-		layers: ['scout', 'trail', 'line', 'smell', 'carry', 'team']
+		layers: ['scout', 'trail', 'line', 'smell', 'carry', 'team'],
+		cover: ['trail', 'line', 'carry', 'team']
 	},
 	rainbow: {
 		label: 'Rainbow',
-		layers: ['sunlight', 'rain', 'drop', 'rainbow']
+		layers: ['sunlight', 'rain', 'drop', 'rainbow'],
+		cover: ['sunlight', 'rain', 'rainbow']
 	},
 	electricity: {
 		label: 'Electricity to a home',
-		layers: ['flow-high', 'transformer', 'flow-home', 'bulb']
+		layers: ['flow-high', 'transformer', 'flow-home', 'bulb'],
+		cover: ['flow-high', 'transformer', 'flow-home', 'bulb']
 	},
 	'day-night': {
 		label: 'Day and night',
-		layers: ['sunlight', 'spin', 'day', 'night']
+		layers: ['sunlight', 'spin', 'day', 'night'],
+		cover: ['sunlight', 'spin', 'day', 'night']
 	},
 	seed: {
 		label: 'Seed to plant',
-		layers: ['water', 'root', 'shoot', 'leaves', 'flower', 'sunlight']
+		layers: ['water', 'root', 'shoot', 'leaves', 'flower', 'sunlight'],
+		cover: ['root', 'flower', 'sunlight']
 	},
 	butterfly: {
 		label: 'Butterfly life cycle',
-		layers: ['egg', 'caterpillar', 'chrysalis', 'butterfly', 'cycle']
+		layers: ['egg', 'caterpillar', 'chrysalis', 'butterfly', 'cycle'],
+		cover: ['egg', 'caterpillar', 'chrysalis', 'butterfly']
 	},
 	bees: {
 		label: 'Bees and honey',
-		layers: ['nectar', 'pollen', 'fly', 'cells', 'fan', 'honey']
+		layers: ['nectar', 'pollen', 'fly', 'cells', 'fan', 'honey'],
+		cover: ['nectar', 'pollen', 'fly', 'honey']
 	},
 	moon: {
 		label: "The moon's shapes",
-		layers: ['sunlight', 'orbit', 'full', 'half', 'crescent', 'new']
+		layers: ['sunlight', 'orbit', 'full', 'half', 'crescent', 'new'],
+		cover: ['sunlight', 'orbit', 'full']
 	},
 	shadow: {
 		label: 'Shadows',
-		layers: ['morning', 'noon', 'evening', 'rays']
+		layers: ['morning', 'noon', 'evening', 'rays'],
+		cover: ['morning', 'rays']
 	}
 };
 

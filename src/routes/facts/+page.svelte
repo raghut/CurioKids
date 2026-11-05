@@ -48,9 +48,11 @@
 	{:else if facts.length === 0}
 		<p class="text-center text-gray-400 mt-12 text-xl">No facts yet!</p>
 	{:else}
-		<div class="flex flex-col gap-3">
-			{#each facts as fact}
+		<!-- Big picture covers: one column on a phone, two on a tablet, three on a laptop. -->
+		<div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+			{#each facts as fact, i (fact.id)}
 				<FactCard
+					tint={i}
 					title={fact.title}
 					subtitle={fact.subtitle ?? ''}
 					coverImage={fact.cover_image || '🌿'}
