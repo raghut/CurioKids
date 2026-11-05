@@ -1,5 +1,7 @@
 <script lang="ts">
-	import type { Language } from '$lib/types';
+	import FactScene from '$lib/components/FactScene.svelte';
+	import { SCENE_CATALOG } from '$lib/scenes/catalog';
+	import type { Language, StoryScene } from '$lib/types';
 
 	// Print-only picture-book layout: one story page per sheet, storybook-scale
 	// type, images where present. Hidden on screen; appears only when printing.
@@ -9,7 +11,8 @@
 		pages = [],
 		moral = '',
 		reflectionQuestion = '',
-		language = 'en'
+		language = 'en',
+		scene
 	}: {
 		title: string;
 		cover?: string;
@@ -17,9 +20,14 @@
 		moral?: string;
 		reflectionQuestion?: string;
 		language?: Language;
+		/** A scene story prints its scene, still, at each page's moment instead of images. */
+		scene?: StoryScene;
 	} = $props();
 
 	const te = $derived(language === 'te');
+	const coverLayers = $derived(
+		scene ? [...(SCENE_CATALOG[scene.id]?.cover ?? scene.page_layers[0] ?? [])] : []
+	);
 </script>
 
 <div class="hidden print:block text-black">
@@ -31,7 +39,11 @@
 		>
 			{title}
 		</h1>
-		{#if cover}
+		{#if scene}
+			<div class="print-scene">
+				<FactScene sceneId={scene.id} layers={coverLayers} still />
+			</div>
+		{:else if cover}
 			<img src={cover} alt="" class="max-w-full max-h-[13cm] object-contain rounded-2xl" />
 		{/if}
 		<p class="text-xl text-gray-500" lang={te ? 'te' : undefined}>
@@ -42,7 +54,11 @@
 	<!-- Sheets 2…N: one story page each -->
 	{#each pages as page, i (i)}
 		<section class="print-sheet relative flex flex-col items-center justify-center gap-6 text-center">
-			{#if page.image}
+			{#if scene}
+				<div class="print-scene">
+					<FactScene sceneId={scene.id} layers={scene.page_layers[i] ?? []} still />
+				</div>
+			{:else if page.image}
 				<img src={page.image} alt="" class="max-w-full max-h-[11cm] object-contain rounded-2xl" />
 			{/if}
 			<p class="text-2xl leading-relaxed max-w-[17cm]" lang={te ? 'te' : undefined}>{page.text}</p>
@@ -93,6 +109,14 @@
 		break-inside: avoid;
 		/* Center content on the page without forcing overflow. */
 		min-height: 24cm;
+	}
+	/* The scene's 680x360 shape, as wide as the text and short enough to leave room for it. */
+	.print-scene {
+		width: 17cm;
+		max-width: 100%;
+		aspect-ratio: 680 / 360;
+		border-radius: 1rem;
+		overflow: hidden;
 	}
 	.print-sheet:last-child {
 		break-after: auto;

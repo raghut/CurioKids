@@ -55,7 +55,8 @@
 						cover: (story as GeneratedStory).cover_image_url,
 						pages: (story as GeneratedStory).pages.map((p) => ({ text: p.text, image: p.image_url })),
 						moral: story.moral,
-						reflectionQuestion: story.reflection_question
+						reflectionQuestion: story.reflection_question,
+						scene: (story as GeneratedStory).scene
 					}
 				: {
 						title: story.title,

@@ -77,7 +77,7 @@ with a deploy.
 
 | id | Layers | Used by |
 |---|---|---|
-| `carrot-share` | `day`, `pull`, `carrot`, `sound`, `tortoise`, `share`, `sunset`, `hearts` | carrot-share (Mishti and Dheera) |
+| `carrot-share` | `day`, `pull`, `carrot`, `sound`, `tortoise`, `share`, `sunset`, `hearts` | carrot-share (Mishti and Dheera, en + te) |
 
 Fact scenes and story scenes share one catalog. A story may use a fact scene if it fits.
 
@@ -100,5 +100,12 @@ stories:
 
 ## Print
 
-The print layout (`PrintableStory`) has no pictures for a scene story yet. It prints the words
-only.
+A scene story prints with its pictures. The title sheet shows the scene's cover moment, and each
+page's sheet shows the scene at that page's layers. The pictures are still, because paper can't
+move.
+
+## Writing both languages
+
+Write `en` and `te` together in one file, page for page, so page 3 means the same thing in
+both languages and matches the same picture. Have the Telugu read by someone fluent on the edit
+page before publishing.
