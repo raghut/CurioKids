@@ -211,6 +211,15 @@
 		{/if}
 	</p>
 
+	{#if fact.scene}
+		<!-- A scene fact's pictures are code, not Blob images, so the cover and per-section
+		     image tools below are optional extras rather than missing work. -->
+		<p class="mb-6 rounded-lg bg-sky-blue/20 px-4 py-3 text-sm text-slate-700">
+			This fact uses the animated <strong>{fact.scene.id}</strong> scene, so it needs no generated
+			pictures. Use <em>Preview as a child</em> to see which parts of the scene show on each screen.
+		</p>
+	{/if}
+
 	<!-- Cover -->
 	<section class="mb-6 rounded-2xl bg-white p-5 ring-1 ring-slate-200">
 		<h2 class="mb-1 font-bold text-slate-800">Cover</h2>

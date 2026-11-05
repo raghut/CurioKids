@@ -47,6 +47,9 @@ export function flattenFact(record: FactRecord, language: Language): Fact | null
 		audio: '',
 		sections,
 		reflection_question: c.reflection_question,
-		real_world_mission: c.real_world_mission
+		real_world_mission: c.real_world_mission,
+		// Shared by every language, like the images. Absent on still-image facts, so their
+		// API output is byte-for-byte what it was.
+		...(record.scene ? { scene: record.scene } : {})
 	};
 }

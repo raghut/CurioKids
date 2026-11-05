@@ -54,6 +54,7 @@
 					title={fact.title}
 					subtitle={fact.subtitle ?? ''}
 					coverImage={fact.cover_image || '🌿'}
+					scene={fact.cover_image ? undefined : fact.scene}
 					href="/facts/{fact.id}"
 					completed={$progress.includes(fact.id)}
 					language={$language ?? 'en'}

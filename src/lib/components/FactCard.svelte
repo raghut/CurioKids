@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Check } from 'lucide-svelte';
-	import type { Language } from '$lib/types';
+	import FactScene from '$lib/components/FactScene.svelte';
+	import type { FactScene as Scene, Language } from '$lib/types';
 
 	let {
 		title,
@@ -8,7 +9,8 @@
 		coverImage,
 		href,
 		completed = false,
-		language = 'en'
+		language = 'en',
+		scene
 	}: {
 		title: string;
 		subtitle?: string;
@@ -16,6 +18,8 @@
 		href: string;
 		completed?: boolean;
 		language?: Language;
+		/** A scene fact with no cover image shows a still crop of its first screen. */
+		scene?: Scene;
 	} = $props();
 
 	const te = $derived(language === 'te');
@@ -31,7 +35,9 @@
 	<div
 		class="w-[72px] h-[72px] shrink-0 rounded-xl bg-butter/30 flex items-center justify-center text-3xl overflow-hidden"
 	>
-		{#if isImage}
+		{#if scene}
+			<FactScene sceneId={scene.id} layers={scene.section_layers[0] ?? []} still cover />
+		{:else if isImage}
 			<img src={coverImage} alt="" class="w-full h-full object-cover" />
 		{:else}
 			<span>{coverImage}</span>

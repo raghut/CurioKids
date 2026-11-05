@@ -48,6 +48,17 @@ describe('flattenFact', () => {
 		expect(flattenFact(record(), 'en')!.audio).toBe('');
 	});
 
+	// Still-image facts must reach the child exactly as before the scene field existed.
+	it('adds no scene key to a fact without one', () => {
+		expect('scene' in flattenFact(record(), 'en')!).toBe(false);
+	});
+
+	it('passes a scene through unchanged for every language', () => {
+		const scene = { id: 'water-cycle', section_layers: [['rain'], [], []] };
+		expect(flattenFact(record({ scene }), 'en')!.scene).toEqual(scene);
+		expect(flattenFact(record({ scene }), 'te')!.scene).toEqual(scene);
+	});
+
 	it('merges shared images into the right sections by index', () => {
 		const f = flattenFact(record(), 'en')!;
 		const first = f.sections[0];
