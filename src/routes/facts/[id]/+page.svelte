@@ -59,7 +59,7 @@
 				href="/facts"
 				class="px-6 py-4 rounded-2xl bg-sky-blue text-xl font-bold min-h-[64px] flex items-center"
 			>
-				Back to Why?
+				Back to Why &amp; How?
 			</a>
 		</div>
 	{:else}

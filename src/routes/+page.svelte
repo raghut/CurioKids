@@ -43,7 +43,7 @@
 			class="flex-1 rounded-3xl bg-sky-blue/40 p-8 flex items-center justify-center min-h-[120px] shadow-sm hover:shadow-md transition-shadow"
 		>
 			<span class="text-2xl font-bold" class:lang-te={te} lang={te ? 'te' : undefined}>
-				{te ? 'ఎందుకు?' : 'Why?'}
+				{te ? 'ఎందుకు? ఎలా?' : 'Why & How?'}
 			</span>
 		</a>
 
