@@ -74,37 +74,51 @@
 	}
 </script>
 
-<div class="min-h-screen bg-white p-6 flex flex-col print:min-h-0 print:p-0 print:block">
-	<header class="flex justify-end items-center gap-1 mb-4 print:hidden">
-		{#if story}
-			<button
-				onclick={() => window.print()}
-				class="p-2 rounded-full hover:bg-gray-100"
-				aria-label="Print"
-			>
-				<Printer size={24} strokeWidth={1.5} />
-			</button>
-		{/if}
-		<a href="/stories" class="p-2 rounded-full hover:bg-gray-100" aria-label="Close">
-			<X size={24} strokeWidth={1.5} />
+<!-- The visible screen, not 100vh: on iPhone Safari 100vh runs under the toolbar and hid
+     the next arrow. Print gets its normal flowing layout back. -->
+<div
+	class="flex h-screen flex-col overflow-hidden bg-white px-6 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))] supports-[height:100dvh]:h-dvh print:block print:h-auto print:overflow-visible print:p-0"
+>
+	{#snippet closeButton()}
+		<a
+			href="/stories"
+			class="-mr-3 flex h-16 w-16 shrink-0 items-center justify-center rounded-full hover:bg-gray-100"
+			aria-label="Close"
+		>
+			<X size={28} strokeWidth={1.5} />
 		</a>
-	</header>
+	{/snippet}
+
+	{#if !story}
+		<!-- The reader draws its buttons beside the title; this covers loading and not-found. -->
+		<header class="flex justify-end print:hidden">{@render closeButton()}</header>
+	{/if}
 
 	{#if printData}
 		<PrintableStory {...printData} language={$language ?? 'en'} />
 	{/if}
 
 	{#if story}
-		<div class="flex-1 flex flex-col print:hidden">
+		<div class="flex min-h-0 flex-1 flex-col print:hidden">
 			<StoryReader
 				title={story.title}
 				{pages}
 				moral={story.moral}
 				language={$language ?? 'en'}
-				showClose={false}
 				scene={story.source === 'generated' ? (story as GeneratedStory).scene : undefined}
 				onDone={done}
-			/>
+			>
+				{#snippet actions()}
+					<button
+						onclick={() => window.print()}
+						class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full hover:bg-gray-100"
+						aria-label="Print"
+					>
+						<Printer size={26} strokeWidth={1.5} />
+					</button>
+					{@render closeButton()}
+				{/snippet}
+			</StoryReader>
 		</div>
 	{:else if notFound}
 		<div class="flex-1 flex flex-col items-center justify-center text-center">

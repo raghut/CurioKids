@@ -2,6 +2,7 @@
 	import SectionRenderer from '$lib/components/SectionRenderer.svelte';
 	import FactScene from '$lib/components/FactScene.svelte';
 	import { swipe } from '$lib/actions/swipe';
+	import { scrollHint } from '$lib/actions/scrollHint';
 	import { X, ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import type { FactScene as Scene, FactSection, Language } from '$lib/types';
 
@@ -57,6 +58,9 @@
 
 	const te = $derived(language === 'te');
 	const lead = $derived(te ? 'leading-[1.6]' : 'leading-relaxed');
+	// The title is the question being asked, so it is big only on the first step. After
+	// that it shrinks to a one-line reminder and the picture and words get the screen.
+	const first = $derived(stepIndex === 0);
 
 	export function reset() {
 		stepIndex = 0;
@@ -70,58 +74,59 @@
 	}
 </script>
 
-<div class="flex-1 flex flex-col">
-	{#if showClose}
-		<header class="flex justify-end mb-4">
+<!-- Sized by its host to the visible screen: the arrows sit in a fixed bottom row and
+     only the words scroll if a step is too long, so nothing hides under a browser bar. -->
+<div class="flex min-h-0 flex-1 flex-col">
+	<div class="mb-3 flex shrink-0 items-start gap-2">
+		<h2
+			class="min-w-0 flex-1 {first
+				? `pt-2 text-3xl font-bold ${te ? 'leading-[1.6]' : 'leading-tight'}`
+				: 'truncate pt-5 text-lg text-gray-500'}"
+			lang={te ? 'te' : undefined}
+		>
+			{title}
+		</h2>
+		{#if showClose}
 			<a
 				href={closeHref}
-				class="w-16 h-16 flex items-center justify-center rounded-full hover:bg-gray-100"
+				class="-mr-3 flex h-16 w-16 shrink-0 items-center justify-center rounded-full hover:bg-gray-100"
 				aria-label="Close"
 			>
 				<X size={28} strokeWidth={1.5} />
 			</a>
-		</header>
-	{/if}
-
-	<h2 class="text-3xl font-bold mb-4" lang={te ? 'te' : undefined}>{title}</h2>
+		{/if}
+	</div>
 
 	{#if scene && showScene}
-		<div
-			class="mx-auto mb-4 aspect-[680/360] w-full overflow-hidden rounded-2xl"
-		>
+		<div class="mb-3 aspect-[680/360] max-h-[40dvh] w-full shrink-0 overflow-hidden rounded-2xl">
 			<FactScene sceneId={scene.id} layers={sceneLayers} />
 		</div>
 	{/if}
 
-	<div class="flex-1 flex flex-col justify-center" use:swipe={{ onLeft: next, onRight: prev }}>
+	<div class="flex min-h-0 flex-1 flex-col justify-center" use:swipe={{ onLeft: next, onRight: prev }}>
 		{#if onClosing}
-			<div class="flex flex-col gap-4">
-				<div class="bg-sky-blue/20 rounded-2xl p-6 text-center">
-					<p class="text-xl font-bold mb-2">Think about it 💭</p>
+			<div class="flex min-h-0 flex-col gap-4 overflow-y-auto" use:scrollHint>
+				<div class="rounded-2xl bg-sky-blue/20 p-5 text-center">
+					<p class="mb-2 text-xl font-bold">Think about it 💭</p>
 					<p class="text-2xl {lead}" lang={te ? 'te' : undefined}>{reflectionQuestion}</p>
 				</div>
-				<div class="bg-mint/20 rounded-2xl p-6 text-center">
-					<p class="text-xl font-bold mb-2">Try this! 🌿</p>
+				<div class="rounded-2xl bg-mint/20 p-5 text-center">
+					<p class="mb-2 text-xl font-bold">Try this! 🌿</p>
 					<p class="text-2xl {lead}" lang={te ? 'te' : undefined}>{realWorldMission}</p>
 				</div>
 			</div>
 		{:else if section}
-			<!-- Shorter with a scene above it, so the arrows stay on a phone screen. -->
-			<div
-				class="bg-butter/20 rounded-2xl p-6 {scene
-					? 'min-h-[160px]'
-					: 'min-h-[220px]'} flex flex-col justify-center"
-			>
+			<div class="min-h-0 overflow-y-auto rounded-2xl bg-butter/20 p-5" use:scrollHint>
 				<SectionRenderer {section} {language} />
 			</div>
 		{/if}
 	</div>
 
-	<div class="flex items-center justify-between mt-6">
+	<div class="mt-3 flex shrink-0 items-center justify-between">
 		<button
 			onclick={prev}
 			disabled={stepIndex === 0}
-			class="w-16 h-16 flex items-center justify-center rounded-full bg-gray-100 disabled:opacity-30"
+			class="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 disabled:opacity-30"
 			aria-label="Previous"
 		>
 			<ChevronLeft size={32} />
@@ -130,7 +135,7 @@
 		{#if onClosing}
 			<button
 				onclick={() => onDone?.()}
-				class="px-8 py-4 rounded-full bg-mint font-bold text-xl min-h-[64px]"
+				class="min-h-[64px] rounded-full bg-mint px-8 py-4 text-xl font-bold"
 			>
 				{doneLabel}
 			</button>
@@ -141,7 +146,7 @@
 		<button
 			onclick={next}
 			disabled={onClosing}
-			class="w-16 h-16 flex items-center justify-center rounded-full bg-gray-100 disabled:opacity-30"
+			class="flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 disabled:opacity-30"
 			aria-label="Next"
 		>
 			<ChevronRight size={32} />
