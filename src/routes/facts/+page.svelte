@@ -6,7 +6,16 @@
 	import { loadFacts } from '$lib/data/loadContent';
 	import { warmFacts } from '$lib/data/warmCache';
 	import FactCard from '$lib/components/FactCard.svelte';
-	import { ArrowLeft } from 'lucide-svelte';
+	import FactFilterSheet from '$lib/components/FactFilterSheet.svelte';
+	import {
+		EMPTY_FACT_FILTER,
+		factFilterToParams,
+		isFactFilterActive,
+		matchesFactFilter,
+		parseFactFilter,
+		type FactFilter
+	} from '$lib/data/filterFacts';
+	import { ArrowLeft, SlidersHorizontal } from 'lucide-svelte';
 	import type { Fact } from '$lib/types';
 
 	let facts = $state<Fact[]>([]);
@@ -34,11 +43,16 @@
 
 	// Same contract as the Stories filter: kept in the URL, so it survives reading a fact
 	// and coming back, and resets on a fresh visit from home. Nothing in localStorage.
-	const unreadOnly = $derived($page.url.searchParams.get('unread') === '1');
-	const visible = $derived(unreadOnly ? facts.filter((f) => !$progress.includes(f.id)) : facts);
+	const filter = $derived(parseFactFilter($page.url.searchParams));
+	const filtered = $derived(isFactFilterActive(filter));
+	const visible = $derived(facts.filter((f) => matchesFactFilter(f.id, filter, $progress)));
 
-	function setUnread(on: boolean) {
-		void goto(on ? '/facts?unread=1' : '/facts', { replaceState: true, noScroll: true, keepFocus: true });
+	let sheetOpen = $state(false);
+
+	function applyFilter(next: FactFilter) {
+		sheetOpen = false;
+		const qs = factFilterToParams(next).toString();
+		void goto(qs ? `/facts?${qs}` : '/facts', { replaceState: true, noScroll: true, keepFocus: true });
 	}
 </script>
 
@@ -54,20 +68,29 @@
 		<h1 class="text-3xl font-bold" lang={te ? 'te' : undefined}>
 			{te ? 'ఎందుకు? ఎలా?' : 'Why & How?'}
 		</h1>
-	</header>
 
-	{#if facts.length}
+		<!-- Same as the Stories header: filters live behind this icon, and the coral dot is
+		     the only sign the list is narrowed, so a short list never looks like missing facts. -->
 		<button
 			type="button"
-			class="mb-5 min-h-[64px] rounded-full px-6 text-xl font-bold transition-colors {unreadOnly
-				? 'bg-mint text-green-900'
-				: 'bg-gray-100 text-gray-600'}"
-			aria-pressed={unreadOnly}
-			onclick={() => setUnread(!unreadOnly)}
+			class="relative ml-auto grid min-h-[64px] min-w-[64px] place-items-center rounded-full hover:bg-gray-100"
+			aria-label={te ? 'విషయాలు ఎంచుకో' : 'Choose facts'}
+			onclick={() => (sheetOpen = true)}
 		>
-			<span lang={te ? 'te' : undefined}>{te ? 'ఇంకా చదవలేదు' : 'Not read yet'}</span>
+			<SlidersHorizontal size={26} strokeWidth={1.5} />
+			{#if filtered}
+				<span class="absolute right-3 top-3 h-3 w-3 rounded-full bg-coral"></span>
+			{/if}
 		</button>
-	{/if}
+	</header>
+
+	<FactFilterSheet
+		open={sheetOpen}
+		{filter}
+		lang={$language ?? 'en'}
+		onapply={applyFilter}
+		onclose={() => (sheetOpen = false)}
+	/>
 
 	{#if loading}
 		<p class="text-center text-gray-400 mt-12 text-xl" lang={te ? 'te' : undefined}>
@@ -87,7 +110,7 @@
 			<button
 				type="button"
 				class="min-h-[64px] rounded-2xl bg-butter/50 px-6 text-xl font-bold"
-				onclick={() => setUnread(false)}
+				onclick={() => applyFilter({ ...EMPTY_FACT_FILTER })}
 			>
 				<span lang={te ? 'te' : undefined}>{te ? 'అన్నీ చూపించు' : 'Show all'}</span>
 			</button>
