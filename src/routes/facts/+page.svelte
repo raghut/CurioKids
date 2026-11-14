@@ -1,7 +1,10 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	import { language } from '$lib/stores/language';
 	import { progress } from '$lib/stores/progress';
 	import { loadFacts } from '$lib/data/loadContent';
+	import { warmFacts } from '$lib/data/warmCache';
 	import FactCard from '$lib/components/FactCard.svelte';
 	import { ArrowLeft } from 'lucide-svelte';
 	import type { Fact } from '$lib/types';
@@ -14,13 +17,29 @@
 		if (!$language) return;
 		loading = true;
 		failed = false;
-		loadFacts($language)
-			.then((f) => (facts = f))
+		const lang = $language;
+		loadFacts(lang)
+			.then((f) => {
+				facts = f;
+				warmFacts(
+					f.map((x) => x.id),
+					lang
+				);
+			})
 			.catch(() => (failed = true))
 			.finally(() => (loading = false));
 	});
 
 	const te = $derived($language === 'te');
+
+	// Same contract as the Stories filter: kept in the URL, so it survives reading a fact
+	// and coming back, and resets on a fresh visit from home. Nothing in localStorage.
+	const unreadOnly = $derived($page.url.searchParams.get('unread') === '1');
+	const visible = $derived(unreadOnly ? facts.filter((f) => !$progress.includes(f.id)) : facts);
+
+	function setUnread(on: boolean) {
+		void goto(on ? '/facts?unread=1' : '/facts', { replaceState: true, noScroll: true, keepFocus: true });
+	}
 </script>
 
 <div class="min-h-screen bg-white p-6">
@@ -37,6 +56,19 @@
 		</h1>
 	</header>
 
+	{#if facts.length}
+		<button
+			type="button"
+			class="mb-5 min-h-[64px] rounded-full px-6 text-xl font-bold transition-colors {unreadOnly
+				? 'bg-mint text-green-900'
+				: 'bg-gray-100 text-gray-600'}"
+			aria-pressed={unreadOnly}
+			onclick={() => setUnread(!unreadOnly)}
+		>
+			<span lang={te ? 'te' : undefined}>{te ? 'ఇంకా చదవలేదు' : 'Not read yet'}</span>
+		</button>
+	{/if}
+
 	{#if loading}
 		<p class="text-center text-gray-400 mt-12 text-xl" lang={te ? 'te' : undefined}>
 			{te ? 'విషయాలు వస్తున్నాయి...' : 'Loading facts...'}
@@ -47,10 +79,23 @@
 		</p>
 	{:else if facts.length === 0}
 		<p class="text-center text-gray-400 mt-12 text-xl">No facts yet!</p>
+	{:else if visible.length === 0}
+		<div class="mt-12 text-center">
+			<p class="mb-6 text-xl text-gray-500" lang={te ? 'te' : undefined}>
+				{te ? 'అన్నీ చదివేశావు!' : "You've read them all!"}
+			</p>
+			<button
+				type="button"
+				class="min-h-[64px] rounded-2xl bg-butter/50 px-6 text-xl font-bold"
+				onclick={() => setUnread(false)}
+			>
+				<span lang={te ? 'te' : undefined}>{te ? 'అన్నీ చూపించు' : 'Show all'}</span>
+			</button>
+		</div>
 	{:else}
 		<!-- Big picture covers: one column on a phone, two on a tablet, three on a laptop. -->
 		<div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-			{#each facts as fact, i (fact.id)}
+			{#each visible as fact, i (fact.id)}
 				<FactCard
 					tint={i}
 					title={fact.title}
