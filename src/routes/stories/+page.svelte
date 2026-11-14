@@ -5,6 +5,7 @@
 	import { progress } from '$lib/stores/progress';
 	import { generatedStories } from '$lib/stores/generatedStories';
 	import { loadStories } from '$lib/data/loadContent';
+	import { warmStories } from '$lib/data/warmCache';
 	import { seedActiveThemes } from '$lib/data/themes';
 	import {
 		curatedToFilterable,
@@ -37,9 +38,16 @@
 		loading = true;
 		failed = false;
 		loadStories($language).then((s) => (curated = s));
+		const lang = $language;
 		generatedStories
-			.loadGallery($language)
-			.then((g) => (generated = g))
+			.loadGallery(lang)
+			.then((g) => {
+				generated = g;
+				warmStories(
+					g.map((x) => x.id),
+					lang
+				);
+			})
 			.catch(() => (failed = true))
 			.finally(() => (loading = false));
 	});
